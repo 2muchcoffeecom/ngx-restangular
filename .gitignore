@@ -1,0 +1,12 @@
+node_modules
+typings
+factories
+
+# misc
+.DS_Store
+*.log
+.history
+.idea
+*.d.ts
+*.js
+*.metadata.json
