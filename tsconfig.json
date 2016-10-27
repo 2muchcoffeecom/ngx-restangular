@@ -2,11 +2,20 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "experimentalDecorators": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "declaration": true,
-    "lib": ["es6", "dom"]
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "strictNullChecks": false,
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "types": [
+      "lodash"
+    ]
   },
   "files": [
     "index.ts"
