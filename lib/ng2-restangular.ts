@@ -29,6 +29,7 @@ export class Restangular {
   //  isOverridenMethod,
   //  setUrlCreator,
   //};
+  configuration;
   service;
   id;
   route;

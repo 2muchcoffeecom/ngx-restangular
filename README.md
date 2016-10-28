@@ -502,22 +502,55 @@ Restangular.setFullResponse(true);
 
 Or set it per service
 ````javascript
-// Restangular service that uses setFullResponse
-app.factory('RestFulResponse', function(Restangular) {
-  return Restangular.withConfig(function(RestangularConfigurer) {
+// Restangular factory that uses setFullResponse
+import {OpaqueToken} from "@angular/core";
+import {Restangular} from "ng2-restangular";
+
+export const REST_FUL_RESPONSE = new OpaqueToken('RestFulResponse');
+
+export function RestFulResponseFactory(restangular: Restangular) {
+  return restangular.withConfig((RestangularConfigurer) => {
     RestangularConfigurer.setFullResponse(true);
   });
-});
+}
 
-// Let's use it in the controller
-app.controller('MainCtrl', function(Restangular, RestFulResponse) {
 
-  // Uses full response configuration
-  RestFulResponse.all('users').getList().then(function(response) {
-    $scope.users = response.data;
-    console.log(response.headers);
-  });
-});
+// Подключаем фабрику в нашем модуле
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  providers: [
+    Restangular, // подключение Restangular
+    { provide: REST_FUL_RESPONSE, useFactory:  RestFulResponseFactory, deps: [Restangular] } // подключение гашей фабрики
+  ]
+})
+export class AppModule {
+}
+
+
+// Let's use it in the component
+import { Component, Inject } from '@angular/core';
+import { REST_FUL_RESPONSE } from './rest-ful-response';
+
+@Component({
+  ...
+})
+export class OtherComponent {
+  users;
+  
+  constructor(@Inject(REST_FUL_RESPONSE) public restFulResponse) {
+  }
+  
+  ngOnInit() {
+    this.restFulResponse.all('users').getList().then((response) => {
+      this.users = response.data;
+      console.log(response.headers);
+    });
+  }
+}
 ````
 
 #### setDefaultHeaders
