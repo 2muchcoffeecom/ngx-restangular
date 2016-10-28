@@ -14,7 +14,8 @@
       "es6"
     ],
     "types": [
-      "lodash"
+      "lodash",
+      "node"
     ]
   },
   "files": [

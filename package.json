@@ -1,7 +1,7 @@
 {
   "name": "ng2-restangular",
-  "version": "0.0.2",
-  "description": "Router Helper",
+  "version": "0.0.5",
+  "description": "ng2-restangular",
   "main": "ng2-restangular.js",
   "scripts": {
     "dev": "tsc --watch",
@@ -13,7 +13,13 @@
     "url": "git+https://github.com/2muchcoffeecom/ng2-restangular.git"
   },
   "keywords": [
-    "ng2-router-helper"
+    "ng2-rest",
+    "ng2-restangular",
+    "angular2-restangular",
+    "angular2-rest",
+    "restangular",
+    "angular 2 restangular",
+    "angular 2 rest"
   ],
   "author": "logvinoleg89",
   "bugs": {
@@ -21,7 +27,6 @@
   },
   "homepage": "https://github.com/2muchcoffeecom/ng2-restangular#readme",
   "dependencies": {
-    "ngc": "^1.0.0",
     "lodash": "^4.16.4",
     "q": "^1.4.1"
   },
@@ -31,6 +36,7 @@
     "@angular/http": "^2.0.0",
     "@angular/router": "^3.0.0",
     "@types/lodash": "^4.14.37",
+    "@types/node": "^6.0.46",
     "lodash": "^4.16.4",
     "q": "^1.4.1",
     "rxjs": "^5.0.0-beta.12",

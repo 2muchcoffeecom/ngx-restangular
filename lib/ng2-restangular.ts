@@ -1,18 +1,34 @@
 import {Injectable} from "@angular/core";
 import {Http, Request} from "@angular/http";
 import {Observable} from "rxjs";
-import "q";
-import * as _ from "lodash";
+
+let _ = require('lodash');
+let $q = require('q');
+
 import {RestangularHelper} from "./restangular-helper";
-//import * as $q from "";
 
-declare let Q: any;
-
-//required('q')
 
 @Injectable()
 export class Restangular {
   provider;
+  //  : {
+  //  isSafe,
+  //  absoluteUrl,
+  //  setSelfLinkAbsoluteUrl,
+  //  setBaseUrl,
+  //  setExtraFields,
+  //  setDefaultHttpFields,
+  //  setPlainByDefault,
+  //  withHttpValues,
+  //  setEncodeIds,
+  //  setDefaultRequestParams,
+  //  setDefaultHeaders,
+  //  setDefaultResponseMethod,
+  //  setMethodOverriders,
+  //  setJsonp,
+  //  isOverridenMethod,
+  //  setUrlCreator,
+  //};
   service;
   id;
   route;
@@ -66,7 +82,7 @@ export class Restangular {
   restangularized;
   
   constructor(private http: Http) {
-    this.provider = new providerConfig(this.createRequest.bind(this), Q);
+    this.provider = new providerConfig(this.createRequest.bind(this), $q);
     let element = this.provider.$get();
     Object.assign(this, element);
   }
