@@ -103,7 +103,7 @@ This is all you need to start using all the basic Restangular features.
 ````javascript
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { Restangular } from 'ng2-restangular';
+import { RestangularModule } from 'ng2-restangular';
 
 
 // AppModule is the main entry point into Angular2 bootstraping process
@@ -112,8 +112,13 @@ import { Restangular } from 'ng2-restangular';
   declarations: [
     AppComponent,
   ],
-  providers: [
-    Restangular // подключение Restangular
+  imports: [
+    RestangularModule.forRoot( // подключение Restangular модуля, если нам не нужны дефолтные настройки мы можем подключить RestangularModule вместо  RestangularModule.forRoot
+      (Restangular)=>{ Фунция в которой мы можем устанавливать дефолтные настройки
+        Restangular.provider.setBaseUrl('http://api.restng2.local/v1');
+        Restangular.provider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+      }
+    ),
   ]
 })
 export class AppModule {
@@ -469,7 +474,7 @@ By setting the value of setJsonp to true, both `get` and `getList` will be perfo
 
 You will need to add the 'JSON_CALLBACK' string to your URLs (see [$http.jsonp](http://docs.angularjs.org/api/ng.$http#methods_jsonp)). You can use `setDefaultRequestParams` to accomplish this:
 ```javascript
-RestangularProvider.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK'});
+Restangular.provider.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK'});
 ```
 
 #### setDefaultRequestParams
@@ -482,13 +487,13 @@ Supported method to configure are: remove, get, post, put, common (all)
 
 ````javascript
 // set params for multiple methods at once
-Restangular.setDefaultRequestParams(['remove', 'post'], {confirm: true});
+Restangular.provider.setDefaultRequestParams(['remove', 'post'], {confirm: true});
 
 // set only for get method
-Restangular.setDefaultRequestParams('get', {limit: 10});
+Restangular.provider.setDefaultRequestParams('get', {limit: 10});
 
 // or for all supported request methods
-Restangular.setDefaultRequestParams({apikey: "secret key"});
+Restangular.provider.setDefaultRequestParams({apikey: "secret key"});
 ````
 
 #### setFullResponse
@@ -497,7 +502,7 @@ You can set fullResponse to true to get the whole response every time you do any
 
 ````javascript
 // set params for multiple methods at once
-Restangular.setFullResponse(true);
+Restangular.provider.setFullResponse(true);
 ````
 
 Or set it per service
@@ -522,9 +527,9 @@ export function RestFulResponseFactory(restangular: Restangular) {
   declarations: [
     AppComponent,
   ],
+  imports: [RestangularModule],
   providers: [
-    Restangular, // подключение Restangular
-    { provide: REST_FUL_RESPONSE, useFactory:  RestFulResponseFactory, deps: [Restangular] } // подключение гашей фабрики
+    { provide: REST_FUL_RESPONSE, useFactory:  RestFulResponseFactory, deps: [Restangular] } // подключение нашей фабрики
   ]
 })
 export class AppModule {
@@ -559,7 +564,7 @@ You can set default Headers to be sent with every request. Send format: {header_
 
 ````javascript
 // set default header "token"
-RestangularProvider.setDefaultHeaders({token: "x-restangular"});
+Restangular.provider.setDefaultHeaders({token: "x-restangular"});
 ````
 
 #### setRequestSuffix
@@ -592,64 +597,27 @@ Restangular.configuration.requestSuffix = '/';
 
 ### How to configure them globally
 
-You can configure this in either the `config` or the `run` method. If your configurations don't need any other services, then I'd recommend you do them in the `config`. If your configurations depend on other services, you can configure them in the `run` using `Restangular` instead of `RestangularProvider`
+You can configure this in either the `AppModule`.
 
-#### Configuring in the `config`
+#### Configuring in the `AppModule`
 ````javascript
-app.config(function(RestangularProvider) {
-    RestangularProvider.setBaseUrl('/api/v1');
-    RestangularProvider.setExtraFields(['name']);
-    RestangularProvider.setResponseExtractor(function(response, operation) {
-        return response.data;
-    });
+import { RestangularModule } from 'ng2-restangular';
 
-    RestangularProvider.addElementTransformer('accounts', false, function(element) {
-       element.accountName = 'Changed';
-       return element;
-    });
-
-    RestangularProvider.setDefaultHttpFields({cache: true});
-    RestangularProvider.setMethodOverriders(["put", "patch"]);
-
-    // In this case we are mapping the id of each element to the _id field.
-    // We also change the Restangular route.
-    // The default value for parentResource remains the same.
-    RestangularProvider.setRestangularFields({
-      id: "_id",
-      route: "restangularRoute",
-      selfLink: "self.href"
-    });
-
-    RestangularProvider.setRequestSuffix('.json');
-
-    // Use Request interceptor
-    RestangularProvider.setRequestInterceptor(function(element, operation, route, url) {
-      delete element.name;
-      return element;
-    });
-
-    // ..or use the full request interceptor, setRequestInterceptor's more powerful brother!
-    RestangularProvider.setFullRequestInterceptor(function(element, operation, route, url, headers, params, httpConfig) {
-      delete element.name;
-      return {
-        element: element,
-        params: _.extend(params, {single: true}),
-        headers: headers,
-        httpConfig: httpConfig
-      };
-    });
-
-});
-
-````
-
-#### Configuring in the `run`
-
-````javascript
-// Here I inject the service BaseUrlCalculator which I need
-app.run(function(Restangular, BaseUrlCalculator) {
-    Restangular.setBaseUrl(BaseUrlCalculator.calculate());
-});
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    RestangularModule.forRoot((Restangular)=>{
+      Restangular.provider.setBaseUrl('http://api.restng2.local/v1');
+      Restangular.provider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+    }),
+  ]
+})
+export class AppModule {
+}
 ````
 
 **[Back to top](#table-of-contents)**
@@ -658,30 +626,58 @@ app.run(function(Restangular, BaseUrlCalculator) {
 Let's assume that for most requests you need some configuration (The global one), and for just a bunch of methods you need another configuration. In that case, you'll need to create another Restangular service with this particular configuration. This scoped configuration will inherit all defaults from the global one. Let's see how.
 
 ````javascript
-// Global configuration
-app.config(function(RestangularProvider) {
-  RestangularProvider.setBaseUrl('http://www.google.com');
-  RestangularProvider.setRequestSuffix('.json');
-});
+//Restangular service that uses Bing
+import {OpaqueToken} from "@angular/core";
+import {Restangular} from "ng2-restangular";
+export const RESTANGULAR_BING = new OpaqueToken('RestangularBing');
+export function RestangularBingFactory(restangular: Restangular) {
+  return restangular.withConfig((RestangularConfigurer) => {
+     RestangularConfigurer.setBaseUrl('http://www.bing.com');
+   });
+}
 
-// Restangular service that uses Bing
-app.factory('BingRestangular', function(Restangular) {
-  return Restangular.withConfig(function(RestangularConfigurer) {
-    RestangularConfigurer.setBaseUrl('http://www.bing.com');
-  });
-});
 
-// Let's use them from a controller
-app.controller('MainCtrl', function(Restangular, BingRestangular) {
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    // Global configuration
+    RestangularModule.forRoot((Restangular)=>{
+      Restangular.provider.setBaseUrl('http://www.google.com');
+    }),
+  ],
+  providers: [
+    { provide: RESTANGULAR_BING, useFactory:  RestangularBingFactory, deps: [Restangular] } // подключение нашей фабрики
+  ]
+})
+export class AppModule {}
 
-  // GET to http://www.google.com/users.json
-  // Uses global configuration
-  Restangular.all('users').getList()
 
-  // GET to http://www.bing.com/users.json
-  // Uses Bing configuration which is based on Global one, therefore .json is added.
-  BingRestangular.all('users').getList()
-});
+// Let's use it in the component
+@Component({
+  ...
+})
+export class OtherComponent {
+  users;
+
+  constructor(
+    @Inject(Restangular) public Restangular,
+    @Inject(RESTANGULAR_BING) public RestangularBing
+  ) {}
+
+  ngOnInit() {
+    // GET to http://www.google.com/users
+    // Uses global configuration
+    Restangular.all('users').getList()
+  
+    // GET to http://www.bing.com/users
+    // Uses Bing configuration which is based on Global one, therefore .json is added.
+    RestangularBing.all('users').getList()
+  }
+};
 ````
 
 **[Back to top](#table-of-contents)**
