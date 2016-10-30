@@ -1,11 +1,12 @@
-import {Injectable} from "@angular/core";
+import {Injectable, Inject, Optional} from "@angular/core";
 import {Http, Request} from "@angular/http";
 import {Observable} from "rxjs";
 
 let _ = require('lodash');
 let $q = require('q');
 
-import {RestangularHelper} from "./restangular-helper";
+import {RestangularHelper} from "./ng2-restangular-helper";
+import {RESTANGULAR} from "./ng2-restangular.config";
 
 
 @Injectable()
@@ -82,10 +83,22 @@ export class Restangular {
   save;
   restangularized;
   
-  constructor(private http: Http) {
+  constructor(
+    @Optional() @Inject(RESTANGULAR) public configFn,
+    private http: Http
+  ) {
     this.provider = new providerConfig(this.createRequest.bind(this), $q);
     let element = this.provider.$get();
     Object.assign(this, element);
+    
+    this.setDefaultConfig();
+  }
+  
+  setDefaultConfig(){
+    if(!_.isFunction(this.configFn)){
+      return;
+    }
+    this.configFn(this);
   }
   
   createRequest(options) {

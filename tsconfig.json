@@ -2,17 +2,11 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "noEmitHelpers": true,
-    "strictNullChecks": false,
-    "lib": [
-      "dom",
-      "es6"
-    ],
+    "declaration": true,
+    "lib": ["es6", "dom"],
     "types": [
       "lodash",
       "node"
@@ -22,6 +16,6 @@
     "index.ts"
   ],
   "angularCompilerOptions": {
-    "genDir": "factories"
+    "genDir": "lib"
   }
 }
