@@ -710,22 +710,41 @@ There're some times where you want to use Restangular but you don't want to expo
 Let's see how it works:
 
 ````js
-// Declare factory
-module.factory('Users', function(Restangular) {
-  return Restangular.service('users');
-});
+// Restangular factory that uses Users
+export const USER_REST = new OpaqueToken('UserRest');
+export function UserRestFactory(restangular: Restangular) {
+  return restangular.service('users');
+}
 
-// In your controller you inject Users
-Users.one(2).get() // GET to /users/2
-Users.post({data}) // POST to /users
-
-// GET to /users
-Users.getList().then(function(users) {
-  var user = users[0]; // user === {id: 1, name: "Tonto"}
-  user.name = "Gonto";
-  // PUT to /users/1
-  user.put();
+// Подключаем фабрику в нашем модуле
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [RestangularModule],
+  providers: [
+    { provide: USER_REST, useFactory:  UserRestFactory, deps: [Restangular] } // подключение нашей фабрики
+  ]
 })
+export class AppModule {
+}
+
+export class OtherComponent {
+  constructor(@Inject(USER_REST) public User) {
+    Users.one(2).get() // GET to /users/2
+    Users.post({data}) // POST to /users
+    
+    // GET to /users
+    Users.getList().then(function(users) {
+      var user = users[0]; // user === {id: 1, name: "Tonto"}
+      user.name = "Gonto";
+      // PUT to /users/1
+      user.put();
+    })
+  }
+}
 ````
 
 We can also use Nested RESTful resources with this:

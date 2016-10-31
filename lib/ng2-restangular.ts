@@ -97,7 +97,7 @@ export class Restangular {
   }
   
   setDefaultConfig(){
-    if(!_.isFunction(this.configObj.fn)){
+    if(!this.configObj || !_.isFunction(this.configObj.fn)){
       return;
     }
     
