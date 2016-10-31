@@ -113,8 +113,11 @@ import { RestangularModule } from 'ng2-restangular';
     AppComponent,
   ],
   imports: [
-    RestangularModule.forRoot( // подключение Restangular модуля, если нам не нужны дефолтные настройки мы можем подключить RestangularModule вместо  RestangularModule.forRoot
-      (Restangular)=>{ Фунция в которой мы можем устанавливать дефолтные настройки
+    // подключение Restangular модуля, если нам не нужны дефолтные настройки мы можем подключить RestangularModule вместо  RestangularModule.forRoot
+    // Первый параметр это массив с сервисами которые мы хотим подключить, второй параметр это функция для глобальной настройки
+    RestangularModule.forRoot(
+      [Http],
+      (Restangular, http)=>{ Фунция в которой мы можем устанавливать дефолтные настройки
         Restangular.provider.setBaseUrl('http://api.restng2.local/v1');
         Restangular.provider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
       }
@@ -421,29 +424,47 @@ The errorInterceptor function, whenever it returns `false`, prevents the promise
 The feature to prevent the promise to complete is useful whenever you need to intercept each Restangular error response for every request in your AngularJS application in a single place, increasing debugging capabilities and hooking security features in a single place.
 
 ````javascript
-
 var refreshAccesstoken = function() {
-    var deferred = $q.defer();
-
+  return new Promise((resolve, reject) => {
     // Refresh access-token logic
-
-    return deferred.promise;
+    
+    resolve(true);
+  });
 };
 
-Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
-    if(response.status === 403) {
-        refreshAccesstoken().then(function() {
-            // Repeat the request and then call the handlers the usual way.
-            $http(response.config).then(responseHandler, deferred.reject);
-            // Be aware that no request interceptors are called this way.
-        });
-
-        return false; // error handled
-    }
-
-    return true; // error not handled
-});
-
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  imports: [ // import Angular's modules
+    // Внутри функции для глобальной настройки подключаем Http сервис
+    RestangularModule.forRoot([Http], (Restangular, http)=>{
+      Restangular.provider.setBaseUrl('http://api.test.com/v1');
+      Restangular.provider.setDefaultResponseMethod('promise');
+  
+      // Настраиваем Error Interceptor
+      Restangular.provider.setErrorInterceptor((response, deferred, responseHandler) => {
+        if(response.status === 403) {
+          refreshAccesstoken().then(() => {
+            // Create new request and then call the handlers the usual way.
+            http.get('http://api.test.com/v1/users/2', {})
+            .map(res=>{
+              if (response._body) {
+                response.data = JSON.parse(response._body);
+              } else {
+                response.data = null
+              }
+              return response;
+            })
+            .toPromise().then(responseHandler, deferred.reject);
+            //// Be aware that no request interceptors are called this way.
+          });
+          return false; // error handled
+        }
+        return true; // error not handled
+      });
+    }),
+  ],
+})
 ````
 
 #### setRestangularFields
@@ -610,7 +631,7 @@ import { RestangularModule } from 'ng2-restangular';
     AppComponent,
   ],
   imports: [
-    RestangularModule.forRoot((Restangular)=>{
+    RestangularModule.forRoot([], (Restangular)=>{
       Restangular.provider.setBaseUrl('http://api.restng2.local/v1');
       Restangular.provider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
     }),
@@ -645,7 +666,7 @@ export function RestangularBingFactory(restangular: Restangular) {
   ],
   imports: [
     // Global configuration
-    RestangularModule.forRoot((Restangular)=>{
+    RestangularModule.forRoot([], (Restangular)=>{
       Restangular.provider.setBaseUrl('http://www.google.com');
     }),
   ],

@@ -15,11 +15,11 @@ export class RestangularModule {
     }
   }
   
-  static forRoot(ConfigRestangularFunction: any): ModuleWithProviders {
+  static forRoot(arrDI:any[], ConfigRestangularFunction: any): ModuleWithProviders {
     return {
       ngModule: RestangularModule,
       providers: [
-        {provide: RESTANGULAR, useFactory: RestangularFactory(ConfigRestangularFunction)},
+        {provide: RESTANGULAR, useFactory: RestangularFactory(arrDI, ConfigRestangularFunction)},
       ]
     };
   }

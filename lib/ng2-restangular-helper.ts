@@ -13,7 +13,7 @@ export class RestangularHelper {
       url: options.url,
       body: options.data,
     });
-
+    
     return requestOptions;
   }
   

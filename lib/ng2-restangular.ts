@@ -1,4 +1,4 @@
-import {Injectable, Inject, Optional} from "@angular/core";
+import {Injectable, Inject, Injector, Optional} from "@angular/core";
 import {Http, Request} from "@angular/http";
 import {Observable} from "rxjs";
 
@@ -84,7 +84,8 @@ export class Restangular {
   restangularized;
   
   constructor(
-    @Optional() @Inject(RESTANGULAR) public configFn,
+    @Optional() @Inject(RESTANGULAR) public configObj,
+    private injector: Injector,
     private http: Http
   ) {
     this.provider = new providerConfig(this.createRequest.bind(this), $q);
@@ -95,10 +96,15 @@ export class Restangular {
   }
   
   setDefaultConfig(){
-    if(!_.isFunction(this.configFn)){
+    if(!_.isFunction(this.configObj.fn)){
       return;
     }
-    this.configFn(this);
+    
+    let arrDI = _.map(this.configObj.arrServices, (services)=>{
+      return this.injector.get(services);
+    });
+    
+    this.configObj.fn(...[this, ...arrDI]);
   }
   
   createRequest(options) {
@@ -1226,7 +1232,7 @@ function providerConfig($http, $q) {
         }
         
         var okCallback = function (response) {
-          //debugger;
+          debugger;
           var resData = response.data;
           var fullParams = response.config.params;
           var data = parseResponse(resData, operation, whatFetched, url, response, deferred);
