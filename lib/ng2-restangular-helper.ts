@@ -2,7 +2,7 @@ import {URLSearchParams, Headers, RequestOptions, RequestMethod} from "@angular/
 export class RestangularHelper {
   
   static createRequestOptions(options) {
-    let requestQueryParams = RestangularHelper.createRequestQueryParams(options.queryParams);
+    let requestQueryParams = RestangularHelper.createRequestQueryParams(options.params);
     let requestHeaders = RestangularHelper.createRequestHeaders(options.headers);
     let methodName = options.method.charAt(0).toUpperCase() + options.method.substr(1).toLowerCase();
     
