@@ -2,7 +2,7 @@
 
 
 
-Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
+This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 #Table of contents
@@ -807,7 +807,7 @@ These are the methods that can be called on the Restangular object.
 * **options: ([queryParams, headers])**: Does a OPTIONS
 * **patch(object, [queryParams, headers])**: Does a PATCH
 * **remove([queryParams, headers])**: Does a DELETE. By default, `remove` sends a request with an empty object, which may cause problems with some servers or browsers. [This](https://github.com/mgonto/restangular/issues/193) shows how to configure RESTangular to have no payload.
-* **putElement(idx, params, headers)**: Puts the element on the required index and returns a promise of the updated new array
+* **putElement(index, params, headers)**: Puts the element on the required index and returns a promise of the updated new array
 ````js
 Restangular.all('users').getList()
 .then((users) => {
@@ -893,11 +893,11 @@ Since Angular 1.2, Promise unwrapping in templates has been disabled by default 
 **This means that the following will cease to work**:
 
 ````js
-$scope.accounts = Restangular.all('accounts').getList();
+this.accounts = this.restangular.all('accounts').getList();
 ````
 
 ````html
-<tr ng-repeat="account in accounts">
+<tr *ngFor="let account of accounts"">
   <td>{{account.name}}</td>
 </tr>
 ````
@@ -905,70 +905,17 @@ $scope.accounts = Restangular.all('accounts').getList();
 **As this was a really handy way of working with Restangular, I've made a feature similar to $resource that will enable this behavior again**:
 
 ````js
-$scope.accounts = Restangular.all('accounts').getList().$object;
+this.accounts = this.restangular.all('accounts').getList().$object;
 ````
 
 ````html
-<tr ng-repeat="account in accounts">
+<tr *ngFor="let account of accounts"">
   <td>{{account.name}}</td>
 </tr>
 ````
 
 The `$object` property is a new property I've added to promises. By default, it'll be an empty array or object. Once the sever has responded with the real value, that object or array is filled with the correct response, therefore making the ng-repeat work :). Pretty neat :D
 
-**[Back to top](#table-of-contents)**
-
-## Using Self reference resources
-
-A lot of REST APIs return the URL to self of the element that you're querying. You can use that with Restangular so that you don't have to create the URLs yourself, but use the ones provided by the server.
-
-Let's say that when doing a GET to `/people` you get the following
-
-````javascript
-[{
-  name: "Martin",
-  lastName: "Gontovnikas"
-  self: {
-    link: 'http://www.example.com/people/gonto'
-  }
-}, {
-  name: "John",
-  lastName: "Wayne"
-  self: {
-    link: 'http://www.example.com/people/jhonny'
-  }
-}]
-````
-
-In this case, as you can see, the URL to each element can't be guessed so we need to use that to reference the element. Restangular supports both relative and absolute URLs :).
-
-How do we do this with Restangular?
-
-First, we need to configure the path for the link to self. For that, in the config we do:
-
-````javascript
-RestangularProvider.setRestangularFields({
-  selfLink: 'self.link'
-});
-````
-
-Then, we can just use this :)
-
-````javascript
-// Instead of using all we could also use allUrl to set a URL
-// Restangular.allUrl('people', 'http://www.example.com/people')
-
-Restangular.all('people').getList().then(function(people) {
-
-  var gonto = people[0];
-
-  gonto.name = "Owned";
-
-  // This will do a PUT to http://www.example.com/people/gonto
-  // It uses the self linking property :D
-  gonto.put()
-})
-````
 
 **[Back to top](#table-of-contents)**
 
@@ -977,7 +924,7 @@ Sometimes, we have a lot of nested entities (and their IDs), but we just want th
 
 ````javascript
 
-var restangularSpaces = Restangular.one("accounts",123).one("buildings", 456).all("spaces");
+var restangularSpaces = this.restangular.one("accounts",123).one("buildings", 456).all("spaces");
 
 // This will do ONE get to /accounts/123/buildings/456/spaces
 restangularSpaces.getList()
@@ -994,18 +941,6 @@ Restangular.one("accounts", 123).one("buildings", 456).remove();
 
 **[Back to top](#table-of-contents)**
 
-## Using local $http configuration
-
-There're sometimes when you want to set a specific configuration $http configuration just for one Restangular's call. For that, you can use `withHttpConfig`. You must call that method just before doing the HTTP request. Let's learn how to use it with the following example:
-
-````js
-Restangular.one('accounts', 123).withHttpConfig({timeout: 100}).getList('buildings');
-
-$scope.account.withHttpConfig({timeout: 100}).put();
-````
-
-**[Back to top](#table-of-contents)**
-
 ## Creating new Restangular Methods
 
 Let's assume that your API needs some custom methods to work. If that's the case, always calling customGET or customPOST for that method with all parameters is a pain in the ass. That's why every element has a `addRestangularMethod` method.
@@ -1013,27 +948,33 @@ Let's assume that your API needs some custom methods to work. If that's the case
 This can be used together with the hook `addElementTransformer` to do some neat stuff. Let's see an example to learn this:
 
 ````javascript
-// In your app configuration (config method)
-
-// It will transform all building elements, NOT collections
-RestangularProvider.addElementTransformer('buildings', false, function(building) {
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  imports: [ // import Angular's modules
+    RestangularModule.forRoot([], (Restangular)=>{
+      // It will transform all building elements, NOT collections
+      Restangular.provider.addElementTransformer('buildings', false, function(building) {
         // This will add a method called evaluate that will do a get to path evaluate with NO default
         // query params and with some default header
         // signature is (name, operation, path, params, headers, elementToPost)
-
+    
         building.addRestangularMethod('evaluate', 'get', 'evaluate', undefined, {'myHeader': 'value'});
-
+    
         return building;
-});
-
-RestangularProvider.addElementTransformer('users', true, function(user) {
+      });
+  
+      Restangular.provider.addElementTransformer('users', true, function(user) {
         // This will add a method called login that will do a POST to the path login
         // signature is (name, operation, path, params, headers, elementToPost)
-
+    
         user.addRestangularMethod('login', 'post', 'login');
-
+    
         return user;
-});
+      });
+    }),
+  ],
+})
 
 // Then, later in your code you can do the following:
 
@@ -1129,24 +1070,12 @@ Restangular.all("accounts").getList().then(function() {
 
 You can use `defaultHeaders` property for this or `$httpProvider.defaults.headers`, whichever suits you better. `defaultsHeaders` can be scoped with `withConfig` so it's really cool.
 
-#### Can I cache requests?
-
-`$http` can cache requests if you send the property `cache` to true. You can do that for every Restangular request by using `defaultHttpFields` property. This is the way:
-
-````javascript
-RestangularProvider.setDefaultHttpFields({cache: true});
-````
-
-#### Can it be used in `$routeProvider.resolve`?
-
-Yes, of course. Every method in Restangular returns a promise so this can be used without any problem.
-
 #### **How can I send a delete WITHOUT a body?**
 
 You must add a requestInterceptor for this.
 
 ````js
-RestangularProvider.setRequestInterceptor(function(elem, operation) {
+Restangular.provider.setRequestInterceptor(function(elem, operation) {
   if (operation === "remove") {
      return null;
   }
@@ -1154,63 +1083,12 @@ RestangularProvider.setRequestInterceptor(function(elem, operation) {
 })
 ````
 
-#### **My response is actually wrapped with some metadata. How do I get the data in that case?**
-
-So, let's assume that your data is the following:
-
-````javascript
- // When getting the list, this is the response.
-{
-  "status":"success",
-  "data": {
-    "data": [{
-      "id":1,
-      // More data
-    }],
-    "meta": {
-      "totalRecord":100
-    }
-  }
-}
-
-// When getting a single element, this is the response.
-{
-  "status":"success",
-  "data": {
-    "id" : 1
-    // More data
-  }
-}
-````
-
-In this case, you'd need to use RestangularProvider's `addResponseInterceptor`. See the following:
-
-````javascript
-app.config(function(RestangularProvider) {
-
-    // add a response interceptor
-    RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
-      var extractedData;
-      // .. to look for getList operations
-      if (operation === "getList") {
-        // .. and handle the data and meta data
-        extractedData = data.data.data;
-        extractedData.meta = data.data.meta;
-      } else {
-        extractedData = data.data;
-      }
-      return extractedData;
-    });
-
-});
-````
-
 #### **I use Mongo and the ID of the elements is `_id` not `id` as the default. Therefore requests are sent to undefined routes**
 
 What you need to do is to configure the `RestangularFields` and set the `id` field to `_id`. Let's see how:
 
 ````javascript
-RestangularProvider.setRestangularFields({
+Restangular.provider.setRestangularFields({
   id: "_id"
 });
 ````
@@ -1220,7 +1098,7 @@ RestangularProvider.setRestangularFields({
 In some cases, people have different ID name for each entity. For example, they have CustomerID for customer and EquipmentID for Equipment. If that's the case, you can override Restangular's getIdFromElem. For that, you need to do:
 
 ````js
-RestangularProvider.configuration.getIdFromElem = function(elem) {
+Restangular.provider.configuration.getIdFromElem = function(elem) {
   // if route is customers ==> returns customerID
   return elem[_.initial(elem.route).join('') + "ID"];
 }
@@ -1232,9 +1110,7 @@ With that, you'd get what you need :)
 This can be done using the customPOST / customPUT method. Look at the following example:
 ````js
 Restangular.all('users')
-          .withHttpConfig({transformRequest: angular.identity})
-          .customPOST(formData, undefined, undefined,
-            { 'Content-Type': undefined });
+.customPOST(formData, undefined, undefined, { 'Content-Type': undefined });
 ````
 This basically tells the request to use the *Content-Type: multipart/form-data* as the header. Also *formData* is the body of the request, be sure to add all the params here, including the File you want to send of course. There is an issue already closed but with a lot of information from other users and @mgonto as well: [GitHub - Restangular](https://github.com/mgonto/restangular/issues/420)
 
@@ -1247,7 +1123,7 @@ Let's see an example :).
 ````javascript
 // Here we use then to resolve the promise.
 Restangular.all('users').getList().then(function(users) {
-  $scope.users = users;
+  this.users = users;
   var userWithId = _.find(users, function(user) {
     return user.id === 123;
   });
@@ -1258,7 +1134,7 @@ Restangular.all('users').getList().then(function(users) {
   // Alternatively delete the element from the list when finished
   userWithId.remove().then(function() {
     // Updating the list and removing the user after the response is OK.
-    $scope.users = _.without($scope.users, userWithId);
+    this.users = _.without(this.users, userWithId);
   });
 
 });
@@ -1267,7 +1143,7 @@ Restangular.all('users').getList().then(function(users) {
 When you actually get a list by doing
 
 ````javascript
-$scope.owners = house.getList('owners').$object;
+this.owners = house.getList('owners').$object;
 ````
 
 You're actually assigning a Promise to the owners value of the $scope. As Angular knows how to process promises, if in your view you do an ng-repeat of this $scope variable, results will be shown once the promise is resolved (Response arrived).
@@ -1282,7 +1158,7 @@ If want to keep the restangularized collection, remove the element by modifying 
 ```javascript
 userWithId.remove().then(function() {
   var index = $scope.users.indexOf(userWithId);
-  if (index > -1) $scope.users.splice(index, 1);
+  if (index > -1) this.users.splice(index, 1);
 });
 ```
 
@@ -1295,14 +1171,14 @@ It won't be stripped out anymore as I've ditched `$resource` :). Now you can hap
 In order to get this done, you need to use the `responseExtractor`. You need to set a property there that will point to the original response received. Also, you need to actually copy this response as that response is the one that's going to be `restangularized` later
 
 ````javascript
-RestangularProvider.setResponseExtractor(function(response) {
+Restangular.provider.setResponseExtractor(function(response) {
   var newResponse = response;
-  if (angular.isArray(response)) {
-    angular.forEach(newResponse, function(value, key) {
-      newResponse[key].originalElement = angular.copy(value);
+  if (_.isArray(response)) {
+    _.forEach(newResponse, function(value, key) {
+      newResponse[key].originalElement = _.clone(value);
     });
   } else {
-    newResponse.originalElement = angular.copy(response);
+    newResponse.originalElement = _.clone(response);
   }
 
   return newResponse;
@@ -1312,7 +1188,7 @@ Alternatively, if you just want the stripped out response on any given call, you
 
 ````javascript
 
-$scope.showData = function () {
+this.showData = function () {
   baseUrl.post(someData).then(function(response) {
     console.log(response.plain());
   });

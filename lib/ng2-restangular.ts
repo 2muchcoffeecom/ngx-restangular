@@ -30,6 +30,7 @@ export class Restangular {
   //  isOverridenMethod,
   //  setUrlCreator,
   //};
+  extendCollection;
   copy;
   configuration;
   service;
@@ -664,7 +665,6 @@ function providerConfig($http, $q) {
     };
     
     function RestangularResource(config, $http, url, configurer) {
-      //debugger;
       var resource = {};
       _.each(_.keys(configurer), function (key) {
         var value = configurer[key];
@@ -1116,7 +1116,6 @@ function providerConfig($http, $q) {
       }
       
       function copyRestangularizedElement(fromElement, toElement = {}) {
-        debugger;
         var copiedElement = Object.assign(toElement, fromElement);
         return restangularizeElem(copiedElement[config.restangularFields.parentResource],
           copiedElement, copiedElement[config.restangularFields.route], true);
@@ -1192,7 +1191,12 @@ function providerConfig($http, $q) {
         var deferred = $q.defer();
         var filledArray = [];
         filledArray = config.transformElem(filledArray, true, elemToPut[config.restangularFields.route], service);
-        elemToPut.put(params, headers).then(function (serverElem) {
+        
+        // set promise if undefined
+        let put = elemToPut.put(params, headers);
+        put.then = put.then || put.subscribe;
+        
+        put.then(function (serverElem) {
           var newArray = copyRestangularizedElement(__this);
           newArray[idx] = serverElem;
           filledArray = newArray;
