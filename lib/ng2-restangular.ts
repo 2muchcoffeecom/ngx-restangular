@@ -30,6 +30,7 @@ export class Restangular {
   //  isOverridenMethod,
   //  setUrlCreator,
   //};
+  copy;
   configuration;
   service;
   id;
@@ -941,7 +942,7 @@ function providerConfig($http, $q) {
         elem[config.restangularFields.getRestangularUrl] = _.bind(urlHandler.fetchUrl, urlHandler, elem);
         elem[config.restangularFields.getRequestedUrl] = _.bind(urlHandler.fetchRequestedUrl, urlHandler, elem);
         elem[config.restangularFields.addRestangularMethod] = _.bind(addRestangularMethodFunction, elem);
-        elem[config.restangularFields.clone] = _.bind(copyRestangularizedElement, elem, elem);
+        elem[config.restangularFields.clone] = _.bind(copyRestangularizedElement, elem);
         elem[config.restangularFields.reqParams] = _.isEmpty(reqParams) ? null : reqParams;
         elem[config.restangularFields.withHttpConfig] = _.bind(withHttpConfig, elem);
         elem[config.restangularFields.plain] = _.bind(stripRestangular, elem, elem);
@@ -1114,7 +1115,8 @@ function providerConfig($http, $q) {
         elem[config.restangularFields.doGETLIST] = elem[config.restangularFields.customGETLIST];
       }
       
-      function copyRestangularizedElement(fromElement, toElement?) {
+      function copyRestangularizedElement(fromElement, toElement = {}) {
+        debugger;
         var copiedElement = Object.assign(toElement, fromElement);
         return restangularizeElem(copiedElement[config.restangularFields.parentResource],
           copiedElement, copiedElement[config.restangularFields.route], true);
@@ -1232,7 +1234,6 @@ function providerConfig($http, $q) {
         }
         
         var okCallback = function (response) {
-          debugger;
           var resData = response.data;
           var fullParams = response.config.params;
           var data = parseResponse(resData, operation, whatFetched, url, response, deferred);

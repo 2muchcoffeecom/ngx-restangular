@@ -789,6 +789,12 @@ These are the methods that can be called on the Restangular object.
 * **patch(object, [queryParams, headers])**: Does a PATCH
 * **remove([queryParams, headers])**: Does a DELETE. By default, `remove` sends a request with an empty object, which may cause problems with some servers or browsers. [This](https://github.com/mgonto/restangular/issues/193) shows how to configure RESTangular to have no payload.
 * **putElement(idx, params, headers)**: Puts the element on the required index and returns a promise of the updated new array
+````js
+Restangular.all('users').getList()
+.then((users) => {
+  users.putElement(2, {'name': 'new name'});
+});
+````
 * **getRestangularUrl()**: Gets the URL of the current object.
 * **getRequestedUrl()**: Gets the real URL the current object was requested with (incl. GET parameters). Will equal getRestangularUrl() when no parameters were used, before calling `getList()`, or when using on a nested child.
 * **one(route, id)**: Used for RequestLess connections and URL Building. See section below.
