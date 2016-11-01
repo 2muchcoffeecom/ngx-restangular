@@ -302,10 +302,10 @@ export class OtherComponent {
 
 ### Properties
 Restangular comes with defaults for all of its properties but you can configure them. **So, if you don't need to configure something, there's no need to add the configuration.**
-You can set all these configurations in **RestangularModule(#how-to-configure-them-globally) to change the global configuration** or you can **use the withConfig method in Restangular service to create a new Restangular service with some scoped configuration**. Check the section on this later.
+You can set all these configurations in **[RestangularModule](#how-to-configure-them-globally) to change the global configuration** or you can **use the [withConfig](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one) method in Restangular service to create a new Restangular service with some scoped configuration**. Check the section on this later.
 
 #### setBaseUrl
-The base URL for all calls to your API. For example if your URL for fetching accounts is http://example.com/api/v1/accounts, then your baseUrl is `/api/v1`. The default baseUrl is an empty string which resolves to the same url that AngularJS is running, but you can also set an absolute url like `http://api.example.com/api/v1` if you need to set another domain.
+The base URL for all calls to your API. For example if your URL for fetching accounts is http://example.com/api/v1/accounts, then your baseUrl is `/api/v1`. The default baseUrl is an empty string which resolves to the same url that Angular2 is running, but you can also set an absolute url like `http://api.example.com/api/v1` if you need to set another domain.
 
 #### setExtraFields
 These are the fields that you want to save from your parent resources if you need to display them. By default this is an Empty Array which will suit most cases
@@ -319,7 +319,7 @@ This method accepts 1 parameter, it could be:
 * Array: Specifies the routes (types) of all elements that should be parentless. For example `['buildings']`
 
 #### addElementTransformer
-This is a hook. After each element has been "restangularized" (Added the new methods from Ng2-Restangular), the corresponding transformer will be called if it fits.
+This is a hook. After each element has been "restangularized" (Added the new methods from Restangular), the corresponding transformer will be called if it fits.
 
 This should be used to add your own methods / functions to entities of certain types.
 
@@ -366,9 +366,6 @@ Some of the use cases of the responseInterceptor are handling wrapped responses 
 
 The responseInterceptor must return the restangularized data element.
 
-#### setRequestInterceptor
-**This is deprecated. Use addRequestInterceptor since you can add more than one**.
-
 #### addRequestInterceptor
 The requestInterceptor is called before sending any data to the server. It's a function that must return the element to be requested. This function receives the following arguments:
 
@@ -376,9 +373,6 @@ The requestInterceptor is called before sending any data to the server. It's a f
 * **operation**: The operation made. It'll be the HTTP method used except for a `GET` which returns a list of element which will return `getList` so that you can distinguish them.
 * **what**: The model that's being requested. It can be for example: `accounts`, `buildings`, etc.
 * **url**: The relative URL being requested. For example: `/api/v1/accounts/123`
-
-#### setFullRequestInterceptor
-**This is deprecated. Use addFullRequestInterceptor since you can add more than one**.
 
 #### addFullRequestInterceptor
 This adds a new fullRequestInterceptor. The fullRequestInterceptor is similar to the `requestInterceptor` but more powerful. It lets you change the element, the request parameters and the headers as well.
@@ -398,7 +392,7 @@ The errorInterceptor is called whenever there's an error. It's a function that r
 
 The errorInterceptor function, whenever it returns `false`, prevents the promise linked to a Restangular request to be executed. All other return values (besides `false`) are ignored and the promise follows the usual path, eventually reaching the success or error hooks.
 
-The feature to prevent the promise to complete is useful whenever you need to intercept each Restangular error response for every request in your AngularJS application in a single place, increasing debugging capabilities and hooking security features in a single place.
+The feature to prevent the promise to complete is useful whenever you need to intercept each Restangular error response for every request in your Angular2 application in a single place, increasing debugging capabilities and hooking security features in a single place.
 
 ````javascript
 var refreshAccesstoken = function() {
@@ -412,8 +406,8 @@ var refreshAccesstoken = function() {
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
-  imports: [ // import Angular's modules
-    // Внутри функции для глобальной настройки подключаем Http сервис
+  imports: [ 
+    // Импортируем RestangularModule и устанавливаем дефолтные найстройки для Restanglar
     RestangularModule.forRoot([Http], (Restangular, http)=>{
       Restangular.provider.setBaseUrl('http://api.test.com/v1');
       Restangular.provider.setDefaultResponseMethod('promise');
@@ -446,7 +440,7 @@ var refreshAccesstoken = function() {
 
 #### setRestangularFields
 
-Ng2-Restangular required 3 fields for every "Restangularized" element. These are:
+Restangular required 3 fields for every "Restangularized" element. These are:
 
 * id: Id of the element. Default: id
 * route: Name of the route of this element. Default: route
@@ -461,7 +455,7 @@ All of these fields except for `id` and `selfLink` are handled by Restangular, s
 
 #### setMethodOverriders
 
-You can now Override HTTP Methods. You can set here the array of methods to override. All those methods will be sent as POST and Ng2-Restangular will add an X-HTTP-Method-Override header with the real HTTP method we wanted to do.
+You can now Override HTTP Methods. You can set here the array of methods to override. All those methods will be sent as POST and Restangular will add an X-HTTP-Method-Override header with the real HTTP method we wanted to do.
 
 #### setJsonp
 Typical web browsers prohibit requesting data from a server in a different domain (same-origin policy). JSONP or "JSON with padding" is a communication technique used in JavaScript programs running in web browsers to get around this.
@@ -472,7 +466,7 @@ By setting the value of setJsonp to true, both `get` and `getList` will be perfo
 
 You will need to add the 'JSON_CALLBACK' string to your URLs (see [$http.jsonp](http://docs.angularjs.org/api/ng.$http#methods_jsonp)). You can use `setDefaultRequestParams` to accomplish this:
 ```javascript
-Restangular.provider.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK'});
+RestangularProvider.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK'});
 ```
 
 #### setDefaultRequestParams
@@ -485,13 +479,13 @@ Supported method to configure are: remove, get, post, put, common (all)
 
 ````javascript
 // set params for multiple methods at once
-Restangular.provider.setDefaultRequestParams(['remove', 'post'], {confirm: true});
+RestangularProvider.setDefaultRequestParams(['remove', 'post'], {confirm: true});
 
 // set only for get method
-Restangular.provider.setDefaultRequestParams('get', {limit: 10});
+RestangularProvider.setDefaultRequestParams('get', {limit: 10});
 
 // or for all supported request methods
-Restangular.provider.setDefaultRequestParams({apikey: "secret key"});
+RestangularProvider.setDefaultRequestParams({apikey: "secret key"});
 ````
 
 #### setFullResponse
@@ -500,17 +494,13 @@ You can set fullResponse to true to get the whole response every time you do any
 
 ````javascript
 // set params for multiple methods at once
-Restangular.provider.setFullResponse(true);
+RestangularProvider.setFullResponse(true);
 ````
 
 Or set it per service
 ````javascript
 // Restangular factory that uses setFullResponse
-import {OpaqueToken} from "@angular/core";
-import {Restangular} from "ng2-restangular";
-
 export const REST_FUL_RESPONSE = new OpaqueToken('RestFulResponse');
-
 export function RestFulResponseFactory(restangular: Restangular) {
   return restangular.withConfig((RestangularConfigurer) => {
     RestangularConfigurer.setFullResponse(true);
@@ -518,7 +508,7 @@ export function RestFulResponseFactory(restangular: Restangular) {
 }
 
 
-// Подключаем фабрику в нашем модуле
+// Подключаем фабрику в AppModule модуле
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -527,17 +517,13 @@ export function RestFulResponseFactory(restangular: Restangular) {
   ],
   imports: [RestangularModule],
   providers: [
-    { provide: REST_FUL_RESPONSE, useFactory:  RestFulResponseFactory, deps: [Restangular] } // подключение нашей фабрики
+    { provide: REST_FUL_RESPONSE, useFactory:  RestFulResponseFactory, deps: [Restangular] }
   ]
 })
-export class AppModule {
-}
+export class AppModule {}
 
 
 // Let's use it in the component
-import { Component, Inject } from '@angular/core';
-import { REST_FUL_RESPONSE } from './rest-ful-response';
-
 @Component({
   ...
 })
@@ -562,7 +548,7 @@ You can set default Headers to be sent with every request. Send format: {header_
 
 ````javascript
 // set default header "token"
-Restangular.provider.setDefaultHeaders({token: "x-restangular"});
+RestangularProvider.setDefaultHeaders({token: "x-restangular"});
 ````
 
 #### setRequestSuffix
@@ -581,14 +567,18 @@ You can set this to `true` or `false`. By default it's false. If set to true, da
 
 You can set here if you want to URL Encode IDs or not. By default, it's true.
 
+#### setDefaultResponseMethod
+
+You can choose what Response Method to use `Observable` or `Promise`, by default `Observable`.
+
 **[Back to top](#table-of-contents)**
 
 ### Accessing configuration
 
-You can also access the configuration via `RestangularProvider` and `Restangular` via the `configuration` property if you don't want to use the setters. Check it out:
+You can also access the configuration via `RestangularModule` and `Restangular.provider` via the `configuration` property if you don't want to use the setters. Check it out:
 
 ````js
-Restangular.configuration.requestSuffix = '/';
+Restangular.provider.configuration.requestSuffix = '/';
 ````
 
 **[Back to top](#table-of-contents)**
@@ -598,6 +588,7 @@ Restangular.configuration.requestSuffix = '/';
 You can configure this in either the `AppModule`.
 
 #### Configuring in the `AppModule`
+
 ````javascript
 import { RestangularModule } from 'ng2-restangular';
 
@@ -608,9 +599,39 @@ import { RestangularModule } from 'ng2-restangular';
     AppComponent,
   ],
   imports: [
-    RestangularModule.forRoot([], (Restangular)=>{
-      Restangular.provider.setBaseUrl('http://api.restng2.local/v1');
-      Restangular.provider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+    RestangularModule.forRoot((RestangularProvider)=>{
+      RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+      RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+    }),
+  ]
+})
+export class AppModule {
+}
+````
+
+**[Back to top](#table-of-contents)**
+
+
+#### Configuring in the `AppModule` with Dependency Injection applied
+
+````javascript
+import { RestangularModule } from 'ng2-restangular';
+
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    RestangularModule.forRoot([Http], (RestangularProvider, http)=>{
+      RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+      RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+      
+      // Пример использования Http сервиса внутри глобальной конфигурации рестангулара
+      RestangularProvider.addElementTransformer('me', true, ()=>{
+        return http.get('http://api.test.com/v1/users/2', {});
+      });
     }),
   ]
 })
@@ -625,8 +646,6 @@ Let's assume that for most requests you need some configuration (The global one)
 
 ````javascript
 //Restangular service that uses Bing
-import {OpaqueToken} from "@angular/core";
-import {Restangular} from "ng2-restangular";
 export const RESTANGULAR_BING = new OpaqueToken('RestangularBing');
 export function RestangularBingFactory(restangular: Restangular) {
   return restangular.withConfig((RestangularConfigurer) => {
@@ -643,12 +662,12 @@ export function RestangularBingFactory(restangular: Restangular) {
   ],
   imports: [
     // Global configuration
-    RestangularModule.forRoot([], (Restangular)=>{
-      Restangular.provider.setBaseUrl('http://www.google.com');
+    RestangularModule.forRoot((RestangularProvider)=>{
+      RestangularProvider.setBaseUrl('http://www.google.com');
     }),
   ],
   providers: [
-    { provide: RESTANGULAR_BING, useFactory:  RestangularBingFactory, deps: [Restangular] } // подключение нашей фабрики
+    { provide: RESTANGULAR_BING, useFactory:  RestangularBingFactory, deps: [Restangular] }
   ]
 })
 export class AppModule {}
@@ -659,8 +678,6 @@ export class AppModule {}
   ...
 })
 export class OtherComponent {
-  users;
-
   constructor(
     @Inject(Restangular) public Restangular,
     @Inject(RESTANGULAR_BING) public RestangularBing
@@ -693,7 +710,7 @@ export function UserRestFactory(restangular: Restangular) {
   return restangular.service('users');
 }
 
-// Подключаем фабрику в нашем модуле
+
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -708,6 +725,8 @@ export function UserRestFactory(restangular: Restangular) {
 export class AppModule {
 }
 
+
+// Let's use it in the component
 export class OtherComponent {
   constructor(@Inject(USER_REST) public User) {
     Users.one(2).get() // GET to /users/2
@@ -821,12 +840,10 @@ Restangular.one("accounts", 123).customGET("messages")
 Restangular.all("accounts").customGET("messages", {param: "param2"})
 ````
 
-All custom methods have an alias where you replace `custom` by `do`. For example, `customGET` is equal to `doGET`. Just pick whatever syntax you prefer.
-
 **[Back to top](#table-of-contents)**
 
 ## Copying elements
-Before modifying an object, we sometimes want to copy it and then modify the copied object. We can't use `angular.copy` for this because it'll not change the `this` binded in the functions we add to the object. In this cases, you must use `Restangular.copy(fromElement)`.
+Before modifying an object, we sometimes want to copy it and then modify the copied object. We can use `Restangular.copy(fromElement)`.
 
 **[Back to top](#table-of-contents)**
 
@@ -861,9 +878,9 @@ lengthPromise.then(function(length) {
 
 **[Back to top](#table-of-contents)**
 
-## Using values directly in templates
+## Using values directly in templates (Promises)
 
-Since Angular 1.2, Promise unwrapping in templates has been disabled by default and will be deprecated soon.
+Since Angular2, Promise unwrapping in templates has been disabled by default and will be deprecated soon.
 
 **This means that the following will cease to work**:
 
@@ -899,7 +916,7 @@ Sometimes, we have a lot of nested entities (and their IDs), but we just want th
 
 ````javascript
 
-var restangularSpaces = this.restangular.one("accounts",123).one("buildings", 456).all("spaces");
+var restangularSpaces = Restangular.one("accounts",123).one("buildings", 456).all("spaces");
 
 // This will do ONE get to /accounts/123/buildings/456/spaces
 restangularSpaces.getList()
@@ -927,9 +944,9 @@ This can be used together with the hook `addElementTransformer` to do some neat 
 @NgModule({
   bootstrap: [ AppComponent ],
   imports: [ // import Angular's modules
-    RestangularModule.forRoot([], (Restangular)=>{
+    RestangularModule.forRoot((RestangularProvider)=>{
       // It will transform all building elements, NOT collections
-      Restangular.provider.addElementTransformer('buildings', false, function(building) {
+      RestangularProvider.addElementTransformer('buildings', false, function(building) {
         // This will add a method called evaluate that will do a get to path evaluate with NO default
         // query params and with some default header
         // signature is (name, operation, path, params, headers, elementToPost)
@@ -939,7 +956,7 @@ This can be used together with the hook `addElementTransformer` to do some neat 
         return building;
       });
   
-      Restangular.provider.addElementTransformer('users', true, function(user) {
+      RestangularProvider.addElementTransformer('users', true, function(user) {
         // This will add a method called login that will do a POST to the path login
         // signature is (name, operation, path, params, headers, elementToPost)
     
@@ -978,7 +995,7 @@ Restangular.all('users').login({key: value});
 Create custom methods for your collection using Restangular.extendCollection(). This is an alias for:
 
 ```js
-  Restangular.addElementTransformer(route, true, fn);
+  RestangularProvider.addElementTransformer(route, true, fn);
 ```
 
 ### Example:
@@ -1006,7 +1023,7 @@ Create custom methods for your collection using Restangular.extendCollection(). 
 Create custom methods for your models using Restangular.extendModel(). This is an alias for:
 
 ```js
-  Restangular.addElementTransformer(route, false, fn);
+  RestangularProvider.addElementTransformer(route, false, fn);
 ```
 
 **[Back to top](#table-of-contents)**
@@ -1063,7 +1080,7 @@ Restangular.provider.setRequestInterceptor(function(elem, operation) {
 What you need to do is to configure the `RestangularFields` and set the `id` field to `_id`. Let's see how:
 
 ````javascript
-Restangular.provider.setRestangularFields({
+RestangularProvider.setRestangularFields({
   id: "_id"
 });
 ````
@@ -1087,7 +1104,7 @@ This can be done using the customPOST / customPUT method. Look at the following 
 Restangular.all('users')
 .customPOST(formData, undefined, undefined, { 'Content-Type': undefined });
 ````
-This basically tells the request to use the *Content-Type: multipart/form-data* as the header. Also *formData* is the body of the request, be sure to add all the params here, including the File you want to send of course. There is an issue already closed but with a lot of information from other users and @mgonto as well: [GitHub - Restangular](https://github.com/mgonto/restangular/issues/420)
+This basically tells the request to use the *Content-Type: multipart/form-data* as the header. Also *formData* is the body of the request, be sure to add all the params here, including the File you want to send of course.
 
 #### **How do I handle CRUD operations in a List returned by Restangular?**
 
@@ -1121,8 +1138,8 @@ When you actually get a list by doing
 this.owners = house.getList('owners').$object;
 ````
 
-You're actually assigning a Promise to the owners value of the $scope. As Angular knows how to process promises, if in your view you do an ng-repeat of this $scope variable, results will be shown once the promise is resolved (Response arrived).
-However, changes to that promise that you do from your HTML won't be seen in the scope, as it's not a real array. It's just a promise of an array.
+You're actually assigning a Promise to the owners value. As Angular knows how to process promises, if in your view you do an *ngFor of owners variable, results will be shown once the promise is resolved (Response arrived).
+However, changes to that promise that you do from your HTML won't be seen in the component, as it's not a real array. It's just a promise of an array.
 
 #### Removing an element from a collection, keeping the collection restangularized
 
@@ -1136,10 +1153,6 @@ userWithId.remove().then(function() {
   if (index > -1) this.users.splice(index, 1);
 });
 ```
-
-#### When I set baseUrl with a port, it's stripped out.
-
-It won't be stripped out anymore as I've ditched `$resource` :). Now you can happily put the port :).
 
 #### How can I access the `unrestangularized` element as well as the `restangularized` one?
 
@@ -1170,24 +1183,6 @@ this.showData = function () {
 };
 ````
 
-#### Restangular fails with status code 0
-
-This is typically caused by Cross Origin Request policy. In order to enable cross domain communication and get correct response with appropriate status codes, you must have the CORS headers attached, even in error responses. If the server does not attach the CORS headers to the response then the XHR object won't parse it, thus the XHR object won't have any response body, status or any other response data inside which typically will cause your request to fail with status code 0.
-
-#### Why does this depend on Lodash / Underscore?
-
-This is a very good question. I could've done the code so that I don't depend on Underscore nor Lodash, but I think both libraries make your life SO much easier. They have all of the "functional" stuff like map, reduce, filter, find, etc.
-With these libraries, you always work with immutable stuff, you get compatibility for browsers which don't implement ECMA5 nor some of these cool methods, and they're actually quicker.
-So, why not use it? If you've never heard of them, by using Restangular, you could start using them. Trust me, you're never going to give them up after this!
-
-**[Back to top](#table-of-contents)**
-
-# Supported Angular versions
-
-Restangular supports all angular versions including 1.0.X, 1.1.X and 1.2.X (1.2.4 being the current at the time)
-
-Also, when using Restangular with version >= 1.1.4, in case you're using Restangular inside a callback not handled by Angular, you have to wrap the whole request with `$scope.apply` to make it work or you need to run one extra `$digest` manually. Check out https://github.com/mgonto/restangular/issues/71
-
 **[Back to top](#table-of-contents)**
 
 # Server Frameworks
@@ -1207,35 +1202,8 @@ Users reported that this server frameworks play real nice with Restangular, as t
 
 **[Back to top](#table-of-contents)**
 
-# Releases Notes
-
-New releases notes are together with releases in GitHub at: https://github.com/mgonto/restangular/releases
-
-To see old releases notes, [you can click here](https://github.com/mgonto/restangular/blob/master/CHANGELOG.md)
-
-**[Back to top](#table-of-contents)**
-
-# Contributors
-
-* Martin Gontovnikas ([@mgonto](https://twitter.com/mgonto))
-* Paul Dijou ([@paul_dijou](https://twitter.com/paul_dijou))
-
-**[Back to top](#table-of-contents)**
-
 # License
 
 The MIT License
-
-Copyright (c) 2014 Martin Gontovnikas http://www.gon.to/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mgonto/restangular/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 **[Back to top](#table-of-contents)**
