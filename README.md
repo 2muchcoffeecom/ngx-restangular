@@ -80,6 +80,11 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 **[Back to top](#table-of-contents)**
 
+#Current stage
+
+Ng2-Restangular is in beta-version now. Almost all functionality was transferred from the Restangular.
+We are open to any cooperation in terms of its further development.
+
 #How do I add this to my project?
 
 You can download this by:
@@ -90,7 +95,7 @@ You can download this by:
 
 #Dependencies
 
-Restangular depends on Angular2, Lodash and q(эта библиотека не будет подключатся в последующих версиях).
+Restangular depends on Angular2, Lodash and q(this library won't be included in the next versions).
 
 **[Back to top](#table-of-contents)**
 
@@ -112,36 +117,15 @@ import { RestangularModule } from 'ng2-restangular';
     AppComponent,
   ],
   imports: [
-    // подключение Restangular модуля, если нам не нужны дефолтные настройки мы можем подключить RestangularModule вместо  RestangularModule.forRoot
-    // Первый параметр это массив с сервисами которые мы хотим подключить, второй параметр это функция для глобальной настройки
-    RestangularModule.forRoot(
-      [Http],
-      (Restangular, http)=>{ Фунция в которой мы можем устанавливать дефолтные настройки
-        Restangular.provider.setBaseUrl('http://api.restng2.local/v1');
-        Restangular.provider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+    // Импортируем RestangularModule и устанавливаем дефолтные найстройки для restanglar
+    RestangularModule.forRoot((RestangularProvider) => {
+        RestangularProvider.setBaseUrl('http://api.test.local/v1');
+        RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
       }
     ),
   ]
 })
 export class AppModule {
-}
-
-// дальше в коде ...
-
-/*
- * App Component
- * Top Level Component
- */
-@Component({
-  ...
-})
-export class AppComponent {
-  constructor(
-    private restangular: Restangular
-  ) {
-    // Устанавливаем дефолтные настройки
-    this.restangular.provider.setBaseUrl('http://api.test.com/v1');
-  }
 }
 
 // дальше в коде ...
@@ -154,8 +138,8 @@ export class OtherComponent {
   }
 
   ngOnInit() {
-    // получаем всех юзеров
-    this.restangular.all('users').getList();
+    // GET http://api.test.local/v1/users/2/accounts
+    this.restangular.one('users', 2).all(accounts).getList();
   }
 
 }
@@ -188,9 +172,6 @@ Restangular.several('accounts', 1234, 123, 12345);
 Now that we have our main Object let's start playing with it.
 
 ````javascript
-import { Component } from '@angular/core';
-import { Restangular } from 'ng2-restangular';
-
 @Component({
   ...
 })
@@ -320,8 +301,8 @@ export class OtherComponent {
 ## Configuring Restangular
 
 ### Properties
-Ng2-Restangular comes with defaults for all of its properties but you can configure them. **So, if you don't need to configure something, there's no need to add the configuration.**
-You can set all these configurations in **`Root Component` to change the global configuration** or you can **use the withConfig method in Restangular service to create a new Restangular service with some scoped configuration**. Check the section on this later.
+Restangular comes with defaults for all of its properties but you can configure them. **So, if you don't need to configure something, there's no need to add the configuration.**
+You can set all these configurations in **RestangularModule(#how-to-configure-them-globally) to change the global configuration** or you can **use the withConfig method in Restangular service to create a new Restangular service with some scoped configuration**. Check the section on this later.
 
 #### setBaseUrl
 The base URL for all calls to your API. For example if your URL for fetching accounts is http://example.com/api/v1/accounts, then your baseUrl is `/api/v1`. The default baseUrl is an empty string which resolves to the same url that AngularJS is running, but you can also set an absolute url like `http://api.example.com/api/v1` if you need to set another domain.
