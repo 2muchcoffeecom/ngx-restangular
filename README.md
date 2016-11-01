@@ -111,7 +111,7 @@ import { RestangularModule } from 'ng2-restangular';
     AppComponent,
   ],
   imports: [
-    // Импортируем RestangularModule и устанавливаем дефолтные найстройки для restanglar
+    // Importing RestangularModule and making default configs for restanglar
     RestangularModule.forRoot((RestangularProvider) => {
         RestangularProvider.setBaseUrl('http://api.test.local/v1');
         RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
@@ -122,7 +122,7 @@ import { RestangularModule } from 'ng2-restangular';
 export class AppModule {
 }
 
-// дальше в коде ...
+// later in code ...
 
 @Component({
   ...
@@ -398,12 +398,12 @@ var refreshAccesstoken = function() {
 @NgModule({
   bootstrap: [ AppComponent ],
   imports: [ 
-    // Импортируем RestangularModule и устанавливаем дефолтные найстройки для Restanglar
+    // Importing RestangularModule and making default configs for restanglar
     RestangularModule.forRoot([Http], (Restangular, http)=>{
       Restangular.provider.setBaseUrl('http://api.test.com/v1');
       Restangular.provider.setDefaultResponseMethod('promise');
   
-      // Настраиваем Error Interceptor
+      // Configurating Error Interceptor
       Restangular.provider.setErrorInterceptor((response, deferred, responseHandler) => {
         if(response.status === 403) {
           refreshAccesstoken().then(() => {
@@ -447,6 +447,10 @@ All of these fields except for `id` and `selfLink` are handled by Restangular, s
 #### setMethodOverriders
 
 You can now Override HTTP Methods. You can set here the array of methods to override. All those methods will be sent as POST and Restangular will add an X-HTTP-Method-Override header with the real HTTP method we wanted to do.
+
+````javascript
+RestangularProvider.setMethodOverriders(["Get","Put"]);
+````
 
 #### setJsonp
 Typical web browsers prohibit requesting data from a server in a different domain (same-origin policy). JSONP or "JSON with padding" is a communication technique used in JavaScript programs running in web browsers to get around this.
@@ -499,7 +503,7 @@ export function RestFulResponseFactory(restangular: Restangular) {
 }
 
 
-// Подключаем фабрику в AppModule модуле
+// Configure factory in AppModule module
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -619,7 +623,7 @@ import { RestangularModule } from 'ng2-restangular';
       RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
       RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
       
-      // Пример использования Http сервиса внутри глобальной конфигурации рестангулара
+      // Example of using Http service inside global config restangular
       RestangularProvider.addElementTransformer('me', true, ()=>{
         return http.get('http://api.test.com/v1/users/2', {});
       });
@@ -710,7 +714,7 @@ export function UserRestFactory(restangular: Restangular) {
   ],
   imports: [RestangularModule],
   providers: [
-    { provide: USER_REST, useFactory:  UserRestFactory, deps: [Restangular] } // подключение нашей фабрики
+    { provide: USER_REST, useFactory:  UserRestFactory, deps: [Restangular] } // Configurating our factory
   ]
 })
 export class AppModule {
