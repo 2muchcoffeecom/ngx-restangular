@@ -7,14 +7,11 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 #Table of contents
 
-- [Restangular](#restangular)
-- [Differences with $resource](#differences-with-resource)
+- [Current stage](#current-stage)
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
 - [Dependencies](#dependencies)
-- [Production apps using Restangular](#production-apps-using-restangular)
 - [Starter Guide](#starter-guide)
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
-  - [Adding dependency to Restangular module in your app](#adding-dependency-to-restangular-module-in-your-app)
   - [Using Restangular](#using-restangular)
     - [Creating Main Restangular object](#creating-main-restangular-object)
     - [Let's code!](#lets-code)
@@ -24,25 +21,27 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
       - [setExtraFields](#setextrafields)
       - [setParentless](#setparentless)
       - [addElementTransformer](#addelementtransformer)
+      - [setTransformOnlyServerElements](#settransformonlyserverelements)
       - [setOnElemRestangularized](#setonelemrestangularized)
-      - [setResponseInterceptor](#setresponseinterceptor)
-      - [setResponseExtractor (alias of setResponseInterceptor)](#setresponseinterceptor)
       - [addResponseInterceptor](#addresponseinterceptor)
-      - [setRequestInterceptor](#setrequestinterceptor)
       - [addRequestInterceptor](#addrequestinterceptor)
-      - [setFullRequestInterceptor](#setfullrequestinterceptor)
+      - [addFullRequestInterceptor](#addfullrequestinterceptor)
       - [setErrorInterceptor](#seterrorinterceptor)
       - [setRestangularFields](#setrestangularfields)
       - [setMethodOverriders](#setmethodoverriders)
+      - [setJsonp](#setjsonp)
       - [setDefaultRequestParams](#setdefaultrequestparams)
       - [setFullResponse](#setfullresponse)
       - [setDefaultHeaders](#setdefaultheaders)
       - [setRequestSuffix](#setrequestsuffix)
       - [setUseCannonicalId](#setusecannonicalid)
       - [setPlainByDefault](#setplainbydefault)
+      - [setEncodeIds](#setencodeids)
+      - [setDefaultResponseMethod](#setdefaultresponsemethod)
+    - [Accessing configuration](#accessing-configuration)
     - [How to configure them globally](#how-to-configure-them-globally)
-      - [Configuring in the config](#configuring-in-the-config)
-      - [Configuring in the run](#configuring-in-the-run)
+      - [Configuring in the AppModule](#configuring-in-the-appmodule)
+      - [Configuring in the AppModule with Dependency Injection applied](#configuring-in-the-appmodule-with-dependency-injection-applied)
     - [How to create a Restangular service with a different configuration from the global one](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one)
     - [Decoupled Restangular Service](#decoupled-restangular-service)
   - [Methods description](#methods-description)
@@ -53,7 +52,7 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
   - [Copying elements](#copying-elements)
   - [Enhanced promises](#enhanced-promises)
         - [Using values directly in templates](#using-values-directly-in-templates)
-  - [Using Self reference resources](#using-self-reference-resources)
+  - [Using values directly in templates (Promises)](#using-values-directly-in-templates-(promises))
   - [URL Building](#url-building)
   - [Creating new Restangular Methods](#creating-new-restangular-methods)
   - [Adding Custom Methods to Collections](#adding-custom-methods-to-collections)
@@ -63,19 +62,14 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
 - [FAQ](#faq)
     - [How can I handle errors?](#how-can-i-handle-errors)
     - [I need to send one header in EVERY Restangular request, how do I do this?](#i-need-to-send-one-header-in-every-restangular-request-how-do-i-do-this)
-    - [Can I cache requests?](#can-i-cache-requests)
-    - [Can it be used in $routeProvider.resolve?](#can-it-be-used-in-routeproviderresolve)
-    - [My response is actually wrapped with some metadata. How do I get the data in that case?](#my-response-is-actually-wrapped-with-some-metadata-how-do-i-get-the-data-in-that-case)
+    - [How can I send a delete WITHOUT a body?](#how-can-I-send-a-delete-without-a-body?)
     - [I use Mongo and the ID of the elements is _id not id as the default. Therefore requests are sent to undefined routes](#i-use-mongo-and-the-id-of-the-elements-is-_id-not-id-as-the-default-therefore-requests-are-sent-to-undefined-routes)
     - [What if each of my models has a different ID name like CustomerID for Customer](#what-if-each-of-my-models-has-a-different-id-name-like-customerid-for-customer)
+    - [How can I send files in my request using Restangular?](#how-can-i-send-files-in-my-request-using-restangular?)
     - [How do I handle CRUD operations in a List returned by Restangular?](#how-do-i-handle-crud-operations-in-a-list-returned-by-restangular)
-    - [When I set baseUrl with a port, it's stripped out.](#when-i-set-baseurl-with-a-port-its-stripped-out)
+    - [Removing an element from a collection, keeping the collection restangularized](#removing-an-element-from-a-collection,-keeping-the-collection-restangularized)
     - [How can I access the unrestangularized element as well as the restangularized one?](#how-can-i-access-the-unrestangularized-element-as-well-as-the-restangularized-one)
-    - [Restangular fails with status code 0](#restangular-fails-with-status-code-0)
-    - [Why does this depend on Lodash / Underscore?](#why-does-this-depend-on-lodash--underscore)
-- [Supported Angular versions](#supported-angular-versions)
 - [Server Frameworks](#server-frameworks)
-- [Releases Notes](#releases-notes)
 - [License](#license)
 
 **[Back to top](#table-of-contents)**
@@ -348,9 +342,6 @@ This callback is a function that has 3 parameters:
 
 This can be used together with `addRestangularMethod` (Explained later) to add custom methods to an element
 
-
-#### setResponseInterceptor
-**This is deprecated. Use addResponseInterceptor since you can add more than one**.
 
 #### addResponseInterceptor
 The responseInterceptor is called after we get each response from the server. It's a function that receives this arguments:
