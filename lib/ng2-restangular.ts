@@ -88,7 +88,7 @@ export class Restangular {
       return this.injector.get(services);
     });
     
-    this.configObj.fn(...[this, ...arrDI]);
+    this.configObj.fn(...[this.provider, ...arrDI]);
   }
   
   createRequest(options) {
