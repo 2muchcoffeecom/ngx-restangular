@@ -12,24 +12,6 @@ import {RESTANGULAR} from "./ng2-restangular.config";
 @Injectable()
 export class Restangular {
   provider;
-  //  : {
-  //  isSafe,
-  //  absoluteUrl,
-  //  setSelfLinkAbsoluteUrl,
-  //  setBaseUrl,
-  //  setExtraFields,
-  //  setDefaultHttpFields,
-  //  setPlainByDefault,
-  //  withHttpValues,
-  //  setEncodeIds,
-  //  setDefaultRequestParams,
-  //  setDefaultHeaders,
-  //  setDefaultResponseMethod,
-  //  setMethodOverriders,
-  //  setJsonp,
-  //  isOverridenMethod,
-  //  setUrlCreator,
-  //};
   extendCollection;
   copy;
   configuration;

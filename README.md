@@ -23,7 +23,6 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
       - [setBaseUrl](#setbaseurl)
       - [setExtraFields](#setextrafields)
       - [setParentless](#setparentless)
-      - [setDefaultHttpFields](#setdefaulthttpfields)
       - [addElementTransformer](#addelementtransformer)
       - [setOnElemRestangularized](#setonelemrestangularized)
       - [setResponseInterceptor](#setresponseinterceptor)
@@ -337,9 +336,6 @@ This method accepts 1 parameter, it could be:
 
 * Boolean: Specifies if all elements should be parentless or not
 * Array: Specifies the routes (types) of all elements that should be parentless. For example `['buildings']`
-
-## setDefaultHttpFields
-You can set all of those properties in the object sent on this setter so that they will be used in EVERY API call made by Ng2-Restangular
 
 #### addElementTransformer
 This is a hook. After each element has been "restangularized" (Added the new methods from Ng2-Restangular), the corresponding transformer will be called if it fits.
@@ -793,7 +789,6 @@ These are the methods that can be called on the Restangular object.
 * **getParentList()**: Gets the parent list to which it belongs (if any)
 * **clone()**: Copies the element. It's an alias to calling `Restangular.copy(elem)`.
 * **plain()**: Returns the plain element received from the server without any of the enhanced methods from Restangular. It's an alias to calling `Restangular.stripRestangular(elem)`
-* **withHttpConfig(httpConfig)**: It lets you set a configuration for $http only for the next call. Check the Local Config HTTP section for an example.
 * **save**: Calling save will determine whether to do PUT or POST accordingly
 
 **[Back to top](#table-of-contents)**
@@ -822,7 +817,6 @@ Restangular.all('users').getList()
 * **oneUrl(route, url)**: This will create a new Restangular object that is just a pointer to one element with the specified URL.
 * **allUrl(route, url)**: This creates a Restangular object that is just a pointer to a list at the specified URL.
 * **clone()**: Copies the collection. It's an alias to calling `Restangular.copy(collection)`.
-* **withHttpConfig(httpConfig)**: It lets you set a configuration for $http only for the next call. Check the Local Config HTTP section for an example.
 
 **[Back to top](#table-of-contents)**
 
@@ -1193,21 +1187,6 @@ this.showData = function () {
     console.log(response.plain());
   });
 };
-````
-
-**Addendum :** If you want originalElement to be the original response object instead of having an original value for each key in your newResponse array, replace
-
-
-
-````
-      newResponse[key].originalElement = angular.copy(value);
-````
-
-By
-
-
-````
-      newResponse.originalElement[key] = angular.copy(value);
 ````
 
 #### Restangular fails with status code 0
