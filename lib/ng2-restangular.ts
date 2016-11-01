@@ -232,7 +232,7 @@ function providerConfig($http, $q) {
     /**
      * Method overriders response Method
      **/
-    config.defaultResponseMethod = config.defaultResponseMethod || 'observable';
+    config.defaultResponseMethod = config.defaultResponseMethod || 'promise';
     object.setDefaultResponseMethod = function (method) {
       config.defaultResponseMethod = method;
       object.defaultResponseMethod = config.defaultResponseMethod;

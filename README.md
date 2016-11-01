@@ -560,7 +560,7 @@ You can set here if you want to URL Encode IDs or not. By default, it's true.
 
 #### setDefaultResponseMethod
 
-You can choose what Response Method to use `Observable` or `Promise`, by default `Observable`.
+You can choose what Response Method to use `observable` or `promise`, by default `promise`.
 
 **[Back to top](#table-of-contents)**
 
