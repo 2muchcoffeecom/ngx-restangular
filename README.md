@@ -181,7 +181,7 @@ Now that we have our main Object let's start playing with it.
   imports: [
     // Importing RestangularModule and making default configs for restanglar
     RestangularModule.forRoot((RestangularProvider) => {
-        RestangularProvider.setDefaultResponseMethod("observables");
+        RestangularProvider.setDefaultResponseMethod("observable");
       }
     ),
   ]
