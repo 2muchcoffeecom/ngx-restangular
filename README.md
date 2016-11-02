@@ -78,6 +78,7 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 Ng2-Restangular is in beta-version now. Almost all functionality was transferred from the Restangular.
 We are open to any cooperation in terms of its further development.
+In next versions default response method will be observables. Later library "q" will be replaced by "RxJS". 
 
 #How do I add this to my project?
 
