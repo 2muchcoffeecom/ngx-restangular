@@ -14,8 +14,8 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
   - [Using Restangular](#using-restangular)
     - [Creating Main Restangular object](#creating-main-restangular-object)
-    - [Lets Code with Observables!](#lets-code-with-observables!)
-    - [Here is Example of code with using promises!](#here-is-example-of-code-with-using-promises!)
+    - [Lets Code with Observables!](#lets-code-with-observables)
+    - [Here is Example of code with using promises!](#here-is-example-of-code-with-using-promises)
   - [Configuring Restangular](#configuring-restangular)
     - [Properties](#properties)
       - [setBaseUrl](#setbaseurl)
@@ -52,8 +52,7 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
     - [Custom methods](#custom-methods)
   - [Copying elements](#copying-elements)
   - [Enhanced promises](#enhanced-promises)
-        - [Using values directly in templates](#using-values-directly-in-templates)
-  - [Using values directly in templates (Promises)](#using-values-directly-in-templates-(promises))
+  - [Using values directly in templates with Promises](#using-values-directly-in-templates)
   - [URL Building](#url-building)
   - [Creating new Restangular Methods](#creating-new-restangular-methods)
   - [Adding Custom Methods to Collections](#adding-custom-methods-to-collections)
@@ -1008,7 +1007,7 @@ lengthPromise.then(function(length) {
 
 **[Back to top](#table-of-contents)**
 
-## Using values directly in templates (Promises)
+## Using values directly in templates with Promises
 
 Since Angular2, Promise unwrapping in templates has been disabled by default and will be deprecated soon.
 
