@@ -171,7 +171,7 @@ Now that we have our main Object let's start playing with it.
 
 
 
-````typescript
+````javascript
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -181,7 +181,7 @@ Now that we have our main Object let's start playing with it.
   imports: [
     // Importing RestangularModule and making default configs for restanglar
     RestangularModule.forRoot((RestangularProvider) => {
-        RestangularProvider.setDefaultResponseMethod("observables");
+        RestangularProvider.setDefaultResponseMethod("observable");
       }
     ),
   ]
