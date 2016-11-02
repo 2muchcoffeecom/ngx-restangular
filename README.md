@@ -14,7 +14,8 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
   - [Using Restangular](#using-restangular)
     - [Creating Main Restangular object](#creating-main-restangular-object)
-    - [Let's code!](#lets-code)
+    - [Lets Code with Observables!](#lets-code-with-observables!)
+    - [Here is Example of code with using promises!](#here-is-example-of-code-with-using-promises!)
   - [Configuring Restangular](#configuring-restangular)
     - [Properties](#properties)
       - [setBaseUrl](#setbaseurl)
@@ -161,9 +162,142 @@ Restangular.several('accounts', 1234, 123, 12345);
 
 **[Back to top](#table-of-contents)**
 
-### Let's code!
+### Lets Code with Observables!
 
+If you dont want to use observables see code below.
+The default config is with using promises so you need to set response method to "observables".
+You can do this in config when importing module or like in code below.
 Now that we have our main Object let's start playing with it.
+
+
+
+````typescript
+@Component({
+  ...
+})
+export class OtherComponent {
+  allAccounts;
+  accounts;
+  account;
+  
+  constructor(private restangular: Restangular) {
+    // Setting method of response.
+    this.restangular.provider.setDefaultResponseMethod("observables");
+  }
+  
+  ngOnInit() {
+    
+    // First way of creating a this.restangular object. Just saying the base URL
+    let baseAccounts = this.restangular.all('accounts');
+  
+    // This will query /accounts and return a observable.
+    baseAccounts.getList().subscribe( accounts => {
+      this.allAccounts = accounts;
+    });
+  
+      
+    let newAccount = {name: "Gonto's account"};
+  
+    // POST /accounts
+    baseAccounts.post(newAccount);
+  
+    // GET to http://www.google.com/ You set the URL in this case
+    this.restangular.allUrl('googlers', 'http://www.google.com/').getList();
+  
+    // GET to http://www.google.com/1 You set the URL in this case
+    this.restangular.oneUrl('googlers', 'http://www.google.com/1').get();
+  
+    // You can do RequestLess "connections" if you need as well
+  
+    // Just ONE GET to /accounts/123/buildings/456
+    this.restangular.one('accounts', 123).one('buildings', 456).get();
+  
+    // Just ONE GET to /accounts/123/buildings
+    this.restangular.one('accounts', 123).getList('buildings');
+  
+    // Here we use Observables 
+    // GET /accounts
+    baseAccounts.getList().subscribe( accounts => {
+      // Here we can continue fetching the tree :).
+    
+      let firstAccount = accounts[0];
+      // This will query /accounts/123/buildings considering 123 is the id of the firstAccount
+      let buildings = firstAccount.getList("buildings");
+    
+      // GET /accounts/123/places?query=param with request header: x-user:mgonto
+      let loggedInPlaces = firstAccount.getList("places", {query: 'param'}, {'x-user': 'mgonto'});
+    
+      // This is a regular JS object, we can change anything we want :)
+      firstAccount.name = "Gonto";
+    
+      // If we wanted to keep the original as it is, we can copy it to a new element
+      let editFirstAccount = this.restangular.copy(firstAccount);
+      editFirstAccount.name = "New Name";
+    
+    
+      // PUT /accounts/123. The name of this account will be changed from now on
+      firstAccount.put();
+      editFirstAccount.put();
+    
+      // PUT /accounts/123. Save will do POST or PUT accordingly
+      firstAccount.save();
+    
+      // DELETE /accounts/123 We don't have first account anymore :(
+      firstAccount.remove();
+    
+      var myBuilding = {
+        name: "Gonto's Building",
+        place: "Argentina"
+      };
+    
+      // POST /accounts/123/buildings with MyBuilding information
+      firstAccount.post("Buildings", myBuilding).subscribe( () => {
+        console.log("Object saved OK");
+      }, () => {
+        console.log("There was an error saving");
+      });
+    
+      // GET /accounts/123/users?query=params
+      firstAccount.getList("users", {query: 'params'}).subscribe( users => {
+        // Instead of posting nested element, a collection can post to itself
+        // POST /accounts/123/users
+        users.post({userName: 'unknown'});
+      
+        // Custom methods are available now :).
+        // GET /accounts/123/users/messages?param=myParam
+        users.customGET("messages", {param: "myParam"});
+      
+        var firstUser = users[0];
+      
+        // GET /accounts/123/users/456. Just in case we want to update one user :)
+        let userFromServer = firstUser.get();
+      
+        // ALL http methods are available :)
+        // HEAD /accounts/123/users/456
+        firstUser.head()
+      
+      });
+    
+    }, () => {
+      alert("Oops error from server :(");
+    });
+  
+    // Second way of creating this.restangular object. URL and ID :)
+    var account = this.restangular.one("accounts", 123);
+  
+    // GET /accounts/123?single=true
+    this.account = account.get({single: true});
+  
+    // POST /accounts/123/messages?param=myParam with the body of name: "My Message"
+    account.customPOST({name: "My Message"}, "messages", {param: "myParam"}, {})
+  }
+}
+````
+
+**[Back to top](#table-of-contents)**
+
+### Here is Example of code with using promises!
+
 
 ````javascript
 @Component({
@@ -291,6 +425,7 @@ export class OtherComponent {
 ````
 
 **[Back to top](#table-of-contents)**
+
 
 ## Configuring Restangular
 
