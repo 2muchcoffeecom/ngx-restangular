@@ -84,7 +84,7 @@ In next versions default response method will be observables. Later library "q" 
 
 You can download this by:
 
-* Using npm and running `npm install restangular`
+* Using npm and running `npm install ng2-restangular`
 
 **[Back to top](#table-of-contents)**
 
