@@ -52,7 +52,7 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
     - [Custom methods](#custom-methods)
   - [Copying elements](#copying-elements)
   - [Enhanced promises](#enhanced-promises)
-  - [Using values directly in templates with Promises](#using-values-directly-in-templates)
+  - [Using values directly in templates with Promises](#using-values-directly-in-templates-with-promises)
   - [URL Building](#url-building)
   - [Creating new Restangular Methods](#creating-new-restangular-methods)
   - [Adding Custom Methods to Collections](#adding-custom-methods-to-collections)
@@ -163,14 +163,31 @@ Restangular.several('accounts', 1234, 123, 12345);
 
 ### Lets Code with Observables!
 
-If you dont want to use observables see code below.
+If you dont want to use observables see article below.
 The default config is with using promises so you need to set response method to "observables".
-You can do this in config when importing module or like in code below.
+You can do this in config when importing module.
 Now that we have our main Object let's start playing with it.
 
 
 
 ````typescript
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    // Importing RestangularModule and making default configs for restanglar
+    RestangularModule.forRoot((RestangularProvider) => {
+        RestangularProvider.setDefaultResponseMethod("observables");
+      }
+    ),
+  ]
+})
+export class AppModule {
+}
+
 @Component({
   ...
 })
@@ -180,8 +197,6 @@ export class OtherComponent {
   account;
   
   constructor(private restangular: Restangular) {
-    // Setting method of response.
-    this.restangular.provider.setDefaultResponseMethod("observables");
   }
   
   ngOnInit() {
