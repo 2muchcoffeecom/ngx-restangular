@@ -171,7 +171,7 @@ Now that we have our main Object let's start playing with it.
 
 
 
-````typescript
+````javascript
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
