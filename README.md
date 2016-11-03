@@ -53,7 +53,7 @@ We are open to any cooperation in terms of its further development.
     - [Collection methods](#collection-methods)
     - [Custom methods](#custom-methods)
   - [Copying elements](#copying-elements)
-  - [Using values directly in templates with Promises](#using-values-directly-in-templates-with-promises)
+  - [Using values directly in templates with Observables](#using-values-directly-in-templates-with-observables)
   - [URL Building](#url-building)
   - [Creating new Restangular Methods](#creating-new-restangular-methods)
   - [Adding Custom Methods to Collections](#adding-custom-methods-to-collections)
@@ -542,10 +542,6 @@ If a property isn't returned, the one sent is used.
 
 #### addErrorInterceptor
 The errorInterceptor is called whenever there's an error. It's a function that receives the response, subject and the Restangular-response handler as parameters.
-
-The errorInterceptor function, whenever it returns `false`, prevents the promise linked to a Restangular request to be executed. All other return values (besides `false`) are ignored and the promise follows the usual path, eventually reaching the success or error hooks.
-
-The feature to prevent the promise to complete is useful whenever you need to intercept each Restangular error response for every request in your Angular2 application in a single place, increasing debugging capabilities and hooking security features in a single place.
 
 ````javascript
 // AppModule is the main entry point into Angular2 bootstraping process
@@ -1077,9 +1073,9 @@ Create custom methods for your collection using Restangular.extendCollection(). 
     return collection;
   });
 
-  var accountsPromise = Restangular.all('accounts').getList();
+  var accounts$ = Restangular.all('accounts').getList();
 
-  accountsPromise.subscribe( accounts => {
+  accounts$.subscribe( accounts => {
     accounts.totalAmount(); // invoke your custom collection method
   });
 ```
@@ -1103,9 +1099,9 @@ Create custom methods for your models using Restangular.extendModel(). This is a
     return model;
   });
 
-  var accountPromise = Restangular.one('accounts', 1).get();
+  var account$ = Restangular.one('accounts', 1).get();
 
-  accountPromise.subscribe(function(account) {
+  account$.subscribe(function(account) {
     account.prettifyAmount(); // invoke your custom model method
   });
 ```
@@ -1175,10 +1171,6 @@ Restangular.all('users')
 This basically tells the request to use the *Content-Type: multipart/form-data* as the header. Also *formData* is the body of the request, be sure to add all the params here, including the File you want to send of course.
 
 #### **How do I handle CRUD operations in a List returned by Restangular?**
-
-The best option for doing CRUD operations with a list, is to actually use the "real" list, and not the promise. It makes it easy to interact with it.
-
-Let's see an example :).
 
 ````javascript
 Restangular.all('users').getList().subscribe( users => {
