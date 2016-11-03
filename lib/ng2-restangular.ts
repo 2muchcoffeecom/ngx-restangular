@@ -1,9 +1,7 @@
 import {Injectable, Inject, Injector, Optional} from "@angular/core";
 import {Http, Request} from "@angular/http";
-import {Observable} from "rxjs";
-
-let _ = require('lodash');
-let $q = require('q');
+import {Observable, Subject} from "rxjs";
+import * as _ from "lodash";
 
 import {RestangularHelper} from "./ng2-restangular-helper";
 import {RESTANGULAR} from "./ng2-restangular.config";
@@ -72,7 +70,7 @@ export class Restangular {
     private injector: Injector,
     private http: Http
   ) {
-    this.provider = new providerConfig(this.createRequest.bind(this), $q);
+    this.provider = new providerConfig(this.createRequest.bind(this));
     let element = this.provider.$get();
     Object.assign(this, element);
     
@@ -88,37 +86,19 @@ export class Restangular {
       return this.injector.get(services);
     });
     
-    this.configObj.fn(...[this.provider, ...arrDI]);
+    this.configObj.fn(...[this.provider,  ...arrDI]);
   }
   
   createRequest(options) {
     let requestOptions = RestangularHelper.createRequestOptions(options);
     let request = new Request(requestOptions);
     
-    return this.http.request(request)
-    .map((response: any) => {
-      console.log(requestOptions, request);
-      response.config = {params: request};
-      return response;
-    })
-    .map((response: any) => {
-      if (response._body) {
-        response.data = typeof response._body == 'string' ? JSON.parse(response._body) : response._body;
-      } else {
-        response.data = null
-      }
-      return response;
-    })
-    .catch(err => {
-      err.data = typeof err._body == 'string' ? JSON.parse(err._body) : err._body;
-      console.log('ERROR', err);
-      return Observable.throw(err);
-    })
-    .toPromise();
+    return this.http.request(request);
   }
 }
 
-function providerConfig($http, $q) {
+function providerConfig($http) {
+  this.$http = $http;
   // Configuration
   var Configurer: any = {};
   Configurer.init = function (object, config) {
@@ -417,17 +397,17 @@ function providerConfig($http, $q) {
     
     config.responseInterceptors = config.responseInterceptors || [];
     
-    config.defaultResponseInterceptor = function (data /*, operation, what, url, response, deferred */) {
+    config.defaultResponseInterceptor = function (data /*, operation, what, url, response, subject */) {
       return data;
     };
     
-    config.responseExtractor = function (data, operation, what, url, response, deferred) {
+    config.responseExtractor = function (data, operation, what, url, response, subject) {
       var interceptors = _.clone(config.responseInterceptors);
       interceptors.push(config.defaultResponseInterceptor);
       var theData = data;
       _.each(interceptors, function (interceptor) {
         theData = interceptor(theData, operation,
-          what, url, response, deferred);
+          what, url, response, subject);
       });
       return theData;
     };
@@ -661,21 +641,54 @@ function providerConfig($http, $q) {
         if (config.isSafe(value.method)) {
           
           resource[key] = function () {
-            return $http(_.extend(value, {
+            let config = _.extend(value, {
               url: url
-            }));
+            });
+            return $http(config)
+            .let(interceptor(config));
           };
           
         } else {
           
           resource[key] = function (data) {
-            return $http(_.extend(value, {
+            let config = _.extend(value, {
               url: url,
               data: data
-            }));
+            });
+            return $http(config)
+            .let(interceptor(config))
           };
           
         }
+        
+        function interceptor(options){
+          let requestOptions = RestangularHelper.createRequestOptions(options);
+          let request = new Request(requestOptions);
+          
+          return (observable) => {
+            return observable
+            .map((response: any) => {
+              response.config = {params: request};
+              return response;
+            })
+            .map((response: any) => {
+              if (response._body) {
+                response.data = typeof response._body == 'string' ? JSON.parse(response._body) : response._body;
+              } else {
+                response.data = null
+              }
+              return response;
+            })
+            .catch(err => {
+              err.data = typeof err._body == 'string' ? JSON.parse(err._body) : err._body;
+              console.log('ERROR', err);
+              return Observable.throw(err);
+            });
+          }
+        }
+        
+        resource[key]
+        
       });
       
       return resource;
@@ -1014,54 +1027,20 @@ function providerConfig($http, $q) {
       }
       
       // Promises
-      function restangularizeResponse(promise, isCollection, valueToFill) {
-        promise.call = _.bind(promiseCall, promise);
-        promise.get = _.bind(promiseGet, promise);
-        promise[config.restangularFields.restangularCollection] = isCollection;
-        if (isCollection) {
-          promise.push = _.bind(promiseCall, promise, 'push');
-        }
-        promise.$object = valueToFill;
-        if (config.restangularizePromiseInterceptor) {
-          config.restangularizePromiseInterceptor(promise);
-        }
-        return config.defaultResponseMethod == 'observable' ? Observable.fromPromise(promise) : promise;
+      function restangularizeResponse(subject, isCollection, valueToFill) {
+        return subject;
       }
       
-      function promiseCall(method) {
-        var deferred = $q.defer();
-        var callArgs = arguments;
-        var filledValue = {};
-        this.then(function (val) {
-          var params = Array.prototype.slice.call(callArgs, 1);
-          var func = val[method];
-          func.apply(val, params);
-          filledValue = val;
-          deferred.resolve(val);
-        });
-        return restangularizeResponse(deferred.promise, this[config.restangularFields.restangularCollection], filledValue);
-      }
-      
-      function promiseGet(what) {
-        var deferred = $q.defer();
-        var filledValue = {};
-        this.then(function (val) {
-          filledValue = val[what];
-          deferred.resolve(filledValue);
-        });
-        return restangularizeResponse(deferred.promise, this[config.restangularFields.restangularCollection], filledValue);
-      }
-      
-      function resolvePromise(deferred, response, data, filledValue) {
+      function resolvePromise(subject, response, data, filledValue) {
         _.extend(filledValue, data);
         
         // Trigger the full response interceptor.
         if (config.fullResponse) {
-          return deferred.resolve(_.extend(response, {
+          return subject.next(_.extend(response, {
             data: data
           }));
         } else {
-          deferred.resolve(data);
+          subject.next(data);
         }
       }
       
@@ -1170,28 +1149,25 @@ function providerConfig($http, $q) {
       function putElementFunction(idx, params, headers) {
         var __this = this;
         var elemToPut = this[idx];
-        var deferred = $q.defer();
+        var subject = new Subject();
         var filledArray = [];
         filledArray = config.transformElem(filledArray, true, elemToPut[config.restangularFields.route], service);
-        
-        // set promise if undefined
-        let put = elemToPut.put(params, headers);
-        put.then = put.then || put.subscribe;
-        
-        put.then(function (serverElem) {
+  
+        elemToPut.put(params, headers)
+        .subscribe(function (serverElem) {
           var newArray = copyRestangularizedElement(__this);
           newArray[idx] = serverElem;
           filledArray = newArray;
-          deferred.resolve(newArray);
+          subject.next(newArray);
         }, function (response) {
-          deferred.reject(response);
+          subject.error(response);
         });
         
-        return restangularizeResponse(deferred.promise, true, filledArray);
+        return restangularizeResponse(subject, true, filledArray);
       }
       
-      function parseResponse(resData, operation, route, fetchUrl, response, deferred) {
-        var data = config.responseExtractor(resData, operation, route, fetchUrl, response, deferred);
+      function parseResponse(resData, operation, route, fetchUrl, response, subject) {
+        var data = config.responseExtractor(resData, operation, route, fetchUrl, response, subject);
         var etag = response.headers.get('ETag');
         if (data && etag) {
           data[config.restangularFields.etag] = etag;
@@ -1202,7 +1178,7 @@ function providerConfig($http, $q) {
       
       function fetchFunction(what, reqParams, headers) {
         var __this = this;
-        var deferred = $q.defer();
+        var subject = new Subject();
         var operation = 'getList';
         var url = urlHandler.fetchUrl(this, what);
         var whatFetched = what || __this[config.restangularFields.route];
@@ -1222,7 +1198,7 @@ function providerConfig($http, $q) {
         var okCallback = function (response) {
           var resData = response.data;
           var fullParams = response.config.params;
-          var data = parseResponse(resData, operation, whatFetched, url, response, deferred);
+          var data = parseResponse(resData, operation, whatFetched, url, response, subject);
           
           // support empty response for getList() calls (some APIs respond with 204 and empty body)
           if (_.isUndefined(data) || '' === data) {
@@ -1233,7 +1209,7 @@ function providerConfig($http, $q) {
           }
           
           if (true === config.plainByDefault) {
-            return resolvePromise(deferred, response, data, filledArray);
+            return resolvePromise(subject, response, data, filledArray);
           }
           
           var processedData = _.map(data, function (elem) {
@@ -1249,7 +1225,7 @@ function providerConfig($http, $q) {
           
           if (!__this[config.restangularFields.restangularCollection]) {
             resolvePromise(
-              deferred,
+              subject,
               response,
               restangularizeCollection(
                 __this,
@@ -1262,7 +1238,7 @@ function providerConfig($http, $q) {
             );
           } else {
             resolvePromise(
-              deferred,
+              subject,
               response,
               restangularizeCollection(
                 __this[config.restangularFields.parentResource],
@@ -1278,18 +1254,19 @@ function providerConfig($http, $q) {
         
         urlHandler.resource(this, $http, request.httpConfig, request.headers, request.params, what,
           this[config.restangularFields.etag], operation)[method]()
-        .then(okCallback, function error(response) {
+        .subscribe(okCallback, function error(response) {
           if (response.status === 304 && __this[config.restangularFields.restangularCollection]) {
-            resolvePromise(deferred, response, __this, filledArray);
+            resolvePromise(subject, response, __this, filledArray);
           } else if (_.every(config.errorInterceptors, function (cb: any) {
-              return cb(response, deferred, okCallback) !== false;
+              
+              return cb(response, subject, okCallback) !== false;
             })) {
             // triggered if no callback returns false
-            deferred.reject(response);
+            subject.error(response);
           }
         });
         
-        return restangularizeResponse(deferred.promise, true, filledArray);
+        return restangularizeResponse(subject, true, filledArray);
       }
       
       function withHttpConfig(httpConfig) {
@@ -1307,7 +1284,7 @@ function providerConfig($http, $q) {
       
       function elemFunction(operation, what, params, obj, headers) {
         var __this = this;
-        var deferred = $q.defer();
+        var subject = new Subject();
         var resParams = params || {};
         var route = what || this[config.restangularFields.route];
         var fetchUrl = urlHandler.fetchUrl(this, what);
@@ -1326,15 +1303,15 @@ function providerConfig($http, $q) {
         filledObject = config.transformElem(filledObject, false, route, service);
         
         var okCallback = function (response) {
-          var resData = response.data;
-          var fullParams = response.config.params;
-          var elem = parseResponse(resData, operation, route, fetchUrl, response, deferred);
+          var resData = _.get(response, 'data');
+          var fullParams = _.get(response, 'config.params');
+          
+          var elem = parseResponse(resData, operation, route, fetchUrl, response, subject);
           
           if (elem) {
             var data;
-            
             if (true === config.plainByDefault) {
-              return resolvePromise(deferred, response, elem, filledObject);
+              return resolvePromise(subject, response, elem, filledObject);
             }
             
             if (operation === 'post' && !__this[config.restangularFields.restangularCollection]) {
@@ -1346,7 +1323,7 @@ function providerConfig($http, $q) {
                 null,
                 fullParams
               );
-              resolvePromise(deferred, response, data, filledObject);
+              resolvePromise(subject, response, data, filledObject);
             } else {
               data = restangularizeElem(
                 __this[config.restangularFields.parentResource],
@@ -1358,22 +1335,24 @@ function providerConfig($http, $q) {
               );
               
               data[config.restangularFields.singleOne] = __this[config.restangularFields.singleOne];
-              resolvePromise(deferred, response, data, filledObject);
+              resolvePromise(subject, response, data, filledObject);
             }
             
           } else {
-            resolvePromise(deferred, response, undefined, filledObject);
+            resolvePromise(subject, response, undefined, filledObject);
           }
         };
         
         var errorCallback = function (response) {
           if (response.status === 304 && config.isSafe(operation)) {
-            resolvePromise(deferred, response, __this, filledObject);
+            resolvePromise(subject, response, __this, filledObject);
           } else if (_.every(config.errorInterceptors, function (cb: any) {
-              return cb(response, deferred, okCallback) !== false;
+              response.data = JSON.parse(response._body);
+              
+              return cb(response, subject, okCallback) !== false;
             })) {
             // triggered if no callback returns false
-            deferred.reject(response);
+            subject.error(response);
           }
         };
         // Overriding HTTP Method
@@ -1390,17 +1369,17 @@ function providerConfig($http, $q) {
         if (config.isSafe(operation)) {
           if (isOverrideOperation) {
             urlHandler.resource(this, $http, request.httpConfig, callHeaders, request.params,
-              what, etag, callOperation)[callOperation]({}).then(okCallback, errorCallback);
+              what, etag, callOperation)[callOperation]({}).subscribe(okCallback, errorCallback);
           } else {
             urlHandler.resource(this, $http, request.httpConfig, callHeaders, request.params,
-              what, etag, callOperation)[callOperation]().then(okCallback, errorCallback);
+              what, etag, callOperation)[callOperation]().subscribe(okCallback, errorCallback);
           }
         } else {
           urlHandler.resource(this, $http, request.httpConfig, callHeaders, request.params,
-            what, etag, callOperation)[callOperation](request.element).then(okCallback, errorCallback);
+            what, etag, callOperation)[callOperation](request.element).subscribe(okCallback, errorCallback);
         }
         
-        return restangularizeResponse(deferred.promise, false, filledObject);
+        return restangularizeResponse(subject, false, filledObject);
       }
       
       function getFunction(params, headers) {
