@@ -1,6 +1,6 @@
 import {Injectable, Inject, Injector, Optional} from "@angular/core";
 import {Http, Request} from "@angular/http";
-import {Observable, Subject} from "rxjs";
+import {Observable, Subject, BehaviorSubject} from "rxjs";
 import * as _ from "lodash";
 
 import {RestangularHelper} from "./ng2-restangular-helper";
@@ -1015,7 +1015,7 @@ function providerConfig($http) {
       
       // Promises
       function restangularizeResponse(subject, isCollection, valueToFill) {
-        return subject;
+        return subject.filter(res => res);
       }
       
       function resolvePromise(subject, response, data, filledValue) {
@@ -1136,7 +1136,7 @@ function providerConfig($http) {
       function putElementFunction(idx, params, headers) {
         var __this = this;
         var elemToPut = this[idx];
-        var subject = new Subject();
+        var subject = new BehaviorSubject(null);
         var filledArray = [];
         filledArray = config.transformElem(filledArray, true, elemToPut[config.restangularFields.route], service);
   
@@ -1165,7 +1165,7 @@ function providerConfig($http) {
       
       function fetchFunction(what, reqParams, headers) {
         var __this = this;
-        var subject = new Subject();
+        var subject = new BehaviorSubject(null);
         var operation = 'getList';
         var url = urlHandler.fetchUrl(this, what);
         var whatFetched = what || __this[config.restangularFields.route];
@@ -1271,7 +1271,7 @@ function providerConfig($http) {
       
       function elemFunction(operation, what, params, obj, headers) {
         var __this = this;
-        var subject = new Subject();
+        var subject = new BehaviorSubject(null);
         var resParams = params || {};
         var route = what || this[config.restangularFields.route];
         var fetchUrl = urlHandler.fetchUrl(this, what);
