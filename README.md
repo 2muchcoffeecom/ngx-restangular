@@ -1000,36 +1000,19 @@ Before modifying an object, we sometimes want to copy it and then modify the cop
 
 **[Back to top](#table-of-contents)**
 
-## Using values directly in templates with Promises
+## Using values directly in templates with Observables
 
-Since Angular2, Promise unwrapping in templates has been disabled by default and will be deprecated soon.
-
-**This means that the following will cease to work**:
+If you want to use values directly in templates use `AsyncPipe`
 
 ````js
 this.accounts = this.restangular.all('accounts').getList();
 ````
 
 ````html
-<tr *ngFor="let account of accounts"">
-  <td>{{account.name}}</td>
+<tr *ngFor="let account of accounts | async">
+  <td>{{account.fullName}}</td>
 </tr>
 ````
-
-**As this was a really handy way of working with Restangular, I've made a feature similar to $resource that will enable this behavior again**:
-
-````js
-this.accounts = this.restangular.all('accounts').getList().$object;
-````
-
-````html
-<tr *ngFor="let account of accounts"">
-  <td>{{account.name}}</td>
-</tr>
-````
-
-The `$object` property is a new property I've added to promises. By default, it'll be an empty array or object. Once the sever has responded with the real value, that object or array is filled with the correct response, therefore making the ng-repeat work :). Pretty neat :D
-
 
 **[Back to top](#table-of-contents)**
 
@@ -1189,7 +1172,7 @@ You can use `defaultHeaders` property for this. `defaultsHeaders` can be scoped 
 You must add a requestInterceptor for this.
 
 ````js
-Restangular.provider.setRequestInterceptor(function(elem, operation) {
+RestangularProvider.setRequestInterceptor(function(elem, operation) {
   if (operation === "remove") {
      return null;
   }
