@@ -5,9 +5,14 @@
 This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
+#Current stage
+
+Ng2-Restangular is in beta-version now. Almost all functionality was transferred from the Restangular.
+We are open to any cooperation in terms of its further development.
+In next versions default response method will be observables. Later library "q" will be replaced by "RxJS". 
+
 #Table of contents
 
-- [Current stage](#current-stage)
 - [How do I add this to my project?](#how-do-i-add-this-to-my-project)
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
@@ -73,12 +78,6 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
 - [License](#license)
 
 **[Back to top](#table-of-contents)**
-
-#Current stage
-
-Ng2-Restangular is in beta-version now. Almost all functionality was transferred from the Restangular.
-We are open to any cooperation in terms of its further development.
-In next versions default response method will be observables. Later library "q" will be replaced by "RxJS". 
 
 #How do I add this to my project?
 
@@ -484,6 +483,12 @@ This callback is a function that has 4 parameters:
 
 This can be used together with `addRestangularMethod` (Explained later) to add custom methods to an element
 
+````javascript
+service.setOnElemRestangularized((element, isCollection, what, Restangular) => {
+  element.newField = "newField";
+  return element;
+});
+````
 
 #### addResponseInterceptor
 The responseInterceptor is called after we get each response from the server. It's a function that receives this arguments:
@@ -493,19 +498,15 @@ The responseInterceptor is called after we get each response from the server. It
 * **what**: The model that's being requested. It can be for example: `accounts`, `buildings`, etc.
 * **url**: The relative URL being requested. For example: `/api/v1/accounts/123`
 * **response**: Full server response including headers
-* **Subject**: The Subject for the request.
 
 Some of the use cases of the responseInterceptor are handling wrapped responses and enhancing response elements with more methods among others.
 
 The responseInterceptor must return the restangularized data element.
 
 ````javascript
-RestangularProvider.addResponseInterceptor((element, operation, path, url, headers, params)=> {
-   return {
-     params: Object.assign({}, params, {auth:111}),
-     headers: headers,
-     element: element
-   }
+ RestangularProvider.addResponseInterceptor((data, operation, what, url, response)=> {
+       return data;
+     });
  });
 ````
 
@@ -522,7 +523,7 @@ It can return an object with any (or all) of following properties:
 ````javascript
 RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
    return {
-     params: Object.assign({}, params, {auth:111}),
+     params: Object.assign({}, params, {sort:"name"}),
      headers: headers,
      element: element
    }
@@ -549,7 +550,7 @@ The feature to prevent the promise to complete is useful whenever you need to in
   
       // Configurating Error Interceptor
       RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
-             if (response.status === 404) {
+             if (response.status === 403) {
                // Create new request
                http.get('http://api.restng2.local/v1/users')
                .subscribe(response=>{
