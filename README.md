@@ -90,7 +90,7 @@ You can download this by:
 
 #Dependencies
 
-Restangular depends on Angular2, Lodash and q(this library won't be included in the next versions).
+Restangular depends on Angular2 and Lodash.
 
 **[Back to top](#table-of-contents)**
 
@@ -164,12 +164,7 @@ Restangular.several('accounts', 1234, 123, 12345);
 
 ### Lets Code with Observables!
 
-If you dont want to use observables see article below.
-The default config is with using promises so you need to set response method to "observables".
-You can do this in config when importing module.
 Now that we have our main Object let's start playing with it.
-
-
 
 ````javascript
 // AppModule is the main entry point into Angular2 bootstraping process
@@ -179,11 +174,8 @@ Now that we have our main Object let's start playing with it.
     AppComponent,
   ],
   imports: [
-    // Importing RestangularModule and making default configs for restanglar
-    RestangularModule.forRoot((RestangularProvider) => {
-        RestangularProvider.setDefaultResponseMethod("observable");
-      }
-    ),
+    // Importing RestangularModule
+    RestangularModule,
   ]
 })
 export class AppModule {
@@ -483,7 +475,7 @@ This is a hook. After each element has been "restangularized" (Added the new met
 **I favor the usage of `addElementTransformer` instead of `onElemRestangularized` whenever possible as the implementation is much cleaner.**
 
 
-This callback is a function that has 3 parameters:
+This callback is a function that has 4 parameters:
 
 * **elem**: The element that has just been restangularized. Can be a collection or a single element.
 * **isCollection**: Boolean indicating if this is a collection or a single element.
@@ -501,19 +493,21 @@ The responseInterceptor is called after we get each response from the server. It
 * **what**: The model that's being requested. It can be for example: `accounts`, `buildings`, etc.
 * **url**: The relative URL being requested. For example: `/api/v1/accounts/123`
 * **response**: Full server response including headers
-* **deferred**: The deferred promise for the request.
+* **Subject**: The Subject for the request.
 
 Some of the use cases of the responseInterceptor are handling wrapped responses and enhancing response elements with more methods among others.
 
 The responseInterceptor must return the restangularized data element.
 
-#### addRequestInterceptor
-The requestInterceptor is called before sending any data to the server. It's a function that must return the element to be requested. This function receives the following arguments:
-
-* **element**: The element to send to the server.
-* **operation**: The operation made. It'll be the HTTP method used except for a `GET` which returns a list of element which will return `getList` so that you can distinguish them.
-* **what**: The model that's being requested. It can be for example: `accounts`, `buildings`, etc.
-* **url**: The relative URL being requested. For example: `/api/v1/accounts/123`
+````javascript
+RestangularProvider.addResponseInterceptor((element, operation, path, url, headers, params)=> {
+   return {
+     params: Object.assign({}, params, {auth:111}),
+     headers: headers,
+     element: element
+   }
+ });
+````
 
 #### addFullRequestInterceptor
 This adds a new fullRequestInterceptor. The fullRequestInterceptor is similar to the `requestInterceptor` but more powerful. It lets you change the element, the request parameters and the headers as well.
@@ -524,11 +518,19 @@ It can return an object with any (or all) of following properties:
 * **headers**: The headers to send
 * **params**: The request parameters to send
 * **element**: The element to send
-* **httpConfig**: The httpConfig to call with
 
+````javascript
+RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params)=> {
+   return {
+     params: Object.assign({}, params, {auth:111}),
+     headers: headers,
+     element: element
+   }
+ });
+````
 If a property isn't returned, the one sent is used.
 
-#### setErrorInterceptor
+#### addErrorInterceptor
 The errorInterceptor is called whenever there's an error. It's a function that receives the response, the deferred (for the promise) and the Restangular-response handler as parameters.
 
 The errorInterceptor function, whenever it returns `false`, prevents the promise linked to a Restangular request to be executed. All other return values (besides `false`) are ignored and the promise follows the usual path, eventually reaching the success or error hooks.
@@ -536,14 +538,6 @@ The errorInterceptor function, whenever it returns `false`, prevents the promise
 The feature to prevent the promise to complete is useful whenever you need to intercept each Restangular error response for every request in your Angular2 application in a single place, increasing debugging capabilities and hooking security features in a single place.
 
 ````javascript
-var refreshAccesstoken = function() {
-  return new Promise((resolve, reject) => {
-    // Refresh access-token logic
-    
-    resolve(true);
-  });
-};
-
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -554,26 +548,21 @@ var refreshAccesstoken = function() {
       Restangular.provider.setDefaultResponseMethod('promise');
   
       // Configurating Error Interceptor
-      Restangular.provider.setErrorInterceptor((response, deferred, responseHandler) => {
-        if(response.status === 403) {
-          refreshAccesstoken().then(() => {
-            // Create new request and then call the handlers the usual way.
-            http.get('http://api.test.com/v1/users/2', {})
-            .map(res=>{
-              if (response._body) {
-                response.data = JSON.parse(response._body);
-              } else {
-                response.data = null
-              }
-              return response;
-            })
-            .toPromise().then(responseHandler, deferred.reject);
-            //// Be aware that no request interceptors are called this way.
-          });
-          return false; // error handled
-        }
-        return true; // error not handled
-      });
+      RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
+             if (response.status === 404) {
+               // Create new request
+               http.get('http://api.restng2.local/v1/users')
+               .subscribe(response=>{
+                 response.data = JSON.parse(response._body);
+                 responseHandler(response)
+               }, (err)=>{
+                 response.data = JSON.parse(response._body);
+                 subject.error(err);
+               });
+               return false; // error handled
+             }
+             return true; // error not handled
+           });
     }),
   ],
 })
@@ -679,7 +668,7 @@ export class OtherComponent {
   }
   
   ngOnInit() {
-    this.restFulResponse.all('users').getList().then((response) => {
+    this.restFulResponse.all('users').getList().subscribe( response => {
       this.users = response.data;
       console.log(response.headers);
     });
@@ -723,7 +712,7 @@ You can choose what Response Method to use `observable` or `promise`, by default
 You can also access the configuration via `RestangularModule` and `Restangular.provider` via the `configuration` property if you don't want to use the setters. Check it out:
 
 ````js
-Restangular.provider.configuration.requestSuffix = '/';
+RestangularProvider.configuration.requestSuffix = '/';
 ````
 
 **[Back to top](#table-of-contents)**
@@ -878,7 +867,7 @@ export class OtherComponent {
     Users.post({data}) // POST to /users
     
     // GET to /users
-    Users.getList().then(function(users) {
+    Users.getList().subscribe( users => {
       var user = users[0]; // user === {id: 1, name: "Tonto"}
       user.name = "Gonto";
       // PUT to /users/1
@@ -950,7 +939,7 @@ These are the methods that can be called on the Restangular object.
 * **putElement(index, params, headers)**: Puts the element on the required index and returns a promise of the updated new array
 ````js
 Restangular.all('users').getList()
-.then((users) => {
+.subscribe( users => {
   users.putElement(2, {'name': 'new name'});
 });
 ````
@@ -989,37 +978,6 @@ Restangular.all("accounts").customGET("messages", {param: "param2"})
 
 ## Copying elements
 Before modifying an object, we sometimes want to copy it and then modify the copied object. We can use `Restangular.copy(fromElement)`.
-
-**[Back to top](#table-of-contents)**
-
-## Enhanced promises
-
-Restangular uses enhanced promises when returning. What does this mean? All promises returned now have 2 additional methods and collection promises have 3. These are the methods:
-
-* **call(methodName, params*)**: This will return a new promise of the previous value, after calling the method called methodName with the parameters params.
-* **get(fieldName)**: This will return a new promise for the type of the field. The param of this new promise is the property `fieldName` from the original promise result.
-* **push(object)**: This method will only be in the promises of arrays. It's a subset of the call method that does a push.
-* **$object**: This returns the reference to the object that will be filled once the server responds a value. This means that if you call `getList` this will be an empty array by default. Once the array is returned from the server, this same `$object` property will get filled with results from the server.
-
-I know these explanations are quite complicated, so let's see an example :D.
-
-````javascript
-var buildings = Restangular.all("buildings").getList();
-
-// New promise after adding the new building
-// Now you can show in scope this newBuildings promise and it'll show all the buildings
-// received from server plus the new one added
-var newBuildings = buildings.push({name: "gonto"});
-
-var newBuildingsSame = buildings.call("push", {name: "gonto"});
-
-// This is a promise of a number value. You can show it in the UI
-var lengthPromise = buildings.get("length");
-
-lengthPromise.then(function(length) {
-  // Here the length is the real length value of the returned collection of buildings
-});
-````
 
 **[Back to top](#table-of-contents)**
 
@@ -1156,7 +1114,7 @@ Create custom methods for your collection using Restangular.extendCollection(). 
 
   var accountsPromise = Restangular.all('accounts').getList();
 
-  accountsPromise.then(function(accounts) {
+  accountsPromise.subscribe( accounts => {
     accounts.totalAmount(); // invoke your custom collection method
   });
 ```
@@ -1182,7 +1140,7 @@ Create custom methods for your models using Restangular.extendModel(). This is a
 
   var accountPromise = Restangular.one('accounts', 1).get();
 
-  accountPromise.then(function(account) {
+  accountPromise.subscribe(function(account) {
     account.prettifyAmount(); // invoke your custom model method
   });
 ```
@@ -1193,19 +1151,19 @@ Create custom methods for your models using Restangular.extendModel(). This is a
 
 #### **How can I handle errors?**
 
-Errors can be checked on the second argument of the then.
+Errors can be checked on the second argument of the subscribe.
 
 ````javascript
-Restangular.all("accounts").getList().then(function() {
+Restangular.all("accounts").getList().subscribe( response => {
   console.log("All ok");
-}, function(response) {
-  console.log("Error with status code", response.status);
+}, errorResponse {
+  console.log("Error with status code", errorResponse.status);
 });
 ````
 
 #### **I need to send one header in EVERY Restangular request, how do I do this?**
 
-You can use `defaultHeaders` property for this or `$httpProvider.defaults.headers`, whichever suits you better. `defaultsHeaders` can be scoped with `withConfig` so it's really cool.
+You can use `defaultHeaders` property for this. `defaultsHeaders` can be scoped with `withConfig` so it's really cool.
 
 #### **How can I send a delete WITHOUT a body?**
 
@@ -1235,7 +1193,7 @@ RestangularProvider.setRestangularFields({
 In some cases, people have different ID name for each entity. For example, they have CustomerID for customer and EquipmentID for Equipment. If that's the case, you can override Restangular's getIdFromElem. For that, you need to do:
 
 ````js
-Restangular.provider.configuration.getIdFromElem = function(elem) {
+RestangularProvider.configuration.getIdFromElem = function(elem) {
   // if route is customers ==> returns customerID
   return elem[_.initial(elem.route).join('') + "ID"];
 }
@@ -1258,8 +1216,7 @@ The best option for doing CRUD operations with a list, is to actually use the "r
 Let's see an example :).
 
 ````javascript
-// Here we use then to resolve the promise.
-Restangular.all('users').getList().then(function(users) {
+Restangular.all('users').getList().subscribe( users => {
   this.users = users;
   var userWithId = _.find(users, function(user) {
     return user.id === 123;
@@ -1269,22 +1226,13 @@ Restangular.all('users').getList().then(function(users) {
   userWithId.put();
 
   // Alternatively delete the element from the list when finished
-  userWithId.remove().then(function() {
+  userWithId.remove().subscribe( () => {
     // Updating the list and removing the user after the response is OK.
     this.users = _.without(this.users, userWithId);
   });
 
 });
 ````
-
-When you actually get a list by doing
-
-````javascript
-this.owners = house.getList('owners').$object;
-````
-
-You're actually assigning a Promise to the owners value. As Angular knows how to process promises, if in your view you do an *ngFor of owners variable, results will be shown once the promise is resolved (Response arrived).
-However, changes to that promise that you do from your HTML won't be seen in the component, as it's not a real array. It's just a promise of an array.
 
 #### Removing an element from a collection, keeping the collection restangularized
 
@@ -1293,8 +1241,8 @@ While the example above removes the deleted user from the collection, it also ov
 If want to keep the restangularized collection, remove the element by modifying the collection in place:
 
 ```javascript
-userWithId.remove().then(function() {
-  var index = $scope.users.indexOf(userWithId);
+userWithId.remove().subscribe( () => {
+  let index = $scope.users.indexOf(userWithId);
   if (index > -1) this.users.splice(index, 1);
 });
 ```
@@ -1304,7 +1252,7 @@ userWithId.remove().then(function() {
 In order to get this done, you need to use the `responseExtractor`. You need to set a property there that will point to the original response received. Also, you need to actually copy this response as that response is the one that's going to be `restangularized` later
 
 ````javascript
-Restangular.provider.setResponseExtractor(function(response) {
+RestangularProvider.setResponseExtractor( (response) => {
   var newResponse = response;
   if (_.isArray(response)) {
     _.forEach(newResponse, function(value, key) {
@@ -1322,7 +1270,7 @@ Alternatively, if you just want the stripped out response on any given call, you
 ````javascript
 
 this.showData = function () {
-  baseUrl.post(someData).then(function(response) {
+  baseUrl.post(someData).subscribe( (response) => {
     console.log(response.plain());
   });
 };
