@@ -9,7 +9,6 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 Ng2-Restangular is in beta-version now. Almost all functionality was transferred from the Restangular.
 We are open to any cooperation in terms of its further development.
-In next versions default response method will be observables. Later library "q" will be replaced by "RxJS". 
 
 #Table of contents
 
@@ -32,10 +31,9 @@ In next versions default response method will be observables. Later library "q" 
       - [addResponseInterceptor](#addresponseinterceptor)
       - [addRequestInterceptor](#addrequestinterceptor)
       - [addFullRequestInterceptor](#addfullrequestinterceptor)
-      - [setErrorInterceptor](#seterrorinterceptor)
+      - [addErrorInterceptor](#adderrorinterceptor)
       - [setRestangularFields](#setrestangularfields)
       - [setMethodOverriders](#setmethodoverriders)
-      - [setJsonp](#setjsonp)
       - [setDefaultRequestParams](#setdefaultrequestparams)
       - [setFullResponse](#setfullresponse)
       - [setDefaultHeaders](#setdefaultheaders)
@@ -43,7 +41,6 @@ In next versions default response method will be observables. Later library "q" 
       - [setUseCannonicalId](#setusecannonicalid)
       - [setPlainByDefault](#setplainbydefault)
       - [setEncodeIds](#setencodeids)
-      - [setDefaultResponseMethod](#setdefaultresponsemethod)
     - [Accessing configuration](#accessing-configuration)
     - [How to configure them globally](#how-to-configure-them-globally)
       - [Configuring in the AppModule](#configuring-in-the-appmodule)
@@ -56,7 +53,6 @@ In next versions default response method will be observables. Later library "q" 
     - [Collection methods](#collection-methods)
     - [Custom methods](#custom-methods)
   - [Copying elements](#copying-elements)
-  - [Enhanced promises](#enhanced-promises)
   - [Using values directly in templates with Promises](#using-values-directly-in-templates-with-promises)
   - [URL Building](#url-building)
   - [Creating new Restangular Methods](#creating-new-restangular-methods)
@@ -341,14 +337,9 @@ export class OtherComponent {
     let baseAccounts = this.restangular.all('accounts');
   
     // This will query /accounts and return a promise.
-    baseAccounts.getList().then(function(accounts) {
+    baseAccounts.getList().toPromise().then(function(accounts) {
       this.allAccounts = accounts;
     });
-  
-    // Does a GET to /accounts
-    // Returns an empty array by default. Once a value is returned from the server
-    // that array is filled with those values. So you can use this in your template
-    this.accounts = this.restangular.all('accounts').getList().$object;
   
     var newAccount = {name: "Gonto's account"};
   
@@ -371,7 +362,7 @@ export class OtherComponent {
   
     // Here we use Promises then
     // GET /accounts
-    baseAccounts.getList().then(function (accounts) {
+    baseAccounts.getList().toPromise().then(function (accounts) {
       // Here we can continue fetching the tree :).
     
       var firstAccount = accounts[0];
@@ -405,14 +396,14 @@ export class OtherComponent {
       };
     
       // POST /accounts/123/buildings with MyBuilding information
-      firstAccount.post("Buildings", myBuilding).then(function() {
+      firstAccount.post("Buildings", myBuilding).toPromise().then(function() {
         console.log("Object saved OK");
       }, function() {
         console.log("There was an error saving");
       });
     
       // GET /accounts/123/users?query=params
-      firstAccount.getList("users", {query: 'params'}).then(function(users) {
+      firstAccount.getList("users", {query: 'params'}).toPromise().then(function(users) {
         // Instead of posting nested element, a collection can post to itself
         // POST /accounts/123/users
         users.post({userName: 'unknown'});
@@ -550,7 +541,7 @@ RestangularProvider.addFullRequestInterceptor((element, operation, path, url, he
 If a property isn't returned, the one sent is used.
 
 #### addErrorInterceptor
-The errorInterceptor is called whenever there's an error. It's a function that receives the response, the deferred (for the promise) and the Restangular-response handler as parameters.
+The errorInterceptor is called whenever there's an error. It's a function that receives the response, subject and the Restangular-response handler as parameters.
 
 The errorInterceptor function, whenever it returns `false`, prevents the promise linked to a Restangular request to be executed. All other return values (besides `false`) are ignored and the promise follows the usual path, eventually reaching the success or error hooks.
 
@@ -563,8 +554,7 @@ The feature to prevent the promise to complete is useful whenever you need to in
   imports: [ 
     // Importing RestangularModule and making default configs for restanglar
     RestangularModule.forRoot([Http], (Restangular, http)=>{
-      Restangular.provider.setBaseUrl('http://api.test.com/v1');
-      Restangular.provider.setDefaultResponseMethod('promise');
+      RestangularProvider.setBaseUrl('http://api.test.com/v1');
   
       // Configurating Error Interceptor
       RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
@@ -609,18 +599,6 @@ You can now Override HTTP Methods. You can set here the array of methods to over
 ````javascript
 RestangularProvider.setMethodOverriders(["Get","Put"]);
 ````
-
-#### setJsonp
-Typical web browsers prohibit requesting data from a server in a different domain (same-origin policy). JSONP or "JSON with padding" is a communication technique used in JavaScript programs running in web browsers to get around this.
-
-For JSONP to work, a server must know how to reply with JSONP-formatted results. JSONP does not work with JSON-formatted results. The JSONP parameters passed as arguments to a script are defined by the server.
-
-By setting the value of setJsonp to true, both `get` and `getList` will be performed using JSonp instead of the regular GET.
-
-You will need to add the 'JSON_CALLBACK' string to your URLs (see [$http.jsonp](http://docs.angularjs.org/api/ng.$http#methods_jsonp)). You can use `setDefaultRequestParams` to accomplish this:
-```javascript
-RestangularProvider.setDefaultRequestParams('jsonp', {callback: 'JSON_CALLBACK'});
-```
 
 #### setDefaultRequestParams
 
@@ -695,15 +673,6 @@ export class OtherComponent {
 }
 ````
 
-#### setDefaultHeaders
-
-You can set default Headers to be sent with every request. Send format: {header_name: header_value}
-
-````javascript
-// set default header "token"
-RestangularProvider.setDefaultHeaders({token: "x-restangular"});
-````
-
 #### setRequestSuffix
 
 If all of your requests require to send some suffix to work, you can set it here. For example, if you need to send the format like `/users/123.json` you can add that `.json` to the suffix using the `setRequestSuffix` method
@@ -719,12 +688,6 @@ You can set this to `true` or `false`. By default it's false. If set to true, da
 #### setEncodeIds
 
 You can set here if you want to URL Encode IDs or not. By default, it's true.
-
-#### setDefaultResponseMethod
-
-You can choose what Response Method to use `observable` or `promise`, by default `promise`.
-
-**[Back to top](#table-of-contents)**
 
 ### Accessing configuration
 
@@ -955,7 +918,7 @@ These are the methods that can be called on the Restangular object.
 * **options: ([queryParams, headers])**: Does a OPTIONS
 * **patch(object, [queryParams, headers])**: Does a PATCH
 * **remove([queryParams, headers])**: Does a DELETE. By default, `remove` sends a request with an empty object, which may cause problems with some servers or browsers. [This](https://github.com/mgonto/restangular/issues/193) shows how to configure RESTangular to have no payload.
-* **putElement(index, params, headers)**: Puts the element on the required index and returns a promise of the updated new array
+* **putElement(index, params, headers)**: Puts the element on the required index and returns a observable of the updated new array
 ````js
 Restangular.all('users').getList()
 .subscribe( users => {
