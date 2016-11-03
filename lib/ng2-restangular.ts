@@ -92,8 +92,26 @@ export class Restangular {
   createRequest(options) {
     let requestOptions = RestangularHelper.createRequestOptions(options);
     let request = new Request(requestOptions);
-    
-    return this.http.request(request);
+  
+    return this.http.request(request)
+    .map((response: any) => {
+      console.log(requestOptions, request);
+      response.config = {params: request};
+      return response;
+    })
+    .map((response: any) => {
+      if (response._body) {
+        response.data = typeof response._body == 'string' ? JSON.parse(response._body) : response._body;
+      } else {
+        response.data = null
+      }
+      return response;
+    })
+    .catch(err => {
+      err.data = typeof err._body == 'string' ? JSON.parse(err._body) : err._body;
+      console.log('ERROR', err);
+      return Observable.throw(err);
+    })
   }
 }
 
@@ -644,8 +662,7 @@ function providerConfig($http) {
             let config = _.extend(value, {
               url: url
             });
-            return $http(config)
-            .let(interceptor(config));
+            return $http(config);
           };
           
         } else {
@@ -655,40 +672,10 @@ function providerConfig($http) {
               url: url,
               data: data
             });
-            return $http(config)
-            .let(interceptor(config))
+            return $http(config);
           };
           
         }
-        
-        function interceptor(options){
-          let requestOptions = RestangularHelper.createRequestOptions(options);
-          let request = new Request(requestOptions);
-          
-          return (observable) => {
-            return observable
-            .map((response: any) => {
-              response.config = {params: request};
-              return response;
-            })
-            .map((response: any) => {
-              if (response._body) {
-                response.data = typeof response._body == 'string' ? JSON.parse(response._body) : response._body;
-              } else {
-                response.data = null
-              }
-              return response;
-            })
-            .catch(err => {
-              err.data = typeof err._body == 'string' ? JSON.parse(err._body) : err._body;
-              console.log('ERROR', err);
-              return Observable.throw(err);
-            });
-          }
-        }
-        
-        resource[key]
-        
       });
       
       return resource;
