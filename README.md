@@ -555,9 +555,9 @@ The refreshAccesstoken function must return observable. It`s function that will 
     RestangularModule.forRoot((Restangular)=>{
       RestangularProvider.setBaseUrl('http://api.test.com/v1');
   
-      // Configurating Error Interceptor
+      // This function must return observable
       var refreshAccesstoken = function () {
-        // Refresh access-token logic
+        // Here you can make action before repeated request
         return Observable.of(true)
       };
       
@@ -567,6 +567,8 @@ The refreshAccesstoken function must return observable. It`s function that will 
   
           refreshAccesstoken()
           .switchMap(refreshAccesstokenResponse => {
+            //If you want to change request or make with it some actions and give the request to the repeatRequest func.
+            //Or you can live it empty and request will be the same.
             return response.repeatRequest(response.request);
           })
           .subscribe(
