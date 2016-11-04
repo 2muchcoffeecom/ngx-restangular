@@ -545,13 +545,14 @@ The errorInterceptor is called whenever there's an error. It's a function that r
 
 The errorInterceptor function, whenever it returns false, prevents the observable linked to a Restangular request to be executed. All other return values (besides false) are ignored and the observable follows the usual path, eventually reaching the success or error hooks.
 
+The refreshAccesstoken function must return observable. It`s function that will be done before repeating the request, there you can make some actions. In switchMap you might do some transformations to request.
 ````javascript
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
   imports: [ 
     // Importing RestangularModule and making default configs for restanglar
-    RestangularModule.forRoot([Http], (Restangular, http)=>{
+    RestangularModule.forRoot((Restangular)=>{
       RestangularProvider.setBaseUrl('http://api.test.com/v1');
   
       // Configurating Error Interceptor
