@@ -1,6 +1,6 @@
 {
   "name": "ng2-restangular",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ng2-restangular",
   "scripts": {
     "dev": "tsc --watch",

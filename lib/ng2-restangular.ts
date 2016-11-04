@@ -1,10 +1,9 @@
-import {Injectable, Inject, Injector, Optional} from "@angular/core";
-import {Http, Request} from "@angular/http";
-import {Observable, Subject, BehaviorSubject} from "rxjs";
-import * as _ from "lodash";
+import {Injectable, Inject, Injector, Optional} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import * as _ from 'lodash';
 
-import {RestangularHelper} from "./ng2-restangular-helper";
-import {RESTANGULAR} from "./ng2-restangular.config";
+import {RESTANGULAR} from './ng2-restangular.config';
+import {RestangularHttp} from './ng2-restangular-http';
 
 
 @Injectable()
@@ -68,9 +67,9 @@ export class Restangular {
   constructor(
     @Optional() @Inject(RESTANGULAR) public configObj,
     private injector: Injector,
-    private http: Http
+    private http: RestangularHttp
   ) {
-    this.provider = new providerConfig(this.createRequest.bind(this));
+    this.provider = new providerConfig(http);
     let element = this.provider.$get();
     Object.assign(this, element);
     
@@ -88,35 +87,9 @@ export class Restangular {
     
     this.configObj.fn(...[this.provider,  ...arrDI]);
   }
-  
-  createRequest(options) {
-    let requestOptions = RestangularHelper.createRequestOptions(options);
-    let request = new Request(requestOptions);
-  
-    return this.http.request(request)
-    .map((response: any) => {
-      console.log(requestOptions, request);
-      response.config = {params: request};
-      return response;
-    })
-    .map((response: any) => {
-      if (response._body) {
-        response.data = typeof response._body == 'string' ? JSON.parse(response._body) : response._body;
-      } else {
-        response.data = null
-      }
-      return response;
-    })
-    .catch(err => {
-      err.data = typeof err._body == 'string' ? JSON.parse(err._body) : err._body;
-      console.log('ERROR', err);
-      return Observable.throw(err);
-    })
-  }
 }
 
 function providerConfig($http) {
-  this.$http = $http;
   // Configuration
   var Configurer: any = {};
   Configurer.init = function (object, config) {
@@ -662,7 +635,7 @@ function providerConfig($http) {
             let config = _.extend(value, {
               url: url
             });
-            return $http(config);
+            return $http.createRequest(config);
           };
           
         } else {
@@ -672,7 +645,7 @@ function providerConfig($http) {
               url: url,
               data: data
             });
-            return $http(config);
+            return $http.createRequest(config);
           };
           
         }
@@ -1334,8 +1307,6 @@ function providerConfig($http) {
           if (response.status === 304 && config.isSafe(operation)) {
             resolvePromise(subject, response, __this, filledObject);
           } else if (_.every(config.errorInterceptors, function (cb: any) {
-              response.data = JSON.parse(response._body);
-              
               return cb(response, subject, okCallback) !== false;
             })) {
             // triggered if no callback returns false

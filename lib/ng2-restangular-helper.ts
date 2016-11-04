@@ -1,4 +1,5 @@
-import {URLSearchParams, Headers, RequestOptions, RequestMethod} from "@angular/http";
+import {URLSearchParams, Headers, RequestOptions, RequestMethod} from '@angular/http';
+
 export class RestangularHelper {
   
   static createRequestOptions(options) {
