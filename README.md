@@ -543,6 +543,8 @@ If a property isn't returned, the one sent is used.
 #### addErrorInterceptor
 The errorInterceptor is called whenever there's an error. It's a function that receives the response, subject and the Restangular-response handler as parameters.
 
+The errorInterceptor function, whenever it returns false, prevents the observable linked to a Restangular request to be executed. All other return values (besides false) are ignored and the observable follows the usual path, eventually reaching the success or error hooks.
+
 ````javascript
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
@@ -553,21 +555,28 @@ The errorInterceptor is called whenever there's an error. It's a function that r
       RestangularProvider.setBaseUrl('http://api.test.com/v1');
   
       // Configurating Error Interceptor
+      var refreshAccesstoken = function () {
+        // Refresh access-token logic
+        return Observable.of(true)
+      };
+      
+      // errors
       RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
-             if (response.status === 403) {
-               // Create new request
-               http.get('http://api.restng2.local/v1/users')
-               .subscribe(response=>{
-                 response.data = JSON.parse(response._body);
-                 responseHandler(response)
-               }, (err)=>{
-                 response.data = JSON.parse(response._body);
-                 subject.error(err);
-               });
-               return false; // error handled
-             }
-             return true; // error not handled
-           });
+        if (response.status === 403) {
+  
+          refreshAccesstoken()
+          .switchMap(refreshAccesstokenResponse => {
+            return response.repeatRequest(response.request);
+          })
+          .subscribe(
+            res => responseHandler(res),
+            err => subject.error(err)
+          );
+          
+          return false; // error handled
+        }
+        return true; // error not handled
+      });
     }),
   ],
 })
