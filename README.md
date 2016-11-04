@@ -561,7 +561,6 @@ The refreshAccesstoken function must return observable. It`s function that will 
         return Observable.of(true)
       };
       
-      // errors
       RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
         if (response.status === 403) {
   
