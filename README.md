@@ -552,7 +552,7 @@ The refreshAccesstoken function must return observable. It`s function that will 
   bootstrap: [ AppComponent ],
   imports: [ 
     // Importing RestangularModule and making default configs for restanglar
-    RestangularModule.forRoot((Restangular)=>{
+    RestangularModule.forRoot( (Restangular) => {
       RestangularProvider.setBaseUrl('http://api.test.com/v1');
   
       // This function must return observable
