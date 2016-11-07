@@ -2,20 +2,49 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "experimentalDecorators": true,
     "moduleResolution": "node",
+    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "lib": ["es6", "dom"],
-    "types": [
-      "lodash",
-      "node"
+    "sourceMap": true,
+    "removeComments": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "typeRoots": [
+      "./node_modules/@types/"
     ]
   },
+  "compileOnSave": false,
   "files": [
     "index.ts"
   ],
   "angularCompilerOptions": {
     "genDir": "lib"
-  }
+  },
+  "exclude": [
+    "node_modules/*",
+    "**/*-aot.ts"
+  ]
 }
+
+
+//{
+//  "compilerOptions": {
+//    "target": "es5",
+//    "module": "commonjs",
+//    "moduleResolution": "node",
+//    "experimentalDecorators": true,
+//    "emitDecoratorMetadata": true,
+//    "declaration": true,
+//    "lib": ["es6", "dom"],
+//    "types": [
+//      "lodash",
+//      "node"
+//    ]
+//  },
+//  "files": [
+//    "index.ts"
+//  ],
+//  "angularCompilerOptions": {
+//    "genDir": "lib"
+//  }
+//}
