@@ -5,7 +5,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declaration": true,
+"declaration": true,
     "sourceMap": true,
     "removeComments": false,
     "suppressImplicitAnyIndexErrors": true,
@@ -14,6 +14,9 @@
     ]
   },
   "compileOnSave": false,
+  "angularCompilerOptions": {
+    "genDir": "lib"
+  },
   "exclude": [
     "node_modules/*",
     "**/*-aot.ts"

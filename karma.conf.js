@@ -5,6 +5,10 @@ module.exports = function(config) {
   var appSrcBase = 'app/';       // app source TS files
   var appAssets  = 'base/app/'; // component assets fetched by Angular's compiler
 
+  var libBase    = 'lib/';       // transpiled app JS and map files
+  var libSrcBase = 'lib/';       // app source TS files
+  var libAssets  = 'base/lib/'; // component assets fetched by Angular's compiler
+
   var testBase    = 'testing/';       // transpiled test JS and map files
   var testSrcBase = 'testing/';       // test source TS files
 
@@ -70,13 +74,19 @@ module.exports = function(config) {
       { pattern: appSrcBase + '**/*.ts', included: false, watched: false },
       { pattern: appBase + '**/*.js.map', included: false, watched: false },
       { pattern: testSrcBase + '**/*.ts', included: false, watched: false },
-      { pattern: testBase + '**/*.js.map', included: false, watched: false }
+      { pattern: testBase + '**/*.js.map', included: false, watched: false },
+
+
+      { pattern: libSrcBase + '**/*.ts', included: false, watched: false },
+      { pattern: libBase + '**/*.js.map', included: false, watched: false },
+      { pattern: libBase + '**/*.js', included: false, watched: true },
     ],
 
     // Proxied base paths for loading assets
     proxies: {
       // required for component assets fetched by Angular's compiler
-      "/app/": appAssets
+      "/app/": appAssets,
+      "/lib/": '../lib'
     },
 
     exclude: [],

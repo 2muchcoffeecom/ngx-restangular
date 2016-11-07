@@ -6,6 +6,7 @@ import {RESTANGULAR} from './ng2-restangular.config';
 import {RestangularHttp} from './ng2-restangular-http';
 
 
+
 @Injectable()
 export class Restangular {
   provider;
