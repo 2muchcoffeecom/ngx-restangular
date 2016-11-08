@@ -63,6 +63,8 @@ export class Restangular {
   plain;
   save;
   restangularized;
+  restangularizeElement;
+  restangularizeCollection;
   
   constructor(
     @Optional() @Inject(RESTANGULAR) public configObj,
