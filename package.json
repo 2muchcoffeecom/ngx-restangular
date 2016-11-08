@@ -1,19 +1,25 @@
 {
   "name": "ng2-restangular",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "ng2-restangular",
+  "main": "./dist/umd/ng2-restangular.js",
+  "module": "./dist/esm/src/index.js",
+  "typings": "./dist/esm/src/index.d.ts",
   "scripts": {
-    "prepublish": "tsc",
-    "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
-    "pree2e": "npm run webdriver:update",
-    "e2e": "tsc && concurrently \"http-server -s\" \"protractor protractor.config.js\" --kill-others --success first",
-    "lint": "tslint ./app/**/*.ts -t verbose",
-    "lite": "lite-server",
-    "test": "tsc && concurrently \"tsc -w\" \"karma start karma.conf.js\"",
-    "test-once": "tsc && karma start karma.conf.js --single-run",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "webdriver:update": "webdriver-manager update"
+    "start": "concurrently --raw \"webpack-dev-server --open\" \"npm run test:watch\"",
+    "build:demo": "webpack -p",
+    "build:umd": "webpack --config webpack.config.umd.js",
+    "build:ngc": "ngc -p tsconfig-ngc.json",
+    "build:dist": "npm run build:umd && npm run build:ngc",
+    "build:clean": "rm -rf dist",
+    "test": "karma start",
+    "test:watch": "karma start --watch",
+    "commit": "git-cz",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "typedoc": "typedoc --options typedoc.json src/*.ts",
+    "gh-pages": "git checkout gh-pages && git merge master && npm run build:demo && npm run typedoc && git add . && git commit -m 'chore: build demo and docs' && git push && git checkout master",
+    "prepublish": "standard-version --first-release && git push --follow-tags origin master && npm run build:dist",
+    "postpublish": "npm run build:clean"
   },
   "repository": {
     "type": "git",
@@ -29,56 +35,71 @@
     "angular 2 rest"
   ],
   "author": "logvinoleg89 <logvinoleg89@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/2muchcoffeecom/ng2-restangular/issues"
   },
   "homepage": "https://github.com/2muchcoffeecom/ng2-restangular#readme",
-  "dependencies": {
-    "lodash": "^4.16.4"
-  },
   "devDependencies": {
-    "@types/lodash": "^4.14.37",
-    "typings": "^1.3.3",
-
     "@angular/common": "~2.1.2",
     "@angular/compiler": "~2.1.2",
+    "@angular/compiler-cli": "~2.1.2",
     "@angular/core": "~2.1.2",
-    "@angular/forms": "~2.1.2",
-    "@angular/http": "~2.1.2",
+    "@angular/http": "^2.1.2",
     "@angular/platform-browser": "~2.1.2",
     "@angular/platform-browser-dynamic": "~2.1.2",
-    "@angular/router": "~3.1.2",
-    "@angular/upgrade": "~2.1.2",
-
-    "angular-in-memory-web-api": "~0.1.13",
-    "systemjs": "0.19.40",
-    "core-js": "^2.4.1",
-    "reflect-metadata": "^0.1.8",
+    "@types/chai": "~3.4.33",
+    "@types/core-js": "~0.9.34",
+    "@types/jasmine": "~2.5.36",
+    "@types/sinon": "~1.16.30",
+    "@types/sinon-chai": "~2.7.27",
+    "chai": "~3.5.0",
+    "commitizen": "~2.8.1",
+    "concurrently": "~3.1.0",
+    "conventional-changelog": "~1.1.0",
+    "conventional-changelog-cli": "~1.2.0",
+    "core-js": "~2.4.1",
+    "cz-conventional-changelog": "~1.2.0",
+    "ghooks": "~1.3.2",
+    "imports-loader": "~0.6.5",
+    "jasmine-core": "~2.5.0",
+    "karma": "~1.3.0",
+    "karma-coverage": "~1.1.0",
+    "karma-jasmine": "~1.0.2",
+    "karma-phantomjs-launcher": "~1.0.0",
+    "karma-remap-istanbul": "~0.2.1",
+    "karma-sourcemap-loader": "~0.3.7",
+    "karma-webpack": "~1.8.0",
+    "lodash": "^4.16.6",
+    "phantomjs-prebuilt": "~2.1.7",
     "rxjs": "5.0.0-beta.12",
-    "zone.js": "^0.6.26",
-
-    "concurrently": "^3.1.0",
-    "lite-server": "^2.2.2",
-    "typescript": "^2.0.3",
-
-    "canonical-path": "0.0.2",
-    "http-server": "^0.9.0",
-    "tslint": "^3.15.1",
-    "lodash": "^4.16.4",
-    "jasmine-core": "~2.4.1",
-    "karma": "^1.3.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-cli": "^1.0.1",
-    "karma-htmlfile-reporter": "^0.3.4",
-    "karma-jasmine": "^1.0.2",
-    "karma-jasmine-html-reporter": "^0.2.2",
-    "protractor": "4.0.9",
-    "webdriver-manager": "10.2.5",
-    "rimraf": "^2.5.4",
-
-    "@types/core-js": "^0.9.34",
-    "@types/node": "^6.0.46",
-    "@types/jasmine": "^2.5.36",
-    "@types/selenium-webdriver": "^2.53.33"
+    "sinon": "~1.17.4",
+    "sinon-chai": "~2.8.0",
+    "sourcemap-istanbul-instrumenter-loader": "~0.2.0",
+    "standard-version": "~3.0.0",
+    "ts-loader": "~0.9.5",
+    "tslint": "~3.15.1",
+    "tslint-loader": "~2.1.4",
+    "typedoc": "~0.5.1",
+    "typescript": "~2.0.3",
+    "validate-commit-msg": "~2.8.0",
+    "webpack": "~1.13.0",
+    "webpack-dev-server": "~1.16.1",
+    "zone.js": "~0.6.12"
+  },
+  "peerDependencies": {
+    "@angular/core": "^2.0.0",
+    "lodash": "^4.16.6"
+  },
+  "files": [
+    "dist"
+  ],
+  "config": {
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    },
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   }
 }
