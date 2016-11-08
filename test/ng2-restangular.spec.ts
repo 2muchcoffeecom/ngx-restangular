@@ -300,7 +300,7 @@ describe('Restangular | ', () => {
       });
       service.provider.setFullResponse(true);
 
-      let one = service.one(endpoint, id).put(queryParams, headers).subscribe(res => {
+      service.one(endpoint, id).put(queryParams, headers).subscribe(res => {
         expect(res.data.test).toBeTruthy();
         expect(res.headers.has("testHeader")).toBeTruthy();
       });
@@ -318,7 +318,7 @@ describe('Restangular | ', () => {
       });
       service.provider.setFullResponse(true);
 
-      let one = service.one(endpoint, id).remove(queryParams, headers).subscribe(res => {
+      service.one(endpoint, id).remove(queryParams, headers).subscribe(res => {
         expect(res.data.test).toBeTruthy();
         expect(res.headers.has("testHeader")).toBeTruthy();
       });
@@ -336,7 +336,7 @@ describe('Restangular | ', () => {
       });
       service.provider.setFullResponse(true);
 
-      let one = service.one(endpoint, id).head(queryParams, headers).subscribe(res => {
+      service.one(endpoint, id).head(queryParams, headers).subscribe(res => {
         expect(res.data.test).toBeTruthy();
         expect(res.headers.has("testHeader")).toBeTruthy();
       });
@@ -354,7 +354,7 @@ describe('Restangular | ', () => {
       });
       service.provider.setFullResponse(true);
 
-      let one = service.one(endpoint, id).trace(queryParams, headers).subscribe(res => {
+      service.one(endpoint, id).trace(queryParams, headers).subscribe(res => {
         expect(res.data.test).toBeTruthy();
         expect(res.headers.has("testHeader")).toBeTruthy();
       });
@@ -372,7 +372,7 @@ describe('Restangular | ', () => {
       });
       service.provider.setFullResponse(true);
 
-      let one = service.one(endpoint, id).options(queryParams, headers).subscribe(res => {
+      service.one(endpoint, id).options(queryParams, headers).subscribe(res => {
         expect(res.data.test).toBeTruthy();
         expect(res.headers.has("testHeader")).toBeTruthy();
       });
@@ -391,7 +391,7 @@ describe('Restangular | ', () => {
       });
       service.provider.setFullResponse(true);
 
-      let one = service.one(endpoint, id).patch(elementToPost,queryParams, headers).subscribe(res => {
+      service.one(endpoint, id).patch(elementToPost,queryParams, headers).subscribe(res => {
         expect(res.data.test).toBeTruthy();
         expect(res.headers.has("testHeader")).toBeTruthy();
       });
@@ -744,7 +744,7 @@ describe('Restangular | ', () => {
         });
         service.provider.setFullResponse(true);
 
-        let one = service.one(endpoint,id).post(endpoint,elementToPost,queryParams,headers).subscribe(res => {
+        service.one(endpoint,id).post(endpoint,elementToPost,queryParams,headers).subscribe(res => {
           expect(res.data.test).toBeTruthy();
           expect(res.headers.has("testHeader")).toBeTruthy();
         });
