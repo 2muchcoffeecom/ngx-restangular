@@ -104,6 +104,9 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: false,
+
+    // How many browsers Karma launches in parallel.
+    concurrency: 1
   });
 };
