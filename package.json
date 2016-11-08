@@ -18,7 +18,7 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "typedoc": "typedoc --options typedoc.json src/*.ts",
     "gh-pages": "git checkout gh-pages && git merge master && npm run build:demo && npm run typedoc && git add . && git commit -m 'chore: build demo and docs' && git push && git checkout master",
-    "prepublish": "standard-version --first-release && git push --follow-tags origin master && npm run build:dist",
+    "prepublish": "npm run build:dist",
     "postpublish": "npm run build:clean"
   },
   "repository": {
@@ -67,9 +67,11 @@
     "karma-coverage": "~1.1.0",
     "karma-jasmine": "~1.0.2",
     "karma-phantomjs-launcher": "~1.0.0",
+    "karma-chrome-launcher": "^2.0.0",
     "karma-remap-istanbul": "~0.2.1",
     "karma-sourcemap-loader": "~0.3.7",
     "karma-webpack": "~1.8.0",
+    "karma-jasmine-html-reporter": "^0.2.2",
     "lodash": "^4.16.6",
     "phantomjs-prebuilt": "~2.1.7",
     "rxjs": "5.0.0-beta.12",
