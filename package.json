@@ -1,12 +1,12 @@
 {
   "name": "ng2-restangular",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "ng2-restangular",
   "main": "./dist/umd/ng2-restangular.js",
   "module": "./dist/esm/src/index.js",
   "typings": "./dist/esm/src/index.d.ts",
   "scripts": {
-    "start": "concurrently --raw \"webpack-dev-server --open\" \"npm run test:watch\"",
+    "start": "concurrently --raw \"webpack-dev-server --watch\" \"npm run test:watch\"",
     "build:demo": "webpack -p",
     "build:umd": "webpack --config webpack.config.umd.js",
     "build:ngc": "ngc -p tsconfig-ngc.json",
