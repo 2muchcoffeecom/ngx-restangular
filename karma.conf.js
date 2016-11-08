@@ -1,114 +1,98 @@
-// #docregion
+'use strict';
+
+const webpack = require('webpack');
+const WATCH = process.argv.indexOf('--watch') > -1;
+
 module.exports = function(config) {
-
-  var appBase    = 'app/';       // transpiled app JS and map files
-  var appSrcBase = 'app/';       // app source TS files
-  var appAssets  = 'base/app/'; // component assets fetched by Angular's compiler
-
-  var libBase    = 'lib/';       // transpiled app JS and map files
-  var libSrcBase = 'lib/';       // app source TS files
-  var libAssets  = 'base/lib/'; // component assets fetched by Angular's compiler
-
-  var testBase    = 'testing/';       // transpiled test JS and map files
-  var testSrcBase = 'testing/';       // test source TS files
-
   config.set({
-    basePath: '',
+
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: './',
+
+    // frameworks to use
+    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
-    plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'), // click "Debug" in browser to see it
-      require('karma-htmlfile-reporter') // crashing w/ strange socket error
+
+    // list of files / patterns to load in the browser
+    files: [
+      'test/entry.ts'
     ],
 
-    customLaunchers: {
-      // From the CLI. Not used here but interesting
-      // chrome setup for travis CI using chromium
-      Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
+    // list of files to exclude
+    exclude: [
+    ],
+
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: {
+      'test/entry.ts': ['webpack', 'sourcemap']
+    },
+
+    webpack: {
+      resolve: {
+        extensions: ['', '.ts', '.js'],
+        alias: {
+          sinon: 'sinon/pkg/sinon'
+        }
+      },
+      module: {
+        preLoaders: [{
+          test: /\.ts$/, loader: 'tslint', exclude: /node_modules/
+        }],
+        loaders: [{
+          test: /\.ts$/, loader: 'ts', exclude: /node_modules/
+        }, {
+          test: /sinon.js$/, loader: 'imports?define=>false,require=>false'
+        }],
+        postLoaders: [{
+          test: /src\/.+\.ts$/,
+          exclude: /(test|node_modules)/,
+          loader: 'sourcemap-istanbul-instrumenter?force-sourcemap=true'
+        }]
+      },
+      tslint: {
+        emitErrors: !WATCH,
+        failOnHint: false
+      },
+      plugins: [
+        new webpack.SourceMapDevToolPlugin({
+          filename: null,
+          test: /\.(ts|js)($|\?)/i
+        })
+      ].concat(!WATCH ? [new webpack.NoErrorsPlugin()] : [])
+    },
+
+    remapIstanbulReporter: {
+      reports: {
+        html: 'coverage/html',
+        'text-summary': null
       }
     },
-    files: [
-      // System.js for module loading
-      'node_modules/systemjs/dist/system.src.js',
 
-      // Polyfills
-      'node_modules/core-js/client/shim.js',
-      'node_modules/reflect-metadata/Reflect.js',
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['progress', 'coverage', 'karma-remap-istanbul'],
 
-      // zone.js
-      'node_modules/zone.js/dist/zone.js',
-      'node_modules/zone.js/dist/long-stack-trace-zone.js',
-      'node_modules/zone.js/dist/proxy.js',
-      'node_modules/zone.js/dist/sync-test.js',
-      'node_modules/zone.js/dist/jasmine-patch.js',
-      'node_modules/zone.js/dist/async-test.js',
-      'node_modules/zone.js/dist/fake-async-test.js',
-
-      // RxJs
-      { pattern: 'node_modules/rxjs/**/*.js', included: false, watched: false },
-      { pattern: 'node_modules/rxjs/**/*.js.map', included: false, watched: false },
-
-      // Paths loaded via module imports:
-      // Angular itself
-      { pattern: 'node_modules/@angular/**/*.js', included: false, watched: false },
-      { pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: false },
-
-      { pattern: 'systemjs.config.js', included: false, watched: false },
-      { pattern: 'systemjs.config.extras.js', included: false, watched: false },
-      'karma-test-shim.js',
-
-      // transpiled application & spec code paths loaded via module imports
-      { pattern: appBase + '**/*.js', included: false, watched: true },
-      { pattern: testBase + '**/*.js', included: false, watched: true },
-
-
-      // Asset (HTML & CSS) paths loaded via Angular's component compiler
-      // (these paths need to be rewritten, see proxies section)
-      { pattern: appBase + '**/*.html', included: false, watched: true },
-      { pattern: appBase + '**/*.css', included: false, watched: true },
-
-      // Paths for debugging with source maps in dev tools
-      { pattern: appSrcBase + '**/*.ts', included: false, watched: false },
-      { pattern: appBase + '**/*.js.map', included: false, watched: false },
-      { pattern: testSrcBase + '**/*.ts', included: false, watched: false },
-      { pattern: testBase + '**/*.js.map', included: false, watched: false },
-
-
-      { pattern: libSrcBase + '**/*.ts', included: false, watched: false },
-      { pattern: libBase + '**/*.js.map', included: false, watched: false },
-      { pattern: libBase + '**/*.js', included: false, watched: true },
-    ],
-
-    // Proxied base paths for loading assets
-    proxies: {
-      // required for component assets fetched by Angular's compiler
-      "/app/": appAssets,
-      "/lib/": '../lib'
-    },
-
-    exclude: [],
-    preprocessors: {},
-    // disabled HtmlReporter; suddenly crashing w/ strange socket error
-    reporters: ['progress', 'kjhtml'],//'html'],
-
-    // HtmlReporter configuration
-    htmlReporter: {
-      // Open this file to see results in browser
-      outputFile: '_test-output/tests.html',
-
-      // Optional
-      pageTitle: 'Unit Tests',
-      subPageTitle: __dirname
-    },
-
+    // web server port
     port: 9876,
+
+    // enable / disable colors in the output (reporters and logs)
     colors: true,
+
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
-    autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false
-  })
-}
+
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: WATCH,
+
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: ['PhantomJS'],
+
+    // Continuous Integration mode
+    // if true, Karma captures browsers, runs the tests and exits
+    singleRun: !WATCH
+  });
+};

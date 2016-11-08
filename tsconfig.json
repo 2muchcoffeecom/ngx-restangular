@@ -1,24 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-"declaration": true,
     "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "removeComments": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "typeRoots": [
-      "./node_modules/@types/"
-    ]
-  },
-  "compileOnSave": false,
-  "angularCompilerOptions": {
-    "genDir": "lib"
+    "noImplicitAny": false
   },
   "exclude": [
-    "node_modules/*",
-    "**/*-aot.ts"
-  ]
+    "node_modules"
+  ],
+  "compileOnSave": false
 }

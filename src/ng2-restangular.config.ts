@@ -1,5 +1,5 @@
 import {OpaqueToken} from "@angular/core";
-let _ = require('lodash');
+import * as _ from 'lodash';
 
 
 export const RESTANGULAR = new OpaqueToken('restangularWithConfig');

@@ -1,4 +1,3 @@
-debugger;
 /* tslint:disable:member-ordering no-unused-variable */
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 import {RESTANGULAR, RestangularFactory} from './ng2-restangular.config';
