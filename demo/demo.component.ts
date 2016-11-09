@@ -2,45 +2,94 @@ import {Component} from "@angular/core";
 import {Restangular} from "./../src";
 
 import 'rxjs/Rx';
+import {RequestShowService} from "./request-show-service/request-show.service";
+import {Observable, BehaviorSubject} from "rxjs";
 
 
 @Component({
   selector: 'demo-app',
-  styles: [``],
-  template: `
-    <div class="text-center">
-      DEMO
-    </div>
-    <h4>Get list of accounts from 'http://api.2muchcoffee.com/v1/accounts' allAccounts</h4>
-    <ul>
-        <li *ngFor="let acc of allAccounts">
-            <p>User: {{acc}}</p>
-        </li>
-    </ul>
-    <h4>Get list of buildings from 'http://api.2muchcoffee.com/v1/accounts/123/buildings' </h4>
-    <ul>
-        <li *ngFor="let building of oneAccountsBuildings">
-            <p>Building: {{building}}</p>
-        </li>
-    </ul>
-  `
+  styleUrls: ['./demo.style.css'],
+  templateUrl: './demo.template.html',
+
 })
 export class Demo {
   public allAccounts: any;
   public oneAccountsBuildings: any;
   public account: any;
+  public form:any;
+
+  public queryArr = [];
+  public headersArr= [];
+
+  public request = {
+    endpoint: "",
+    id: "",
+    headers: {},
+    queryParams: {}
+  };
+
+  public requestToShow$: any;
+  public responseToShow$: any = new BehaviorSubject(null);
 
 
-  constructor(public restangular: Restangular) {
+
+  constructor(public restangular: Restangular, private requestShowService: RequestShowService) {
   }
 
+  ngAfterViewInit(){
+    // this.requestToShow$ = this.requestShowService.requestToShow;
+  }
+
+  Submit (form) {
+    this.sendRequest(form)
+  }
+
+  private formParams (param) {
+    let params = {};
+    param.filter(r=>!!r.name).map(param => {
+      params[param.name] = param.value;
+    });
+    return params;
+  }
+
+  makeRequest(form){
+    form.value.queryParams = this.formParams(this.queryArr);
+    form.value.headers = this.formParams(this.headersArr);
+    this.request.queryParams = form.value.queryParams;
+    this.request.headers = form.value.headers;
+  }
+
+  sendRequest(form){
+    this.makeRequest(form);
+    this.restangular.one(form.value.endpoint,form.value.id).get(form.value.queryParams,form.value.headers).subscribe(res => {
+      this.responseToShow$.next(res);
+    })
+  }
+
+  addQueryParams() {
+    this.queryArr.push({});
+  }
+
+  addHeaders() {
+    this.headersArr.push({});
+  }
+
+
+
   ngOnInit() {
+
+    this.responseToShow$.subscribe(res => {
+      debugger;
+    });
+
+    this.requestToShow$ = this.requestShowService.requestToShow;
+
     // First way of creating a this.restangular object. Just saying the base URL
     let baseAccounts = this.restangular.all('accounts');
 
     // This will query /accounts and return a observable.
     baseAccounts.getList().subscribe(accounts => {
-      this.allAccounts = accounts.map(account => account.user);
+      this.allAccounts = accounts.map(account => {return{"account": account.user}});
       console.log(accounts);
     });
 
@@ -64,7 +113,7 @@ export class Demo {
 
     // Just ONE GET to /accounts/123/buildings
     this.restangular.one('accounts', 123).getList('buildings').subscribe(buildings => {
-      this.oneAccountsBuildings = buildings.map(building => building.user);
+      this.oneAccountsBuildings = buildings.map(building => {return{"building": building.user}});
       console.log(buildings);
     });
 

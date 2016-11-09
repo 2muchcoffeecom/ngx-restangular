@@ -1,0 +1,56 @@
+<div class=clearfix>
+    <div class="col">
+        <h3>Simple Http Get request</h3>
+        <form #form="ngForm" (submit)="sendRequest(form)">
+            <label for="endpoint">http://api.2muchcoffee.com/v1/</label>
+            <input name="endpoint" id="endpoint" [(ngModel)]="request.endpoint">
+            <label for="id">/</label>
+            <input name="id" id="id" [(ngModel)]="request.id">
+        </form>
+        <div>
+            <div *ngFor="let query of queryArr; let index=index" class=clearfix>
+                <div class=col2>
+                    <label for="queryParamName">Parameter Name</label>
+                    <input name="queryParamName" id="queryParamName" [(ngModel)]="query.name"
+                           (change)="makeRequest(form)">
+                </div>
+                <div class=col2>
+                    <label for="queryParamValue">Parameter Value</label>
+                    <input name="queryParamValue" id="queryParamValue" [(ngModel)]="query.value"
+                           (change)="makeRequest(form)">
+                </div>
+            </div>
+            <input type=button class=button (click)="addQueryParams(); $event.preventDefault()" value="Add Query Params">
+        </div>
+        <div>
+            <div *ngFor="let header of headersArr; let index=index" class=clearfix>
+                <div class=col2>
+                    <label for="headerName">Header Name</label>
+                    <input name="headerName" id="headerName" [(ngModel)]="header.name" (change)="makeRequest(form)">
+                </div>
+                <div class=col2>
+                    <label for="headerValue">Header Value</label>
+                    <input name="headerValue" id="headerValue" [(ngModel)]="header.value" (change)="makeRequest(form)">
+                </div>
+            </div>
+            <input type=button class=button (click)="addHeaders(); $event.preventDefault()" value="Add Headers">
+        </div>
+        <div>
+            <button (click)="Submit(form)"  class="button large">Send Request</button>
+        </div>
+
+        <h3>Sample of function</h3>
+        <pre rel="javascript"><code>
+restangular.one({{request.endpoint}},{{request.id}}).get({{request.queryParams| json}},{{request.headers | json}})</code>
+    </pre>
+    </div>
+
+    <div class="col">
+        <h3>Request</h3>
+        <pre rel="javascript"><code>{{requestToShow$ | async | json}}</code></pre>
+    </div>
+    <div class="col">
+        <h3>Response</h3>
+        <pre rel="javascript"><code>{{responseToShow$ | async | json}}</code></pre>
+    </div>
+</div>
