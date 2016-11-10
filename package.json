@@ -48,6 +48,7 @@
     "@angular/http": "^2.1.2",
     "@angular/platform-browser": "~2.1.2",
     "@angular/platform-browser-dynamic": "~2.1.2",
+    "@angular/router": "3.0.0",
     "@types/chai": "~3.4.33",
     "@types/core-js": "~0.9.34",
     "@types/jasmine": "~2.5.36",
@@ -103,5 +104,9 @@
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@angular/http": "^2.1.2",
+    "@angular/router": "^3.0.0"
   }
 }

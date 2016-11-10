@@ -1,0 +1,1 @@
+{"__symbolic":"module","version":1,"metadata":{},"exports":[{"from":"./ng2-restangular.module","export":["RestangularModule"]},{"from":"./ng2-restangular","export":["Restangular"]},{"from":"./ng2-restangular-http","export":["RestangularHttp"]}]}

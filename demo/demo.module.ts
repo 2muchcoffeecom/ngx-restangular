@@ -8,6 +8,9 @@ import {MockBackend} from "@angular/http/testing";
 import {FormsModule} from "@angular/forms";
 
 import {RequestShowService} from "./request-show-service/request-show.service"
+import {RouterModule, Router} from "@angular/router";
+import {routes} from "./demo.routes";
+import {RequestCalcModule} from "./request-calc";
 
 @NgModule({
   declarations: [Demo],
@@ -15,6 +18,8 @@ import {RequestShowService} from "./request-show-service/request-show.service"
     BrowserModule,
     FormsModule,
     HttpModule,
+    RequestCalcModule,
+    RouterModule.forRoot(routes),
     RestangularModule.forRoot((RestangularProvider) => {
       RestangularProvider.setBaseUrl('http://api.2muchcoffee.com/v1');
       RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
@@ -24,25 +29,5 @@ import {RequestShowService} from "./request-show-service/request-show.service"
   bootstrap: [Demo]
 })
 export class DemoModule {
-  // This need only for Demo App
-  // Its Fake Backend servise to return data
-  constructor(backend: MockBackend, requestShowService: RequestShowService) {
-    backend.connections.subscribe(connection => {
-      let resOptions = new ResponseOptions({
-        body: JSON.stringify([{user: "first"}, {user: "second"}, {user: "third"}]),
-        headers: new Headers({
-          'header': 'server-header'
-        }),
-        status: 200
-      });
-      let response = new Response(resOptions);
 
-      requestShowService.requestToShow.next(connection.request);
-      console.log("Request Url on Backend: ", connection.request.url);
-
-      // debugger;
-
-      connection.mockRespond(response)
-    })
-  }
 }
