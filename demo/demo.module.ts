@@ -40,7 +40,7 @@ export class DemoModule {
       requestShowService.requestToShow.next(connection.request);
       console.log("Request Url on Backend: ", connection.request.url);
 
-      debugger;
+      // debugger;
 
       connection.mockRespond(response)
     })

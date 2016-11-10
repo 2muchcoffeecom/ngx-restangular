@@ -26,6 +26,26 @@
     padding-left: 20px;
 }
 
+.label-top {
+    display: inline-block;
+}
+
+.label-top[hidden] {
+    display: none;
+}
+
+*[hidden] {
+    display: none;
+}
+
+.label-top input,.label-top label {
+    display: block;
+}
+
+.label-top label {
+    text-align: center;
+}
+
 .button {
     display: block;
     padding: 3px;
