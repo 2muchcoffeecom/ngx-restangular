@@ -56,6 +56,12 @@ export class DemoModule {
         response = new Response(resOptions);
       }
 
+      if(connection.request.url.indexOf("http://api.2muchcoffee.com/v1/heroes/")>=0){
+        let id = connection.request.url.slice(connection.request.url.lastIndexOf("/")+1, connection.request.url.length);
+        resOptions = resOptions.merge({body:JSON.stringify(heroService.getHero(id))});
+        response = new Response(resOptions);
+      }
+
 
       connection.mockRespond(response)
     })
