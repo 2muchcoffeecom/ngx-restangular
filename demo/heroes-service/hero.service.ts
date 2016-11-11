@@ -20,7 +20,7 @@ export class HeroService {
   }
 
   getHero(id) {
-    return this.heroes[id]
+    return this.heroes[id];
   }
 
 }

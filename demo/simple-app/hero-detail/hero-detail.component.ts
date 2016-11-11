@@ -3,10 +3,8 @@ import {Component} from "@angular/core";
 import 'rxjs/Rx';
 import {Observable, BehaviorSubject} from "rxjs";
 import {Restangular} from "../../../src/ng2-restangular";
- import {Hero} from "../../heroes-service/hero";
-import {RequestShowService} from "../../request-show-service/request-show.service";
+import {Hero} from "../../heroes-service/hero";
 import {ActivatedRoute, Params} from "@angular/router";
-import {HeroService} from "../../heroes-service/hero.service";
 
 
 @Component({
@@ -18,16 +16,18 @@ export class HeroDetailComponent {
 
   public hero: Hero;
 
-  constructor(private route: ActivatedRoute, private heroService: HeroService){
+  constructor(private route: ActivatedRoute, private restangular: Restangular){
   }
 
   ngOnInit() {
-    debugger;
+    let id;
     this.route.params.forEach((params: Params) => {
-      let id = +params['id'];
-      debugger;
-      this.hero = this.heroService.getHero(id);
+      id = +params['id'];
     });
+    this.restangular.one("heroes",id).get().subscribe(res => {
+      this.hero = res;
+    });
+
   }
 
 }

@@ -14,7 +14,6 @@ import {RouterModule} from "@angular/router";
     FormsModule,
     HttpModule,
     RouterModule,
-
   ],
   exports: [HeroListComponent]
 })
