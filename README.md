@@ -22,6 +22,7 @@ We are open to any cooperation in terms of its further development.
     - [Here is Example of code with using promises!](#here-is-example-of-code-with-using-promises)
   - [Configuring Restangular](#configuring-restangular)
     - [Properties](#properties)
+      - [withConfig](#withconfig)
       - [setBaseUrl](#setbaseurl)
       - [setExtraFields](#setextrafields)
       - [setParentless](#setparentless)
@@ -446,7 +447,40 @@ export class OtherComponent {
 
 ### Properties
 Restangular comes with defaults for all of its properties but you can configure them. **So, if you don't need to configure something, there's no need to add the configuration.**
-You can set all these configurations in **[RestangularModule](#how-to-configure-them-globally) to change the global configuration** or you can **use the [withConfig](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one) method in Restangular service to create a new Restangular service with some scoped configuration**. Check the section on this later.
+You can set all these configurations in **[RestangularModule](#how-to-configure-them-globally) to change the global configuration**, you can also **use the [withConfig](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one) method in Restangular service to create a new Restangular service with some scoped configuration** or **use [withConfig](#withconfig) in component to make specified Restangular**  
+
+#### withConfig
+You can configure Restangular "withConfig" like in example below, you can also configure them globally **[RestangularModule](#how-to-configure-them-globally) or in service with [withConfig](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one)
+ 
+ ````javascript
+ @NgModule({
+   bootstrap: [ AppComponent ],
+   declarations: [
+     AppComponent,
+   ],
+   imports: [
+     // Global configuration
+     RestangularModule.forRoot((RestangularProvider)=>{
+       RestangularProvider.setBaseUrl('http://www.google.com');
+     }),
+   ]
+ })
+ export class AppModule {}
+
+ // Let's use it in the component
+ @Component({
+   ...
+ })
+ export class OtherComponent {
+   constructor(private restangular: Restangular) {}
+ 
+   ngOnInit() {
+     restangular.withConfig((RestangularConfigurer) => {
+       RestangularConfigurer.setBaseUrl('http://www.bing.com');
+     }).all('users').getList()
+   }
+ };
+ ````
 
 #### setBaseUrl
 The base URL for all calls to your API. For example if your URL for fetching accounts is http://example.com/api/v1/accounts, then your baseUrl is `/api/v1`. The default baseUrl is an empty string which resolves to the same url that Angular2 is running, but you can also set an absolute url like `http://api.example.com/api/v1` if you need to set another domain.
