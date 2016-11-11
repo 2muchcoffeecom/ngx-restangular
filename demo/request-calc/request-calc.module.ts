@@ -7,15 +7,14 @@ import {FormsModule} from "@angular/forms";
 
 import {RequestCalcComponent} from "./request-calc.component";
 import {RequestShowService} from "../request-show-service/request-show.service";
-import {RestangularModule} from "../../dist/esm/src/ng2-restangular.module";
+import {RestangularModule} from "../../src/ng2-restangular.module";
 
 @NgModule({
   declarations: [RequestCalcComponent],
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule,
-    RestangularModule
+    HttpModule
   ],
   exports: [RequestCalcComponent]
 })
