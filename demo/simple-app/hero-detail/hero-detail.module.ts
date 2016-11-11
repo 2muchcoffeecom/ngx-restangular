@@ -1,20 +1,21 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import { HttpModule} from "@angular/http";
+import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
+import {HeroDetailComponent} from "./hero-detail.component";
 
 
-import {RequestCalcComponent} from "./request-calc.component";
 
 @NgModule({
-  declarations: [RequestCalcComponent],
+  declarations: [HeroDetailComponent],
   imports: [
     CommonModule,
     FormsModule,
     HttpModule
   ],
-  exports: [RequestCalcComponent]
+  exports: [HeroDetailComponent]
 })
-export class RequestCalcModule {
+export class HeroDetailModule {
+
 
 }

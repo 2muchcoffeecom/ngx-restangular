@@ -1,0 +1,3 @@
+<ul *ngIf="heroList">
+    <li *ngFor="let hero of heroList; let id = index;"><a [routerLink]="['/simpleapp/herodetail/', id]">{{hero.name}}</a></li>
+</ul>
