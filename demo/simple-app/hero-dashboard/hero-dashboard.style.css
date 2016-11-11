@@ -6,9 +6,9 @@ li a {
     display: block;
     padding: 40px 5%;
     font-size: 17px;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
+    color: #eee;
+    background-color: #555;
+    border: 1px solid #111;
     border-radius: 4px;
 }
 * {

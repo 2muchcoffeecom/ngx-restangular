@@ -1,0 +1,11 @@
+.wrapper {
+    background-color: #cccccc;
+    color: #000;
+    border-radius: 5px;
+    border: 1px solid #bbbbbb;
+    text-align: left;
+    padding: 10px;
+}
+.wrapper h3 {
+    text-align: center;
+}

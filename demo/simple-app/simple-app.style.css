@@ -1,12 +1,13 @@
-div {
-    width: 80%;
-    margin: 0 auto;
+.wrapper {
     text-align: center;
+    position: relative;
+}
+.side-bar {
+
 }
 a {
     display: inline-block;
     text-align: center;
-    width: 40%;
     margin: 20px 4.9%;
     padding: 15px;
     font-size: 13px;
