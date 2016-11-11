@@ -7,7 +7,7 @@ import {Hero} from "../../heroes-service/hero";
 
 
 @Component({
-  selector: 'simple-app',
+  selector: 'hero-dashboard',
   styleUrls: ['./simple-app/hero-dashboard/hero-dashboard.style.css'],
   templateUrl: './simple-app/hero-dashboard/hero-dashboard.template.html'
 })

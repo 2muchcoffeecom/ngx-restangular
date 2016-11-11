@@ -8,7 +8,7 @@ import {RequestShowService} from "../../request-show-service/request-show.servic
 
 
 @Component({
-  selector: 'simple-app',
+  selector: 'hero-list',
   styleUrls: ['./simple-app/hero-list/hero-list.style.css'],
   templateUrl: './simple-app/hero-list/hero-list.template.html'
 })

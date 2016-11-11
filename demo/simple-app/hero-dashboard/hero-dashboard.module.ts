@@ -7,8 +7,6 @@ import {SimpleAppComponent} from "../simple-app.component";
 import {HeroDashboardComponent} from "./hero-dashboard.component";
 import {RouterModule} from "@angular/router";
 
-
-
 @NgModule({
   declarations: [HeroDashboardComponent],
   imports: [
