@@ -15,7 +15,10 @@ export class HeroService {
     {name:"Hero8"}
   ];
 
-  getHeroes() {
+  getHeroes(number?) {
+    if(arguments.length) {
+      return this.heroes.slice(0,number)
+    }
     return this.heroes;
   }
 

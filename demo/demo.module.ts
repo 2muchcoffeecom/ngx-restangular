@@ -13,9 +13,10 @@ import {routes} from "./demo.routes";
 import {RequestCalcModule} from "./request-calc";
 import {SimpleAppModule} from "./simple-app";
 import {HeroService} from "./heroes-service/hero.service";
+import {LandingComponent} from "./landing/landing.component";
 
 @NgModule({
-  declarations: [Demo],
+  declarations: [Demo, LandingComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -49,17 +50,21 @@ export class DemoModule {
       requestShowService.requestToShow.next(connection.request);
       console.log("Request Url on Backend: ", connection.request.url);
 
-      // debugger;
 
-      if(connection.request.url == "http://api.2muchcoffee.com/v1/heroes"){
-        resOptions = resOptions.merge({body:JSON.stringify(heroService.getHeroes())});
+      if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes)/.test(connection.request.url)) {
+        resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes())});
         response = new Response(resOptions);
-      }
-
-      if(connection.request.url.indexOf("http://api.2muchcoffee.com/v1/heroes/")>=0){
-        let id = connection.request.url.slice(connection.request.url.lastIndexOf("/")+1, connection.request.url.length);
-        resOptions = resOptions.merge({body:JSON.stringify(heroService.getHero(id))});
-        response = new Response(resOptions);
+        let t = connection.request.url.indexOf(/number=[0-9]+/);
+        if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\?number=)/.test(connection.request.url)) {
+          let number = +connection.request.url.slice(connection.request.url.lastIndexOf("=") + 1, connection.request.url.length);
+          resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes(number))});
+          response = new Response(resOptions);
+        }
+        if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\/)/.test(connection.request.url)) {
+          let id = connection.request.url.slice(connection.request.url.lastIndexOf("/") + 1, connection.request.url.length);
+          resOptions = resOptions.merge({body: JSON.stringify(heroService.getHero(id))});
+          response = new Response(resOptions);
+        }
       }
 
 

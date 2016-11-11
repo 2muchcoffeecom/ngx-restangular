@@ -11,7 +11,7 @@ import {HeroDetailComponent} from "./hero-detail.component";
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule
+    HttpModule,
   ],
   exports: [HeroDetailComponent]
 })
