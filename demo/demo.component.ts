@@ -13,4 +13,12 @@ import {Observable, BehaviorSubject} from "rxjs";
 
 })
 export class Demo {
+  constructor(restangular:Restangular){
+    restangular.withConfig((RestangularConfigurer) => {
+      RestangularConfigurer.setBaseUrl('http://www.bing.com');
+    }).all('users').getList().subscribe(res=>{
+      console.log(res);
+      debugger;
+    })
+  }
 }
