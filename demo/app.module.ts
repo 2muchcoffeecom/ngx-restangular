@@ -48,6 +48,7 @@ export class AppModule {
       let response = new Response(resOptions);
 
       requestShowService.requestToShow.next(connection.request);
+      // console.log(connection.request);
       console.log("Request Url on Backend: ", connection.request.url);
 
 
@@ -63,7 +64,7 @@ export class AppModule {
           resOptions = resOptions.merge({body: JSON.stringify(heroService.putHero(connection.request.headers.get("id"), connection.request.getBody()))});
           response = new Response(resOptions);
         }
-        let t = connection.request.url.indexOf(/number=[0-9]+/);
+        // let t = connection.request.url.indexOf(/number=[0-9]+/);
         if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\?number=)/.test(connection.request.url)) {
           let number = +connection.request.url.slice(connection.request.url.lastIndexOf("=") + 1, connection.request.url.length);
           resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes(number))});

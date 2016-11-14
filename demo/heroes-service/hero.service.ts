@@ -32,8 +32,8 @@ export class HeroService {
   }
 
   putHero(id, hero) {
-    this.heroes[id] = JSON.parse(hero);
-    return this.heroes[id];
+    this.heroes[+id] = JSON.parse(hero);
+    return this.heroes[+id];
   }
 
 

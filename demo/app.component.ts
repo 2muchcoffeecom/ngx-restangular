@@ -12,4 +12,9 @@ import {Observable, BehaviorSubject} from "rxjs";
   templateUrl: './app.template.html',
 })
 export class App {
+  public request;
+
+  constructor(public requestShowService: RequestShowService) {
+    this.request = requestShowService.requestToShow;
+  }
 }

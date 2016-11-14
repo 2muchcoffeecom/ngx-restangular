@@ -42,7 +42,7 @@ export class HeroDetailComponent {
 
   editHero() {
     if (this.editable) {
-      this.hero.put(undefined,{"id":this.id});
+      this.hero.put(undefined,{"id":"" + this.id});
       this.editable = false;
     }
     else this.editable = true;
