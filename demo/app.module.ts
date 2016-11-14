@@ -2,21 +2,21 @@ import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule, Headers, Response, ResponseOptions} from "@angular/http";
 import {RestangularModule} from "./../src";
-import {Demo} from "./demo.component";
+import {App} from "./app.component";
 import {MockProviders} from "./mock-data/mock-providers";
 import {MockBackend} from "@angular/http/testing";
 import {FormsModule} from "@angular/forms";
 
 import {RequestShowService} from "./request-show-service/request-show.service"
 import {RouterModule, Router} from "@angular/router";
-import {routes} from "./demo.routes";
+import {routes} from "./app.routes";
 import {RequestCalcModule} from "./request-calc";
 import {SimpleAppModule} from "./simple-app";
 import {HeroService} from "./heroes-service/hero.service";
 import {LandingComponent} from "./landing/landing.component";
 
 @NgModule({
-  declarations: [Demo, LandingComponent],
+  declarations: [App, LandingComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -30,9 +30,9 @@ import {LandingComponent} from "./landing/landing.component";
     }),
   ],
   providers: [MockProviders, RequestShowService, HeroService],
-  bootstrap: [Demo]
+  bootstrap: [App]
 })
-export class DemoModule {
+export class AppModule {
 
   // This need only for Demo App
   // Its Fake Backend servise to return data
@@ -74,7 +74,6 @@ export class DemoModule {
           resOptions = resOptions.merge({body: JSON.stringify(heroService.getHero(id))});
           response = new Response(resOptions);
         }
-
       }
 
 

@@ -7,10 +7,9 @@ import {Observable, BehaviorSubject} from "rxjs";
 
 
 @Component({
-  selector: 'demo-app',
-  styleUrls: ['./demo.style.css'],
-  templateUrl: './demo.template.html',
-
+  selector: 'app',
+  styleUrls: ['./app.style.css'],
+  templateUrl: './app.template.html',
 })
-export class Demo {
+export class App {
 }
