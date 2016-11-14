@@ -27,4 +27,15 @@ export class ExtendAppComponent {
       this.users = users;
     });
   }
+
+  errorInterceptor() {
+    alert("Check Console Please");
+    this.restangular.withConfig((RestangularConfigurer) => {
+      RestangularConfigurer.setBaseUrl('http://api.2muchcoffee.com/v1');
+    }).all("error").getList().subscribe(res => {
+      console.log(res);
+    },err => {
+      console.log("Error from server:", err);
+    });
+  }
 }
