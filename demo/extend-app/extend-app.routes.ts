@@ -5,7 +5,7 @@ import {ExtendAppComponent} from "./extend-app.component";
 // import {HeroDetailComponent} from "./hero-detail/";
 
 
-export const exampleAppRoutes: Routes = [
+export const extendAppRoutes: Routes = [
   {
     path: '',
     component: ExtendAppComponent,

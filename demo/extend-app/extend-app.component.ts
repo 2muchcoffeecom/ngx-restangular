@@ -1,9 +1,11 @@
-import {Component} from "@angular/core";
+import {Component, Inject} from "@angular/core";
 import {Restangular} from "./../../src";
 
 import 'rxjs/Rx';
 import {RequestShowService} from "../request-show-service/request-show.service";
 import {Hero} from "../heroes-service/hero";
+// import {Random, RandomUser} from "./extend-app.module";
+import {RANDOM_USER} from "../random-user-restangular/random-user-restangular";
 
 
 @Component({
@@ -12,6 +14,17 @@ import {Hero} from "../heroes-service/hero";
   templateUrl: './extend-app/extend-app.template.html'
 })
 export class ExtendAppComponent {
-  constructor(public restangular: Restangular, private requestShowService: RequestShowService) {
+  public response;
+
+  public users;
+
+  constructor(public restangular: Restangular,  @Inject(RANDOM_USER) public randomUser) {
+
+  }
+
+  getUsers() {
+    this.randomUser.all("users").getList().subscribe(users => {
+      this.users = users;
+    });
   }
 }

@@ -1,6 +1,10 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OpaqueToken} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {Hero} from "./hero";
+import {Restangular} from "../../src/ng2-restangular";
+
+
+
 
 @Injectable()
 export class HeroService {

@@ -1,4 +1,4 @@
-import {NgModule} from "@angular/core";
+import {NgModule, Injectable} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule, Headers, Response, ResponseOptions} from "@angular/http";
 import {RestangularModule} from "./../src";
@@ -17,6 +17,8 @@ import {SimpleAppModule} from "./simple-app";
 import {HeroService} from "./heroes-service/hero.service";
 import {LandingComponent} from "./landing/landing.component";
 import {ExtendAppModule} from "./extend-app/extend-app.module";
+import {Restangular} from "../src/ng2-restangular";
+import {RANDOM_USER,RestangularRandomUserFactory} from "./random-user-restangular/random-user-restangular"
 
 @NgModule({
   declarations: [App, LandingComponent],
@@ -49,7 +51,9 @@ import {ExtendAppModule} from "./extend-app/extend-app.module";
       });
     }),
   ],
-  providers: [MockProviders, RequestShowService, HeroService],
+  providers: [MockProviders, RequestShowService, HeroService,
+    { provide: RANDOM_USER, useFactory:  RestangularRandomUserFactory, deps: [Restangular] }
+  ],
   bootstrap: [App]
 })
 export class AppModule {
@@ -95,6 +99,14 @@ export class AppModule {
           resOptions = resOptions.merge({body: JSON.stringify(heroService.getHero(id))});
           response = new Response(resOptions);
         }
+      }
+
+      if(/(https:\/\/randomuser.me\/api\/)/.test(connection.request.url)) {
+        resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes().map((hero,index)=>{
+          hero.name = "user" + ++index;
+          return hero;
+        }))});
+        response = new Response(resOptions);
       }
 
       if (/(http:\/\/api.2muchcoffee.com\/v1\/error)/.test(connection.request.url)) {
