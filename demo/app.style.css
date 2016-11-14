@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+}
+a {
+    font-size: 20px;
+    color: #333333;
+    margin: 0 10px;
+}
+a:hover {
+    color: #888888;
+    text-decoration: none;
+}
+a:focus{
+    text-decoration: none;
+}
+a.active {
+    color: #a94442;
+    text-shadow: 2px 3px 5px rgba(123,123,211,0.5);
+}

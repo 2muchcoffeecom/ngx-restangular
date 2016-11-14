@@ -8,19 +8,22 @@ import {RequestShowService} from "../../request-show-service/request-show.servic
 
 
 @Component({
-  selector: 'simple-app',
+  selector: 'hero-list',
   styleUrls: ['./simple-app/hero-list/hero-list.style.css'],
   templateUrl: './simple-app/hero-list/hero-list.template.html'
 })
 export class HeroListComponent {
 
+  private heroes;
+
   public heroList: Hero[];
 
   constructor(public restangular: Restangular, private requestShowService: RequestShowService) {
+    this.heroes = restangular.all("heroes");
   }
 
   ngOnInit() {
-    this.restangular.all("heroes").getList().subscribe(heroes => {
+    this.heroes.getList().subscribe(heroes => {
       this.heroList = heroes;
     });
   }

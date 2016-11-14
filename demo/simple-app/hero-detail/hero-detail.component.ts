@@ -4,7 +4,7 @@ import 'rxjs/Rx';
 import {Observable, BehaviorSubject} from "rxjs";
 import {Restangular} from "../../../src/ng2-restangular";
 import {Hero} from "../../heroes-service/hero";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 
 @Component({
@@ -14,20 +14,38 @@ import {ActivatedRoute, Params} from "@angular/router";
 })
 export class HeroDetailComponent {
 
-  public hero: Hero;
+  private heroes;
+  private id: number;
 
-  constructor(private route: ActivatedRoute, private restangular: Restangular){
+  public hero: Restangular;
+  public editable: boolean;
+
+  constructor(private route: ActivatedRoute, private restangular: Restangular, private router: Router) {
+    this.heroes = restangular.all("heroes");
   }
 
   ngOnInit() {
-    let id;
     this.route.params.forEach((params: Params) => {
-      id = +params['id'];
+      this.id = +params['id'];
     });
-    this.restangular.one("heroes",id).get().subscribe(res => {
+    this.restangular.one("heroes", this.id).get().subscribe(res => {
       this.hero = res;
     });
 
+  }
+
+  deleteHero() {
+    this.heroes.post({id: this.id}).subscribe(heroes => {
+      this.router.navigate(["/simpleapp/herolist"]);
+    })
+  }
+
+  editHero() {
+    if (this.editable) {
+      this.hero.put(undefined,{"id":this.id});
+      this.editable = false;
+    }
+    else this.editable = true;
   }
 
 }

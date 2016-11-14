@@ -85,15 +85,8 @@ input:focus {
     margin: 5px;
 }
 .large {
-    padding: 5px;
     font-size: 18px;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin: 5px;
 }
-
 .col2 {
     width: 50%;
     float: left;

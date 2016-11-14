@@ -19,10 +19,5 @@ export class SimpleAppComponent {
   constructor(public restangular: Restangular, private requestShowService: RequestShowService) {
   }
 
-  ngOnInit() {
-    this.restangular.all("heroes").getList().subscribe(heroes => {
-      this.heroList = heroes;
-    });
-  }
 
 }

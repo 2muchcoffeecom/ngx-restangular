@@ -1,0 +1,27 @@
+.wrapper {
+    background-color: #cccccc;
+    color: #000;
+    border-radius: 5px;
+    border: 1px solid #bbbbbb;
+    text-align: left;
+    padding: 10px;
+}
+
+.wrapper h3 {
+    text-align: center;
+}
+
+.relative {
+    position: relative;
+}
+
+.btn-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-50%,25%);
+}
+.btn-ok {
+    color: green;
+    opacity: 0.8;
+}
