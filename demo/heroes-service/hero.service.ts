@@ -26,5 +26,15 @@ export class HeroService {
     return this.heroes[id];
   }
 
+  deleteHero(id) {
+    this.heroes.splice(id,1);
+    return this.heroes;
+  }
+
+  putHero(id, hero) {
+    this.heroes[id] = JSON.parse(hero);
+    return this.heroes[id];
+  }
+
 
 }

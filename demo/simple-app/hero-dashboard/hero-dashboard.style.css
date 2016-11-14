@@ -2,15 +2,6 @@ ul {
     list-style-type: none;
     padding:0;
 }
-li a {
-    display: block;
-    padding: 40px 5%;
-    font-size: 17px;
-    color: #eee;
-    background-color: #555;
-    border: 1px solid #111;
-    border-radius: 4px;
-}
-* {
-    box-sizing: border-box;
+a:hover {
+    cursor: pointer;
 }
