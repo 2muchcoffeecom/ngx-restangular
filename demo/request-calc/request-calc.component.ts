@@ -84,37 +84,41 @@ export class RequestCalcComponent {
       if (this.selectMethod == "post") {
         this.restangular[this.selectType](form.value.endpoint)[this.selectMethod](elementToPost, form.value.queryParams, form.value.headers).subscribe(res => {
           this.responseToShow$.next(res);
-        }).unsubscribe();
+        },this.errorShow).unsubscribe();
       }
       else if (this.selectMethod == "get") {
         this.restangular[this.selectType](form.value.endpoint)[this.selectMethod](form.value.id, form.value.queryParams, form.value.headers).subscribe(res => {
           this.responseToShow$.next(res);
-        }).unsubscribe();
+        },this.errorShow).unsubscribe();
       }
       else {
         this.restangular[this.selectType](form.value.endpoint)[this.selectMethod](form.value.queryParams, form.value.headers).subscribe(res => {
           this.responseToShow$.next(res);
-        }).unsubscribe();
+        },this.errorShow).unsubscribe();
       }
     }
     else {
       if (this.selectMethod == "post") {
         this.restangular[this.selectType](form.value.endpoint,form.value.id)[this.selectMethod](form.value.subelement, elementToPost, form.value.queryParams, form.value.headers).subscribe(res => {
           this.responseToShow$.next(res);
-        }).unsubscribe();
+        },this.errorShow).unsubscribe();
       }
       else if (this.selectMethod == "getList") {
         this.restangular[this.selectType](form.value.endpoint,form.value.id)[this.selectMethod](form.value.subelement, form.value.queryParams, form.value.headers).subscribe(res => {
           this.responseToShow$.next(res);
-        }).unsubscribe();
+        },this.errorShow).unsubscribe();
       }
       else {
         this.restangular[this.selectType](form.value.endpoint,form.value.id)[this.selectMethod](form.value.queryParams, form.value.headers).subscribe(res => {
           this.responseToShow$.next(res);
-        }).unsubscribe();
+        },this.errorShow).unsubscribe();
       }
     }
     form.reset();
+  }
+
+  errorShow(err) {
+    console.log("Error from server with ErrorInterceptor",err);
   }
 
   addQueryParams() {
