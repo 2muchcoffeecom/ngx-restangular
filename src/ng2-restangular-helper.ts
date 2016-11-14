@@ -34,6 +34,13 @@ export class RestangularHelper {
   }
   
   static createRequestHeaders(headers) {
+    for (let key in headers) {
+      let value: any = headers[key];
+      if (typeof value === 'undefined') {
+        delete headers[key];
+      }
+    }
+    
     return new Headers(Object.assign({}, headers));
   }
 }
