@@ -3,7 +3,7 @@ import {Restangular} from "./../../src";
 
 import 'rxjs/Rx';
 import {RequestShowService} from "../request-show-service/request-show.service";
-import {Observable, BehaviorSubject} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 
 
 @Component({
@@ -46,10 +46,6 @@ export class RequestCalcComponent {
 
 
   constructor(public restangular: Restangular, private requestShowService: RequestShowService) {
-  }
-
-  ngAfterViewInit() {
-    // this.requestToShow$ = this.requestShowService.requestToShow;
   }
 
   Submit(form,e) {

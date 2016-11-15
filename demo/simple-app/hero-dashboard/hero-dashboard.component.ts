@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 
 import 'rxjs/Rx';
-import {Observable, BehaviorSubject} from "rxjs";
 import {Restangular} from "../../../src/ng2-restangular";
 import {Hero} from "../../heroes-service/hero";
 

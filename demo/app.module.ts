@@ -1,4 +1,4 @@
-import {NgModule, Injectable} from "@angular/core";
+import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule, Headers, Response, ResponseOptions} from "@angular/http";
 import {RestangularModule} from "./../src";
@@ -6,7 +6,7 @@ import {App} from "./app.component";
 import {MockProviders} from "./mock-data/mock-providers";
 import {MockBackend} from "@angular/http/testing";
 import {FormsModule} from "@angular/forms";
-import {RouterModule, Router} from "@angular/router";
+import {RouterModule} from "@angular/router";
 
 import {Observable} from "rxjs";
 

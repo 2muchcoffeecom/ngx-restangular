@@ -5,8 +5,6 @@ import {FormsModule} from "@angular/forms";
 import {HeroListComponent} from "./hero-list.component";
 import {RouterModule} from "@angular/router";
 
-
-
 @NgModule({
   declarations: [HeroListComponent],
   imports: [
