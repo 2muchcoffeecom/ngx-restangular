@@ -1,6 +1,6 @@
 {
   "name": "ng2-restangular",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "ng2-restangular",
   "main": "./dist/umd/ng2-restangular.js",
   "module": "./dist/esm/src/index.js",
@@ -91,7 +91,11 @@
     "zone.js": "~0.6.12"
   },
   "peerDependencies": {
-    "@angular/core": "^2.0.0",
+    "@angular/common": "~2.0.0",
+    "@angular/compiler": "~2.0.0",
+    "@angular/compiler-cli": "~2.0.0",
+    "@angular/http": "~2.0.0",
+    "@angular/core": "~2.0.0",
     "lodash": "^4.16.6"
   },
   "files": [
@@ -106,7 +110,11 @@
     }
   },
   "dependencies": {
-    "@angular/http": "^2.1.2",
+    "@angular/common": "~2.0.0",
+    "@angular/compiler": "~2.0.0",
+    "@angular/compiler-cli": "~2.0.0",
+    "@angular/http": "~2.0.0",
+    "@angular/core": "~2.0.0",
     "@angular/router": "^3.0.0"
   }
 }
