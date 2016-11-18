@@ -1,0 +1,16 @@
+div {
+    width: 80%;
+    margin: 0 auto;
+}
+a {
+    display: inline-block;
+    text-align: center;
+    width: 40%;
+    margin: 20px 4%;
+    padding: 15px;
+    font-size: 13px;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

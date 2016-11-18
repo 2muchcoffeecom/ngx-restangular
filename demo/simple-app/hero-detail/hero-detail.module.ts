@@ -3,6 +3,7 @@ import {CommonModule} from "@angular/common";
 import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
 import {HeroDetailComponent} from "./hero-detail.component";
+import {RouterModule} from "@angular/router";
 
 
 
@@ -11,7 +12,8 @@ import {HeroDetailComponent} from "./hero-detail.component";
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    RouterModule
   ],
   exports: [HeroDetailComponent]
 })

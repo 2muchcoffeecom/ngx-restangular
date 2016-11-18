@@ -2,20 +2,23 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
-import {HeroListComponent} from "./hero-list.component";
 import {RouterModule} from "@angular/router";
 
+import {ExtendAppComponent} from "./extend-app.component";
+
 @NgModule({
-  declarations: [HeroListComponent],
+  declarations: [
+    ExtendAppComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
     HttpModule,
     RouterModule,
   ],
-  exports: [HeroListComponent]
+  exports: [ExtendAppComponent]
 })
-export class HeroListModule {
+export class ExtendAppModule {
 
 
 }

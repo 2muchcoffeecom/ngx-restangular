@@ -1,0 +1,18 @@
+<div class=wrapper>
+    <h3>ExtendApp</h3>
+    <button class="btn btn-default" (click)="getUsers()">Get Users With Restangular provides as factory</button>
+
+    <button class="btn btn-default" (click)="errorInterceptor()">Test Error Interceptor</button>
+
+    <div class=row>
+        <div class="col-sm-6 col-sm-offset-3">
+            <ul class="list-group" *ngIf="users">
+                <li *ngFor="let user of users;" class="list-group-item clearfix">
+                    {{user.name}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+

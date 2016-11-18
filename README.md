@@ -130,7 +130,7 @@ export class OtherComponent {
 
   ngOnInit() {
     // GET http://api.test.local/v1/users/2/accounts
-    this.restangular.one('users', 2).all(accounts).getList();
+    this.restangular.one('users', 2).all('accounts').getList();
   }
 
 }

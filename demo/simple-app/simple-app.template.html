@@ -1,4 +1,8 @@
-<h3>SimpleApp</h3>
-<a [routerLink]="['/simpleapp/herolist']">Hero List</a>
-<a [routerLink]="['/simpleapp/herodashboard']">Hero Dashboard</a>
-<router-outlet></router-outlet>
+<div class=wrapper>
+    <h3>SimpleApp</h3>
+    <div class="btn-group button-head" role="group" aria-label="...">
+        <a  class="btn btn-default" [routerLink]="['/simpleapp/herolist']">Hero List</a>
+        <a  class="btn btn-default" [routerLink]="['/simpleapp/herodashboard']">Hero Dashboard</a>
+    </div>
+    <router-outlet></router-outlet>
+</div>

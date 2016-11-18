@@ -1,5 +1,4 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {Injectable, OpaqueToken} from '@angular/core';
 import {Hero} from "./hero";
 
 @Injectable()
@@ -15,12 +14,26 @@ export class HeroService {
     {name:"Hero8"}
   ];
 
-  getHeroes() {
+  getHeroes(number?) {
+    if(arguments.length) {
+      return this.heroes.slice(0,number)
+    }
     return this.heroes;
   }
 
   getHero(id) {
     return this.heroes[id];
   }
+
+  deleteHero(id) {
+    this.heroes.splice(id,1);
+    return this.heroes;
+  }
+
+  putHero(id, hero) {
+    this.heroes[+id] = JSON.parse(hero);
+    return this.heroes[+id];
+  }
+
 
 }
