@@ -1,5 +1,6 @@
 /* tslint:disable:member-ordering no-unused-variable */
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
+import {HttpModule} from "@angular/http";
 import {RESTANGULAR, RestangularFactory} from './ng2-restangular.config';
 import {Restangular} from './ng2-restangular';
 import {RestangularHttp} from './ng2-restangular-http';
@@ -20,6 +21,7 @@ export class RestangularModule {
     return {
       ngModule: RestangularModule,
       providers: [
+        HttpModule,
         RestangularHttp,
         {provide: RESTANGULAR, useFactory: RestangularFactory(...config)},
       ]
