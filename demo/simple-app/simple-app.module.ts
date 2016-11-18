@@ -9,6 +9,7 @@ import {HeroDashboardModule} from "./hero-dashboard";
 import {RouterModule} from "@angular/router";
 import {HeroListModule} from "./hero-list/";
 import {HeroDetailModule} from "./hero-detail/";
+import {HeroAddModule} from "./hero-add/hero-add.module";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {HeroDetailModule} from "./hero-detail/";
     HeroDetailModule,
     RouterModule,
     HeroListModule,
-    HeroDashboardModule
+    HeroDashboardModule,
+    HeroAddModule
   ],
   exports: [SimpleAppComponent]
 })

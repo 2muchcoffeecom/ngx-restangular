@@ -62,6 +62,7 @@ export class AppModule {
   // Its Fake Backend servise to return data
   constructor(backend: MockBackend, requestShowService: RequestShowService, heroService: HeroService) {
     backend.connections.subscribe(connection => {
+      debugger;
       let resOptions = new ResponseOptions({
         body: JSON.stringify([{user: "first"}, {user: "second"}, {user: "third"}]),
         headers: new Headers({
