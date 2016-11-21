@@ -2,6 +2,7 @@ import {Component} from "@angular/core";
 
 import 'rxjs/Rx';
 import {Restangular} from "../../../src/ng2-restangular";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -11,7 +12,7 @@ import {Restangular} from "../../../src/ng2-restangular";
 })
 export class HeroAddComponent {
 
-  constructor(public restangular: Restangular) {
+  constructor(public restangular: Restangular, private router: Router) {
   }
 
   ngOnInit() {
@@ -19,6 +20,7 @@ export class HeroAddComponent {
 
   submitForm (form){
     this.restangular.all('heroes').post(form.value);
+    this.router.navigate(["/simpleapp/herolist"]);
   }
 
 }

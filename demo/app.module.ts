@@ -62,7 +62,7 @@ export class AppModule {
   // Its Fake Backend servise to return data
   constructor(backend: MockBackend, requestShowService: RequestShowService, heroService: HeroService) {
     backend.connections.subscribe(connection => {
-      debugger;
+
       let resOptions = new ResponseOptions({
         body: JSON.stringify([{user: "first"}, {user: "second"}, {user: "third"}]),
         headers: new Headers({
@@ -76,38 +76,17 @@ export class AppModule {
       // console.log(connection.request);
       console.log("Request Url on Backend: ", connection.request.url);
 
-// TODO
-      // if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes)/.test(connection.request.url)) {
-      //   resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes())});
-      //   response = new Response(resOptions);
-      //   if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\/)/.test(connection.request.url)) {
-      //     let id = connection.request.url.slice(connection.request.url.lastIndexOf("/") + 1, connection.request.url.length);
-      //     resOptions = resOptions.merge({body: JSON.stringify(heroService.getHero(id))});
-      //     response = new Response(resOptions);
-      //
-      //     if(connection.request.method == 3) {
-      //       heroService.deleteHero(id);
-      //       resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes())});
-      //       response = new Response(resOptions);
-      //     }
-      //     if (connection.request.method == 2 && connection.request.headers.has("id")) {
-      //       resOptions = resOptions.merge({body: JSON.stringify(heroService.putHero(connection.request.headers.get("id"), connection.request.getBody()))});
-      //       response = new Response(resOptions);
-      //     }
-      //   }
-      //   if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\?number=)/.test(connection.request.url)) {
-      //     let number = +connection.request.url.slice(connection.request.url.lastIndexOf("=") + 1, connection.request.url.length);
-      //     resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes(number))});
-      //     response = new Response(resOptions);
-      //   }
-      // }
-
-
       if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes)/.test(connection.request.url)) {
         resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes())});
         response = new Response(resOptions);
-        if (connection.request.method == 1 && connection.request._body.id >= 0) {
-          heroService.deleteHero(connection.request._body.id);
+
+        if(connection.request.method == 1) {
+          heroService.addHero(connection.request.getBody());
+          resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes())});
+          response = new Response(resOptions);
+        }
+        if(connection.request.method == 3 && connection.request.headers.has("id")) {
+          heroService.deleteHero(connection.request.headers.get("id"));
           resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes())});
           response = new Response(resOptions);
         }
@@ -115,15 +94,15 @@ export class AppModule {
           resOptions = resOptions.merge({body: JSON.stringify(heroService.putHero(connection.request.headers.get("id"), connection.request.getBody()))});
           response = new Response(resOptions);
         }
-        // let t = connection.request.url.indexOf(/number=[0-9]+/);
-        if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\?number=)/.test(connection.request.url)) {
-          let number = +connection.request.url.slice(connection.request.url.lastIndexOf("=") + 1, connection.request.url.length);
-          resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes(number))});
-          response = new Response(resOptions);
-        }
         if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\/)/.test(connection.request.url)) {
           let id = connection.request.url.slice(connection.request.url.lastIndexOf("/") + 1, connection.request.url.length);
           resOptions = resOptions.merge({body: JSON.stringify(heroService.getHero(id))});
+          response = new Response(resOptions);
+
+        }
+        if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\?number=)/.test(connection.request.url)) {
+          let number = +connection.request.url.slice(connection.request.url.lastIndexOf("=") + 1, connection.request.url.length);
+          resOptions = resOptions.merge({body: JSON.stringify(heroService.getHeroes(number))});
           response = new Response(resOptions);
         }
       }

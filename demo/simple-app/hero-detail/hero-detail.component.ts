@@ -33,14 +33,15 @@ export class HeroDetailComponent {
   }
 
   deleteHero() {
-    this.heroes.post({id: this.id}).subscribe(heroes => {
+    debugger;
+    this.hero.remove(null,{"id":this.id}).subscribe(heroes => {
       this.router.navigate(["/simpleapp/herolist"]);
     })
   }
 
   editHero() {
     if (this.editable) {
-      this.hero.put(undefined,{"id":"" + this.id});
+      this.hero.put(null,{"id":this.id});
       this.editable = false;
     }
     else this.editable = true;
