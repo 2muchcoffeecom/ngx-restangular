@@ -4,6 +4,7 @@
 
 This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
+Live Demo on Plunkr [Hero App](http://embed.plnkr.co/qozGPV2HowzmtKbC9a54/)
 
 #Current stage
 
@@ -1282,7 +1283,7 @@ this.showData = function () {
 
 # Server Frameworks
 
-Users reported that this server frameworks play real nice with Restangular, as they let you create a Nested RESTful Resources API easily:
+Users reported that this server frameworks play real nice with Ng2-Restangular, as they let you create a Nested RESTful Resources API easily:
 
 * Ruby on Rails
 * CakePHP, Laravel and FatFREE, Symfony2 with RestBundle, Silex for PHP
