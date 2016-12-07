@@ -1,15 +1,17 @@
 /* tslint:disable:member-ordering no-unused-variable */
-import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
+import {ModuleWithProviders, NgModule, Optional, SkipSelf, OpaqueToken} from '@angular/core';
 import {HttpModule} from "@angular/http";
 import {RESTANGULAR, RestangularFactory} from './ng2-restangular.config';
 import {Restangular} from './ng2-restangular';
 import {RestangularHttp} from './ng2-restangular-http';
 
+export const CONFIGOBJ = new OpaqueToken('configObj');
+
 @NgModule({
   providers: [Restangular]
 })
 export class RestangularModule {
-  
+
   constructor(@Optional() @SkipSelf() parentModule: RestangularModule) {
     if (parentModule) {
       throw new Error(
@@ -17,14 +19,16 @@ export class RestangularModule {
     }
   }
   
-  static forRoot(...config): ModuleWithProviders {
+  static forRoot(config1?, config2?): ModuleWithProviders {
     return {
       ngModule: RestangularModule,
       providers: [
         HttpModule,
         RestangularHttp,
-        {provide: RESTANGULAR, useFactory: RestangularFactory(...config)},
+        {provide: CONFIGOBJ, useValue: [config1,config2]},
+        {provide: RESTANGULAR, useFactory: RestangularFactory, deps: [CONFIGOBJ]},
       ]
-    };
+    }
   }
+
 }
