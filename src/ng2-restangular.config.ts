@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 
 export const RESTANGULAR = new OpaqueToken('restangularWithConfig');
 export function RestangularFactory(config) {
-  debugger
   let configObj = {
     fn: config[0],
     arrServices: [],
@@ -16,6 +15,5 @@ export function RestangularFactory(config) {
       fn: config[1]
     }
   }
-  debugger;
   return configObj;
 }

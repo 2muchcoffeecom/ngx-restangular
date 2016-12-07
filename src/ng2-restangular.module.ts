@@ -5,7 +5,7 @@ import {RESTANGULAR, RestangularFactory} from './ng2-restangular.config';
 import {Restangular} from './ng2-restangular';
 import {RestangularHttp} from './ng2-restangular-http';
 
-export const CONFIGOBJ = new OpaqueToken('configObj');
+export const CONFIG_OBJ = new OpaqueToken('configObj');
 
 @NgModule({
   providers: [Restangular]
@@ -25,8 +25,8 @@ export class RestangularModule {
       providers: [
         HttpModule,
         RestangularHttp,
-        {provide: CONFIGOBJ, useValue: [config1,config2]},
-        {provide: RESTANGULAR, useFactory: RestangularFactory, deps: [CONFIGOBJ]},
+        {provide: CONFIG_OBJ, useValue: [config1,config2]},
+        {provide: RESTANGULAR, useFactory: RestangularFactory, deps: [CONFIG_OBJ]},
       ]
     }
   }

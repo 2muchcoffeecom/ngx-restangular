@@ -110,7 +110,6 @@ export class Restangular {
     private injector: Injector,
     private http: RestangularHttp
   ) {
-    debugger;
     this.provider = new providerConfig(http);
     let element = this.provider.$get();
     Object.assign(this, element);
