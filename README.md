@@ -47,6 +47,7 @@ We are open to any cooperation in terms of its further development.
     - [How to configure them globally](#how-to-configure-them-globally)
       - [Configuring in the AppModule](#configuring-in-the-appmodule)
       - [Configuring in the AppModule with Dependency Injection applied](#configuring-in-the-appmodule-with-dependency-injection-applied)
+      - [Configuring in the AppModule to compile with AoT with Dependency Injection applied](#configuring-in-the-AppModule-to-compile-with-aot-with-dependency-injection-applied)
     - [How to create a Restangular service with a different configuration from the global one](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one)
     - [Decoupled Restangular Service](#decoupled-restangular-service)
   - [Methods description](#methods-description)
@@ -791,6 +792,33 @@ import { RestangularModule } from 'ng2-restangular';
         return http.get('http://api.test.com/v1/users/2', {});
       });
     }),
+  ]
+})
+export class AppModule {
+}
+````
+
+**[Back to top](#table-of-contents)**
+
+#### Configuring in the `AppModule` to compile with AoT with Dependency Injection applied
+This changes need for AoT compiler functions calls should be out of metadata.
+
+````javascript
+import { RestangularModule } from 'ng2-restangular';
+
+export function configFunc (RestangularProvider, http) {
+  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+}
+
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    RestangularModule.forRoot([Http], configFunc),
   ]
 })
 export class AppModule {
