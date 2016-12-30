@@ -804,6 +804,8 @@ export class AppModule {
 This changes need for AoT compiler functions calls should be out of metadata.
 
 ````javascript
+import { NgModule } from '@angular/core';
+import { Http } from '@angular/http';
 import { RestangularModule } from 'ng2-restangular';
 
 export function configFunc (RestangularProvider, http) {
