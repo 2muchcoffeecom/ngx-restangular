@@ -43,8 +43,9 @@
   "devDependencies": {
     "@angular/common": "^2.0.0",
     "@angular/compiler": "^2.0.0",
-    "@angular/compiler-cli": "2.0.0",
+    "@angular/compiler-cli": "^2.0.0",
     "@angular/core": "^2.0.0",
+    "@angular/forms": "^2.0.0",
     "@angular/http": "^2.0.0",
     "@angular/platform-browser": "^2.0.0",
     "@angular/platform-browser-dynamic": "^2.0.0",
@@ -88,6 +89,7 @@
     "validate-commit-msg": "~2.8.0",
     "webpack": "~1.13.0",
     "webpack-dev-server": "~1.16.1",
+    "webpack-node-externals": "^1.5.4",
     "zone.js": "~0.6.12"
   },
   "peerDependencies": {
