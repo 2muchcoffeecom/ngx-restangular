@@ -4,7 +4,11 @@
 
 This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
-Live Demo on Plunkr [Hero App](http://embed.plnkr.co/qozGPV2HowzmtKbC9a54/)
+
+#Demo
+
+Live Demo on Plunkr [Hero App](http://embed.plnkr.co/qozGPV2HowzmtKbC9a54/).
+You can also check post about using ng2-restangular with [restdb.io](restdb.io) service in [simple TODO Application](http://blog.2muchcoffee.com/angular_todo_application_with_ng2-restangular_and_restdb-io/)
 
 #Current stage
 
