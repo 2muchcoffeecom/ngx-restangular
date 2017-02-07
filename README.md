@@ -102,6 +102,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RestangularModule } from 'ng2-restangular';
 
+export function RestangularConfigFactory (RestangularProvider) {
+  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+}
 
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
@@ -111,11 +115,7 @@ import { RestangularModule } from 'ng2-restangular';
   ],
   imports: [
     // Importing RestangularModule and making default configs for restanglar
-    RestangularModule.forRoot((RestangularProvider) => {
-        RestangularProvider.setBaseUrl('http://api.test.local/v1');
-        RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
-      }
-    ),
+    RestangularModule.forRoot(RestangularConfigFactory),
   ]
 })
 export class AppModule {
@@ -455,33 +455,34 @@ You can set all these configurations in **[RestangularModule](#how-to-configure-
 You can configure Restangular "withConfig" like in example below, you can also configure them globally **[RestangularModule](#how-to-configure-them-globally) or in service with [withConfig](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one)
  
  ````javascript
- @NgModule({
-   bootstrap: [ AppComponent ],
-   declarations: [
-     AppComponent,
-   ],
-   imports: [
-     // Global configuration
-     RestangularModule.forRoot((RestangularProvider)=>{
-       RestangularProvider.setBaseUrl('http://www.google.com');
-     }),
-   ]
- })
- export class AppModule {}
+export function RestangularConfigFactory (RestangularProvider) {
+  RestangularProvider.setBaseUrl('http://www.google.com');
+}
 
- // Let's use it in the component
- @Component({
-   ...
- })
- export class OtherComponent {
-   constructor(private restangular: Restangular) {}
- 
-   ngOnInit() {
-     restangular.withConfig((RestangularConfigurer) => {
-       RestangularConfigurer.setBaseUrl('http://www.bing.com');
-     }).all('users').getList()
-   }
- };
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    // Global configuration
+    RestangularModule.forRoot(RestangularConfigFactory),
+  ]
+})
+export class AppModule {}
+// Let's use it in the component
+@Component({
+  ...
+})
+export class OtherComponent {
+  constructor(private restangular: Restangular) {}
+
+  ngOnInit() {
+    restangular.withConfig((RestangularConfigurer) => {
+      RestangularConfigurer.setBaseUrl('http://www.bing.com');
+    }).all('users').getList()
+  }
+};
  ````
 
 #### setBaseUrl
@@ -583,39 +584,41 @@ The errorInterceptor function, whenever it returns false, prevents the observabl
 
 The refreshAccesstoken function must return observable. It`s function that will be done before repeating the request, there you can make some actions. In switchMap you might do some transformations to request.
 ````javascript
+export function RestangularConfigFactory (RestangularProvider) {
+  RestangularProvider.setBaseUrl('http://api.test.com/v1');
+    
+  // This function must return observable
+  var refreshAccesstoken = function () {
+    // Here you can make action before repeated request
+    return Observable.of(true)
+  };
+  
+  RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
+    if (response.status === 403) {
+
+      refreshAccesstoken()
+      .switchMap(refreshAccesstokenResponse => {
+        //If you want to change request or make with it some actions and give the request to the repeatRequest func.
+        //Or you can live it empty and request will be the same.
+        return response.repeatRequest(response.request);
+      })
+      .subscribe(
+        res => responseHandler(res),
+        err => subject.error(err)
+      );
+      
+      return false; // error handled
+    }
+    return true; // error not handled
+  });
+}
+ 
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
   imports: [ 
     // Importing RestangularModule and making default configs for restanglar
-    RestangularModule.forRoot( (Restangular) => {
-      RestangularProvider.setBaseUrl('http://api.test.com/v1');
-  
-      // This function must return observable
-      var refreshAccesstoken = function () {
-        // Here you can make action before repeated request
-        return Observable.of(true)
-      };
-      
-      RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
-        if (response.status === 403) {
-  
-          refreshAccesstoken()
-          .switchMap(refreshAccesstokenResponse => {
-            //If you want to change request or make with it some actions and give the request to the repeatRequest func.
-            //Or you can live it empty and request will be the same.
-            return response.repeatRequest(response.request);
-          })
-          .subscribe(
-            res => responseHandler(res),
-            err => subject.error(err)
-          );
-          
-          return false; // error handled
-        }
-        return true; // error not handled
-      });
-    }),
+    RestangularModule.forRoot(RestangularConfigFactory),
   ],
 })
 ````
@@ -751,6 +754,11 @@ You can configure this in either the `AppModule`.
 ````javascript
 import { RestangularModule } from 'ng2-restangular';
 
+export function RestangularConfigFactory (RestangularProvider) {
+  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+}
+
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -758,10 +766,7 @@ import { RestangularModule } from 'ng2-restangular';
     AppComponent,
   ],
   imports: [
-    RestangularModule.forRoot((RestangularProvider)=>{
-      RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
-      RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
-    }),
+    RestangularModule.forRoot(RestangularConfigFactory),
   ]
 })
 export class AppModule {
@@ -776,6 +781,16 @@ export class AppModule {
 ````javascript
 import { RestangularModule } from 'ng2-restangular';
 
+export function RestangularConfigFactory (RestangularProvider, http) {
+  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+  
+  // Example of using Http service inside global config restangular
+  RestangularProvider.addElementTransformer('me', true, ()=>{
+    return http.get('http://api.test.com/v1/users/2', {});
+  });
+}
+
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -783,15 +798,7 @@ import { RestangularModule } from 'ng2-restangular';
     AppComponent,
   ],
   imports: [
-    RestangularModule.forRoot([Http], (RestangularProvider, http)=>{
-      RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
-      RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
-      
-      // Example of using Http service inside global config restangular
-      RestangularProvider.addElementTransformer('me', true, ()=>{
-        return http.get('http://api.test.com/v1/users/2', {});
-      });
-    }),
+    RestangularModule.forRoot([Http], RestangularConfigFactory),
   ]
 })
 export class AppModule {
@@ -808,7 +815,7 @@ import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 import { RestangularModule } from 'ng2-restangular';
 
-export function configFunc (RestangularProvider, http) {
+export function RestangularConfigFactory (RestangularProvider, http) {
   RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
 }
@@ -820,7 +827,7 @@ export function configFunc (RestangularProvider, http) {
     AppComponent,
   ],
   imports: [
-    RestangularModule.forRoot([Http], configFunc),
+    RestangularModule.forRoot([Http], RestangularConfigFactory),
   ]
 })
 export class AppModule {
@@ -833,6 +840,10 @@ export class AppModule {
 Let's assume that for most requests you need some configuration (The global one), and for just a bunch of methods you need another configuration. In that case, you'll need to create another Restangular service with this particular configuration. This scoped configuration will inherit all defaults from the global one. Let's see how.
 
 ````javascript
+export function RestangularConfigFactory (RestangularProvider) {
+  RestangularProvider.setBaseUrl('http://www.google.com');
+}
+
 //Restangular service that uses Bing
 export const RESTANGULAR_BING = new OpaqueToken('RestangularBing');
 export function RestangularBingFactory(restangular: Restangular) {
@@ -850,9 +861,7 @@ export function RestangularBingFactory(restangular: Restangular) {
   ],
   imports: [
     // Global configuration
-    RestangularModule.forRoot((RestangularProvider)=>{
-      RestangularProvider.setBaseUrl('http://www.google.com');
-    }),
+    RestangularModule.forRoot(RestangularConfigFactory),
   ],
   providers: [
     { provide: RESTANGULAR_BING, useFactory:  RestangularBingFactory, deps: [Restangular] }
@@ -1080,31 +1089,33 @@ Let's assume that your API needs some custom methods to work. If that's the case
 This can be used together with the hook `addElementTransformer` to do some neat stuff. Let's see an example to learn this:
 
 ````javascript
+export function RestangularConfigFactory (RestangularProvider) {
+  // It will transform all building elements, NOT collections
+  RestangularProvider.addElementTransformer('buildings', false, function(building) {
+    // This will add a method called evaluate that will do a get to path evaluate with NO default
+    // query params and with some default header
+    // signature is (name, operation, path, params, headers, elementToPost)
+
+    building.addRestangularMethod('evaluate', 'get', 'evaluate', undefined, {'myHeader': 'value'});
+
+    return building;
+  });
+
+  RestangularProvider.addElementTransformer('users', true, function(user) {
+    // This will add a method called login that will do a POST to the path login
+    // signature is (name, operation, path, params, headers, elementToPost)
+
+    user.addRestangularMethod('login', 'post', 'login');
+
+    return user;
+  });
+}
+
 // AppModule is the main entry point into Angular2 bootstraping process
 @NgModule({
   bootstrap: [ AppComponent ],
   imports: [ // import Angular's modules
-    RestangularModule.forRoot((RestangularProvider)=>{
-      // It will transform all building elements, NOT collections
-      RestangularProvider.addElementTransformer('buildings', false, function(building) {
-        // This will add a method called evaluate that will do a get to path evaluate with NO default
-        // query params and with some default header
-        // signature is (name, operation, path, params, headers, elementToPost)
-    
-        building.addRestangularMethod('evaluate', 'get', 'evaluate', undefined, {'myHeader': 'value'});
-    
-        return building;
-      });
-  
-      RestangularProvider.addElementTransformer('users', true, function(user) {
-        // This will add a method called login that will do a POST to the path login
-        // signature is (name, operation, path, params, headers, elementToPost)
-    
-        user.addRestangularMethod('login', 'post', 'login');
-    
-        return user;
-      });
-    }),
+    RestangularModule.forRoot(RestangularConfigFactory),
   ],
 })
 
