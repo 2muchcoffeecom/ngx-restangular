@@ -51,8 +51,6 @@ We are open to any cooperation in terms of its further development.
     - [How to configure them globally](#how-to-configure-them-globally)
       - [Configuring in the AppModule](#configuring-in-the-appmodule)
       - [Configuring in the AppModule with Dependency Injection applied](#configuring-in-the-appmodule-with-dependency-injection-applied)
-      - [Configuring in the AppModule to compile with AoT with Dependency Injection applied](#configuring-in-the-appmodule-to-compile-with-aot-with-dependency-injection-applied)
-      - [Configuring in the AppModule to use in latest Angular Cli](#configuring-in-the-appmodule-to-compile-with-aot-with-dependency-injection-applied)
     - [How to create a Restangular service with a different configuration from the global one](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one)
     - [Decoupled Restangular Service](#decoupled-restangular-service)
   - [Methods description](#methods-description)
@@ -107,6 +105,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RestangularModule } from 'ng2-restangular';
 
+// Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
   RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
@@ -460,6 +459,7 @@ You can set all these configurations in **[RestangularModule](#how-to-configure-
 You can configure Restangular "withConfig" like in example below, you can also configure them globally **[RestangularModule](#how-to-configure-them-globally) or in service with [withConfig](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one)
  
  ````javascript
+// Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
   RestangularProvider.setBaseUrl('http://www.google.com');
 }
@@ -589,6 +589,7 @@ The errorInterceptor function, whenever it returns false, prevents the observabl
 
 The refreshAccesstoken function must return observable. It`s function that will be done before repeating the request, there you can make some actions. In switchMap you might do some transformations to request.
 ````javascript
+// Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
   RestangularProvider.setBaseUrl('http://api.test.com/v1');
     
@@ -759,6 +760,7 @@ You can configure this in either the `AppModule`.
 ````javascript
 import { RestangularModule } from 'ng2-restangular';
 
+// Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
   RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
@@ -786,6 +788,7 @@ export class AppModule {
 ````javascript
 import { RestangularModule } from 'ng2-restangular';
 
+// Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider, http) {
   RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
@@ -812,70 +815,11 @@ export class AppModule {
 
 **[Back to top](#table-of-contents)**
 
-#### Configuring in the `AppModule` to compile with AoT with Dependency Injection applied
-This changes need for AoT compiler functions calls should be out of metadata.
-
-````javascript
-import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
-import { RestangularModule } from 'ng2-restangular';
-
-export function RestangularConfigFactory (RestangularProvider, http) {
-  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
-  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
-}
-
-// AppModule is the main entry point into Angular2 bootstraping process
-@NgModule({
-  bootstrap: [ AppComponent ],
-  declarations: [
-    AppComponent,
-  ],
-  imports: [
-    RestangularModule.forRoot([Http], RestangularConfigFactory),
-  ]
-})
-export class AppModule {
-}
-````
-
-**[Back to top](#table-of-contents)**
-
-
-#### Configuring in the `AppModule` to use in latest Angular Cli
-
-With latest Cli we have to configurate RestangularModule like in code below.
-
-````javascript
-import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
-import { RestangularModule } from 'ng2-restangular';
-
-export function configFunc (RestangularProvider, http) {
-  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
-  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
-}
-
-// AppModule is the main entry point into Angular2 bootstraping process
-@NgModule({
-  bootstrap: [ AppComponent ],
-  declarations: [
-    AppComponent,
-  ],
-  imports: [
-    RestangularModule.forRoot([Http], configFunc),
-  ]
-})
-export class AppModule {
-}
-````
-
-**[Back to top](#table-of-contents)**
-
 ### How to create a Restangular service with a different configuration from the global one
 Let's assume that for most requests you need some configuration (The global one), and for just a bunch of methods you need another configuration. In that case, you'll need to create another Restangular service with this particular configuration. This scoped configuration will inherit all defaults from the global one. Let's see how.
 
 ````javascript
+// Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
   RestangularProvider.setBaseUrl('http://www.google.com');
 }
@@ -1125,6 +1069,7 @@ Let's assume that your API needs some custom methods to work. If that's the case
 This can be used together with the hook `addElementTransformer` to do some neat stuff. Let's see an example to learn this:
 
 ````javascript
+// Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
   // It will transform all building elements, NOT collections
   RestangularProvider.addElementTransformer('buildings', false, function(building) {
