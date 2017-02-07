@@ -4,7 +4,11 @@
 
 This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
-Live Demo on Plunkr [Hero App](http://embed.plnkr.co/qozGPV2HowzmtKbC9a54/)
+
+#Demo
+
+Live Demo on Plunkr [Hero App](http://embed.plnkr.co/qozGPV2HowzmtKbC9a54/).
+You can also check post about using ng2-restangular with [restdb.io](https://restdb.io/) service in [simple TODO Application](http://blog.2muchcoffee.com/angular_todo_application_with_ng2-restangular_and_restdb-io/)
 
 #Current stage
 
@@ -47,7 +51,8 @@ We are open to any cooperation in terms of its further development.
     - [How to configure them globally](#how-to-configure-them-globally)
       - [Configuring in the AppModule](#configuring-in-the-appmodule)
       - [Configuring in the AppModule with Dependency Injection applied](#configuring-in-the-appmodule-with-dependency-injection-applied)
-      - [Configuring in the AppModule to compile with AoT with Dependency Injection applied](#configuring-in-the-AppModule-to-compile-with-aot-with-dependency-injection-applied)
+      - [Configuring in the AppModule to compile with AoT with Dependency Injection applied](#configuring-in-the-appmodule-to-compile-with-aot-with-dependency-injection-applied)
+      - [Configuring in the AppModule to use in latest Angular Cli](#configuring-in-the-appmodule-to-compile-with-aot-with-dependency-injection-applied)
     - [How to create a Restangular service with a different configuration from the global one](#how-to-create-a-restangular-service-with-a-different-configuration-from-the-global-one)
     - [Decoupled Restangular Service](#decoupled-restangular-service)
   - [Methods description](#methods-description)
@@ -828,6 +833,37 @@ export function RestangularConfigFactory (RestangularProvider, http) {
   ],
   imports: [
     RestangularModule.forRoot([Http], RestangularConfigFactory),
+  ]
+})
+export class AppModule {
+}
+````
+
+**[Back to top](#table-of-contents)**
+
+
+#### Configuring in the `AppModule` to use in latest Angular Cli
+
+With latest Cli we have to configurate RestangularModule like in code below.
+
+````javascript
+import { NgModule } from '@angular/core';
+import { Http } from '@angular/http';
+import { RestangularModule } from 'ng2-restangular';
+
+export function configFunc (RestangularProvider, http) {
+  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+}
+
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    RestangularModule.forRoot([Http], configFunc),
   ]
 })
 export class AppModule {
