@@ -6,6 +6,7 @@ export class RestangularHelper {
     let requestQueryParams = RestangularHelper.createRequestQueryParams(options.params);
     let requestHeaders = RestangularHelper.createRequestHeaders(options.headers);
     let methodName = options.method.charAt(0).toUpperCase() + options.method.substr(1).toLowerCase();
+    let withCredentials = options.withCredentials || false;
     
     let requestOptions = new RequestOptions({
       method: RequestMethod[methodName],
@@ -13,6 +14,7 @@ export class RestangularHelper {
       search: requestQueryParams,
       url: options.url,
       body: options.data,
+      withCredentials
     });
     
     return requestOptions;

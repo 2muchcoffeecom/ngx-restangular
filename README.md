@@ -76,6 +76,7 @@ We are open to any cooperation in terms of its further development.
     - [How do I handle CRUD operations in a List returned by Restangular?](#how-do-i-handle-crud-operations-in-a-list-returned-by-restangular)
     - [Removing an element from a collection, keeping the collection restangularized](#removing-an-element-from-a-collection,-keeping-the-collection-restangularized)
     - [How can I access the unrestangularized element as well as the restangularized one?](#how-can-i-access-the-unrestangularized-element-as-well-as-the-restangularized-one)
+    - [How can add withCredentials params to requests?](#how-can-add-withcredentials-params-to-requests)
 - [Server Frameworks](#server-frameworks)
 - [License](#license)
 
@@ -1300,6 +1301,29 @@ this.showData = function () {
   });
 };
 ````
+
+**[Back to top](#table-of-contents)**
+
+#### How can add withCredentials params to requests?
+````javascript
+// Function for settting the default restangular configuration
+export function RestangularConfigFactory (RestangularProvider) {
+  // Adding withCredential parametr to all Restangular requests
+  RestangularProvider.setDefaultHttpFields({ withCredentials: true });
+}
+
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    // Global configuration
+    RestangularModule.forRoot(RestangularConfigFactory),
+  ]
+})
+export class AppModule {}
+ ````
 
 **[Back to top](#table-of-contents)**
 
