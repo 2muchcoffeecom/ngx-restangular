@@ -69,7 +69,7 @@ We are open to any cooperation in terms of its further development.
 - [FAQ](#faq)
     - [How can I handle errors?](#how-can-i-handle-errors)
     - [I need to send one header in EVERY Restangular request, how do I do this?](#i-need-to-send-one-header-in-every-restangular-request-how-do-i-do-this)
-    - [How can I send a delete WITHOUT a body?](#how-can-I-send-a-delete-without-a-body?)
+    - [How can I send a delete WITHOUT a body?](#how-can-i-send-a-delete-without-a-body)
     - [I use Mongo and the ID of the elements is _id not id as the default. Therefore requests are sent to undefined routes](#i-use-mongo-and-the-id-of-the-elements-is-_id-not-id-as-the-default-therefore-requests-are-sent-to-undefined-routes)
     - [What if each of my models has a different ID name like CustomerID for Customer](#what-if-each-of-my-models-has-a-different-id-name-like-customerid-for-customer)
     - [How can I send files in my request using Restangular?](#how-can-i-send-files-in-my-request-using-restangular?)
@@ -1186,7 +1186,7 @@ Errors can be checked on the second argument of the subscribe.
 ````javascript
 Restangular.all("accounts").getList().subscribe( response => {
   console.log("All ok");
-}, errorResponse {
+}, errorResponse => {
   console.log("Error with status code", errorResponse.status);
 });
 ````
