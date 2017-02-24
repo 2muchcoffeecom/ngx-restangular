@@ -297,7 +297,7 @@ export function RestangularConfigurer(object, config){
   config.responseInterceptors = config.responseInterceptors || [];
   
   config.defaultResponseInterceptor = function (data /*, operation, what, url, response, subject */) {
-    return data;
+    return data || {};
   };
   
   config.responseExtractor = function (data, operation, what, url, response, subject) {
