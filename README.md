@@ -68,6 +68,7 @@ We are open to any cooperation in terms of its further development.
     - [Example:](#example-1)
 - [FAQ](#faq)
     - [How can I handle errors?](#how-can-i-handle-errors)
+    - [I need to send Authorization token in EVERY Restangular request, how do I do this?](#i-need-to-send-authorization-token-in-every-restangular-request,-how-do-i-do-this)
     - [I need to send one header in EVERY Restangular request, how do I do this?](#i-need-to-send-one-header-in-every-restangular-request-how-do-i-do-this)
     - [How can I send a delete WITHOUT a body?](#how-can-i-send-a-delete-without-a-body)
     - [I use Mongo and the ID of the elements is _id not id as the default. Therefore requests are sent to undefined routes](#i-use-mongo-and-the-id-of-the-elements-is-_id-not-id-as-the-default-therefore-requests-are-sent-to-undefined-routes)
@@ -1195,10 +1196,47 @@ Restangular.all("accounts").getList().subscribe( response => {
 });
 ````
 
-#### **I need to send one header in EVERY Restangular request, how do I do this?**
+#### **I need to send Authorization token in EVERY Restangular request, how do I do this?**
 
-You can use `defaultHeaders` property for this. `defaultsHeaders` can be scoped with `withConfig` so it's really cool.
+You can use `setDefaultHeaders` or `addFullRequestInterceptor`
 
+````javascript
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { RestangularModule } from 'ng2-restangular';
+import { authService } from '../your-services';
+
+// Function for settting the default restangular configuration
+export function RestangularConfigFactory (RestangularProvider, authService) {
+
+  // set static header
+  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+  
+  // by each request to the server receive a token and update headers with it
+  RestangularProvider.addFullRequestInterceptor((element, operation, path, url, headers, params) => {
+    let bearerToken = authService.getBearerToken();
+      
+    return {
+      headers: Object.assign({}, headers, {Authorization: `Bearer ${bearerToken}`})
+    };
+  });
+}
+
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  bootstrap: [ AppComponent ],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    // Importing RestangularModule and making default configs for restanglar
+    RestangularModule.forRoot([authService], RestangularConfigFactory),
+  ]
+})
+export class AppModule {
+}
+````
+**[Back to top](#table-of-contents)**
 
 
 #### **I need to send one header in EVERY Restangular request, how do I do this?**
