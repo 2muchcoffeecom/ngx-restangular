@@ -591,13 +591,13 @@ The errorInterceptor function, whenever it returns false, prevents the observabl
 The refreshAccesstoken function must return observable. It`s function that will be done before repeating the request, there you can make some actions. In switchMap you might do some transformations to request.
 ````javascript
 // Function for settting the default restangular configuration
-export function RestangularConfigFactory (RestangularProvider) {
+export function RestangularConfigFactory (RestangularProvider, authService) {
   RestangularProvider.setBaseUrl('http://api.test.com/v1');
     
   // This function must return observable
   var refreshAccesstoken = function () {
     // Here you can make action before repeated request
-    return Observable.of(true)
+    return authService.functionForTokenUpdate();
   };
   
   RestangularProvider.addErrorInterceptor((response, subject, responseHandler) => {
@@ -607,6 +607,10 @@ export function RestangularConfigFactory (RestangularProvider) {
       .switchMap(refreshAccesstokenResponse => {
         //If you want to change request or make with it some actions and give the request to the repeatRequest func.
         //Or you can live it empty and request will be the same.
+        
+        // update Authorization header
+        response.request.headers.set('Authorization', 'Bearer ' + refreshAccesstokenResponse)
+        
         return response.repeatRequest(response.request);
       })
       .subscribe(
@@ -625,7 +629,7 @@ export function RestangularConfigFactory (RestangularProvider) {
   bootstrap: [ AppComponent ],
   imports: [ 
     // Importing RestangularModule and making default configs for restanglar
-    RestangularModule.forRoot(RestangularConfigFactory),
+    RestangularModule.forRoot([authService], RestangularConfigFactory),
   ],
 })
 ````
@@ -1190,6 +1194,12 @@ Restangular.all("accounts").getList().subscribe( response => {
   console.log("Error with status code", errorResponse.status);
 });
 ````
+
+#### **I need to send one header in EVERY Restangular request, how do I do this?**
+
+You can use `defaultHeaders` property for this. `defaultsHeaders` can be scoped with `withConfig` so it's really cool.
+
+
 
 #### **I need to send one header in EVERY Restangular request, how do I do this?**
 
