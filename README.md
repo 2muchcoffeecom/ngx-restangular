@@ -68,8 +68,8 @@ We are open to any cooperation in terms of its further development.
     - [Example:](#example-1)
 - [FAQ](#faq)
     - [How can I handle errors?](#how-can-i-handle-errors)
-    - [I need to send Authorization token in EVERY Restangular request, how do I do this?](#i-need-to-send-authorization-token-in-every-restangular-request,-how-do-i-do-this)
-    - [I need to send one header in EVERY Restangular request, how do I do this?](#i-need-to-send-one-header-in-every-restangular-request-how-do-i-do-this)
+    - [I need to send Authorization token in EVERY Restangular request, how can I do this?](#i-need-to-send-authorization-token-in-every-restangular-request-how-do-i-do-this)
+    - [I need to send one header in EVERY Restangular request, how can I do this?](#i-need-to-send-one-header-in-every-restangular-request-how-can-i-do-this)
     - [How can I send a delete WITHOUT a body?](#how-can-i-send-a-delete-without-a-body)
     - [I use Mongo and the ID of the elements is _id not id as the default. Therefore requests are sent to undefined routes](#i-use-mongo-and-the-id-of-the-elements-is-_id-not-id-as-the-default-therefore-requests-are-sent-to-undefined-routes)
     - [What if each of my models has a different ID name like CustomerID for Customer](#what-if-each-of-my-models-has-a-different-id-name-like-customerid-for-customer)
@@ -1196,7 +1196,7 @@ Restangular.all("accounts").getList().subscribe( response => {
 });
 ````
 
-#### **I need to send Authorization token in EVERY Restangular request, how do I do this?**
+#### **I need to send Authorization token in EVERY Restangular request, how can I do this?**
 
 You can use `setDefaultHeaders` or `addFullRequestInterceptor`
 
@@ -1239,7 +1239,7 @@ export class AppModule {
 **[Back to top](#table-of-contents)**
 
 
-#### **I need to send one header in EVERY Restangular request, how do I do this?**
+#### **I need to send one header in EVERY Restangular request, how can I do this?**
 
 You can use `defaultHeaders` property for this. `defaultsHeaders` can be scoped with `withConfig` so it's really cool.
 
