@@ -248,12 +248,14 @@ function providerConfig($http) {
         
         // Trigger the full response interceptor.
         if (config.fullResponse) {
-          return subject.next(_.extend(response, {
+          subject.next(_.extend(response, {
             data: data
           }));
         } else {
           subject.next(data);
         }
+  
+        subject.complete();
       }
       
       
@@ -373,6 +375,8 @@ function providerConfig($http) {
           subject.next(newArray);
         }, function (response) {
           subject.error(response);
+        }, function () {
+          subject.complete();
         });
         
         return restangularizeResponse(subject, true, filledArray);
