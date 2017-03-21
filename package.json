@@ -1,6 +1,6 @@
 {
   "name": "ng2-restangular",
-  "version": "0.1.30",
+  "version": "1.0.0-beta.2",
   "description": "ng2-restangular",
   "main": "./dist/umd/ng2-restangular.js",
   "module": "./dist/esm/src/index.js",
@@ -41,17 +41,16 @@
   },
   "homepage": "https://github.com/2muchcoffeecom/ng2-restangular#readme",
   "devDependencies": {
-    "@angular/common": "2.1.2",
-    "@angular/compiler": "2.1.2",
-    "@angular/compiler-cli": "2.1.2",
-    "@angular/core": "2.1.2",
-    "@angular/forms": "2.1.2",
-    "@angular/http": "2.1.2",
-    "@angular/platform-browser": "2.1.2",
-    "@angular/platform-browser-dynamic": "2.1.2",
-    "@angular/router": "3.0.0",
+    "@angular/common": "~4.0.0-rc.2",
+    "@angular/compiler": "~4.0.0-rc.2",
+    "@angular/compiler-cli": "~4.0.0-rc.2",
+    "@angular/core": "~4.0.0-rc.2",
+    "@angular/forms": "~4.0.0-rc.2",
+    "@angular/http": "~4.0.0-rc.2",
+    "@angular/platform-browser": "~4.0.0-rc.2",
+    "@angular/platform-browser-dynamic": "~4.0.0-rc.2",
+    "@angular/router": "~4.0.0-rc.2",
     "@types/chai": "3.4.34",
-    "@types/lodash": "4.14.38",
     "@types/core-js": "0.9.34",
     "@types/jasmine": "2.5.37",
     "@types/sinon": "1.16.31",
@@ -76,9 +75,8 @@
     "karma-remap-istanbul": "0.2.1",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "1.8.0",
-    "lodash": "4.16.6",
     "phantomjs-prebuilt": "2.1.13",
-    "rxjs": "5.0.0-beta.12",
+    "rxjs": "^5.0.0",
     "sinon": "1.17.6",
     "sinon-chai": "2.8.0",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
@@ -87,35 +85,34 @@
     "tslint": "3.15.1",
     "tslint-loader": "2.1.5",
     "typedoc": "0.5.1",
-    "typescript": "2.0.8",
+    "typescript": "~2.2.1",
     "validate-commit-msg": "2.8.2",
     "webpack": "1.13.3",
     "webpack-dev-server": "1.16.2",
     "webpack-node-externals": "1.5.4",
-    "zone.js": "0.6.26"
+    "zone.js": "^0.7.7"
   },
   "peerDependencies": {
-    "@angular/core": "^2.0.0",
-    "@angular/platform-browser": "^2.0.0",
-    "@angular/http": "^2.0.0",
-    "rxjs": "^5.0.0-beta.12",
+    "@angular/core": "~4.0.0-rc.2",
+    "@angular/platform-browser": "~4.0.0-rc.2",
+    "@angular/http": "~4.0.0-rc.2",
+    "rxjs": "^5.0.0",
     "lodash": "^4.0.0"
   },
   "files": [
     "dist"
   ],
   "config": {
-    "ghooks": {
-    },
+    "ghooks": {},
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
   },
   "dependencies": {
-    "@angular/core": "^2.0.0",
-    "@angular/platform-browser": "^2.0.0",
-    "@angular/http": "^2.0.0",
-    "rxjs": "^5.0.0-beta.12",
+    "@angular/core": "~4.0.0-rc.2",
+    "@angular/platform-browser": "~4.0.0-rc.2",
+    "@angular/http": "~4.0.0-rc.2",
+    "rxjs": "^5.0.0",
     "lodash": "^4.0.0"
   }
 }

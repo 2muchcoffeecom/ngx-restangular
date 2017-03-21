@@ -1,8 +1,8 @@
-import {OpaqueToken} from "@angular/core";
+import {InjectionToken} from "@angular/core";
 import * as _ from 'lodash';
 
 
-export const RESTANGULAR = new OpaqueToken('restangularWithConfig');
+export const RESTANGULAR = new InjectionToken<string>('restangularWithConfig');
 export function RestangularFactory(config) {
   let configObj = {
     fn: config[0],
