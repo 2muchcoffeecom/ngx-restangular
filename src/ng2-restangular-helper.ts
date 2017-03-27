@@ -26,10 +26,18 @@ export class RestangularHelper {
     
     for (let key in requestQueryParams) {
       let value: any = requestQueryParams[key];
-      if (typeof value === 'object') {
-        value = JSON.stringify(value);
+
+      if (Array.isArray(value)) {
+        value.forEach(function(val){
+          search.append(key, val);
+        });
+      } else {
+        if (typeof value === 'object') {
+          value = JSON.stringify(value);
+        }
+        search.append(key, value);
       }
-      search.append(key, value);
+           
     }
     
     return search;
