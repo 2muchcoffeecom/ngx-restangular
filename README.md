@@ -113,7 +113,7 @@ This is all you need to start using all the basic Restangular features.
 ````javascript
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { RestangularModule } from 'ng2-restangular';
+import { RestangularModule, Restangular } from 'ng2-restangular';
 
 // Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
@@ -742,7 +742,7 @@ export class OtherComponent {
 You can set default Headers to be sent with every request. Send format: {header_name: header_value}
 ````javascript
 import { NgModule } from '@angular/core';
-import { RestangularModule } from 'ng2-restangular';
+import { RestangularModule, Restangular } from 'ng2-restangular';
 
 // Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
