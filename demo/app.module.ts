@@ -61,7 +61,7 @@ export class AppModule {
   // This need only for Demo App
   // Its Fake Backend servise to return data
   constructor(backend: MockBackend, requestShowService: RequestShowService, heroService: HeroService) {
-    backend.connections.subscribe(connection => {
+    backend.connections.delay(10).subscribe(connection => {
 
       let resOptions = new ResponseOptions({
         body: JSON.stringify([{user: "first"}, {user: "second"}, {user: "third"}]),
