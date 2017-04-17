@@ -210,7 +210,6 @@ function providerConfig($http) {
       
       
       function all(parent, route) {
-        debugger;
         return restangularizeCollection(parent, [], route, false);
       }
       
