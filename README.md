@@ -15,6 +15,10 @@ You can also check post about using ngx-restangular with [restdb.io](https://res
 Ngx-restangular almost all functionality was transferred from the Restangular.
 We are open to any cooperation in terms of its further development.
 
+# Renaming from ng2-restangular to ngx-restangular
+
+This project was renamed from **ng2-restangular** to **ngx-restangular** due to implementation of Semantic Versioning by Angular Core Team. NPM name also changed, you can install actual version of project with ``npm install ngx-restangular``.
+
 # Table of contents
 
 - [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
