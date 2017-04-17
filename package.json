@@ -1,8 +1,8 @@
 {
-  "name": "ng2-restangular",
-  "version": "1.0.0-beta.3",
-  "description": "ng2-restangular",
-  "main": "./dist/umd/ng2-restangular.js",
+  "name": "ngx-restangular",
+  "version": "1.0.0",
+  "description": "ngx-restangular",
+  "main": "./dist/umd/ngx-restangular.js",
   "module": "./dist/esm/src/index.js",
   "typings": "./dist/esm/src/index.d.ts",
   "scripts": {
@@ -23,33 +23,38 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/2muchcoffeecom/ng2-restangular.git"
+    "url": "git+https://github.com/2muchcoffeecom/ngx-restangular.git"
   },
   "keywords": [
     "ng2-rest",
     "ng2-restangular",
+    "ngx-restangular",
     "angular2-restangular",
+    "angular4-restangular",
     "angular2-rest",
+    "angular4-rest",
     "restangular",
     "angular 2 restangular",
-    "angular 2 rest"
+    "angular 4 restangular",
+    "angular 2 rest",
+    "angular 4 rest"
   ],
   "author": "logvinoleg89 <logvinoleg89@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/2muchcoffeecom/ng2-restangular/issues"
+    "url": "https://github.com/2muchcoffeecom/ngx-restangular/issues"
   },
-  "homepage": "https://github.com/2muchcoffeecom/ng2-restangular#readme",
+  "homepage": "https://github.com/2muchcoffeecom/ngx-restangular#readme",
   "devDependencies": {
-    "@angular/common": "~4.0.0-rc.2",
-    "@angular/compiler": "~4.0.0-rc.2",
-    "@angular/compiler-cli": "~4.0.0-rc.2",
-    "@angular/core": "~4.0.0-rc.2",
-    "@angular/forms": "~4.0.0-rc.2",
-    "@angular/http": "~4.0.0-rc.2",
-    "@angular/platform-browser": "~4.0.0-rc.2",
-    "@angular/platform-browser-dynamic": "~4.0.0-rc.2",
-    "@angular/router": "~4.0.0-rc.2",
+    "@angular/common": "^4.0.0",
+    "@angular/compiler": "^4.0.0",
+    "@angular/compiler-cli": "^4.0.0",
+    "@angular/core": "^4.0.0",
+    "@angular/forms": "^4.0.0",
+    "@angular/http": "^4.0.0",
+    "@angular/platform-browser": "^4.0.0",
+    "@angular/platform-browser-dynamic": "^4.0.0",
+    "@angular/router": "^4.0.0",
     "@types/chai": "3.4.34",
     "@types/core-js": "0.9.34",
     "@types/jasmine": "2.5.37",
@@ -85,7 +90,7 @@
     "tslint": "3.15.1",
     "tslint-loader": "2.1.5",
     "typedoc": "0.5.1",
-    "typescript": "~2.2.1",
+    "typescript": "^2.2.1",
     "validate-commit-msg": "2.8.2",
     "webpack": "1.13.3",
     "webpack-dev-server": "1.16.2",
@@ -93,11 +98,11 @@
     "zone.js": "^0.7.7"
   },
   "peerDependencies": {
-    "@angular/core": "~4.0.0-rc.2",
-    "@angular/platform-browser": "~4.0.0-rc.2",
-    "@angular/http": "~4.0.0-rc.2",
-    "rxjs": "^5.0.0",
-    "lodash": "^4.0.0"
+    "@angular/core": "^4.0.0",
+    "@angular/platform-browser": "^4.0.0",
+    "@angular/http": "^4.0.0",
+    "@types/lodash": "^4.14.62",
+    "rxjs": "^5.0.0"
   },
   "files": [
     "dist"
@@ -109,10 +114,10 @@
     }
   },
   "dependencies": {
-    "@angular/core": "~4.0.0-rc.2",
-    "@angular/platform-browser": "~4.0.0-rc.2",
-    "@angular/http": "~4.0.0-rc.2",
-    "rxjs": "^5.0.0",
-    "lodash": "^4.0.0"
+    "@angular/core": "^4.0.0",
+    "@angular/http": "^4.0.0",
+    "@angular/platform-browser": "4.0.0",
+    "@types/lodash": "^4.14.62",
+    "rxjs": "^5.0.0"
   }
 }
