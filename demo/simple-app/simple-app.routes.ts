@@ -15,7 +15,7 @@ export const simpleAppRoutes: Routes = [
       {path: 'herodashboard', component: HeroDashboardComponent},
       {path: 'herodetail/:id', component: HeroDetailComponent},
       {path: 'addhero', component: HeroAddComponent},
-      {path: '', redirectTo: '/simpleapp/herolist'}
+      {path: '', redirectTo: '/simpleapp/herolist', pathMatch: 'full'}
     ]
   },
 ];

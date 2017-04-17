@@ -1,23 +1,24 @@
-#Ng2-Restangular
+# Ng2-Restangular
 
 
 
 This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
-#Demo
+# Demo
 
 Live Demo on Plunkr [Hero App](http://embed.plnkr.co/qozGPV2HowzmtKbC9a54/).
 You can also check post about using ng2-restangular with [restdb.io](https://restdb.io/) service in [simple TODO Application](http://blog.2muchcoffee.com/angular_todo_application_with_ng2-restangular_and_restdb-io/)
 
-#Current stage
+# Current stage
 
-Ng2-Restangular is in beta-version now. Almost all functionality was transferred from the Restangular.
+Ng2-Restangular almost all functionality was transferred from the Restangular.
 We are open to any cooperation in terms of its further development.
 
-#Table of contents
+# Table of contents
 
-- [How do I add this to my project?](#how-do-i-add-this-to-my-project)
+- [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
+- [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
@@ -35,7 +36,6 @@ We are open to any cooperation in terms of its further development.
       - [setTransformOnlyServerElements](#settransformonlyserverelements)
       - [setOnElemRestangularized](#setonelemrestangularized)
       - [addResponseInterceptor](#addresponseinterceptor)
-      - [addRequestInterceptor](#addrequestinterceptor)
       - [addFullRequestInterceptor](#addfullrequestinterceptor)
       - [addErrorInterceptor](#adderrorinterceptor)
       - [setRestangularFields](#setrestangularfields)
@@ -73,9 +73,9 @@ We are open to any cooperation in terms of its further development.
     - [How can I send a delete WITHOUT a body?](#how-can-i-send-a-delete-without-a-body)
     - [I use Mongo and the ID of the elements is _id not id as the default. Therefore requests are sent to undefined routes](#i-use-mongo-and-the-id-of-the-elements-is-_id-not-id-as-the-default-therefore-requests-are-sent-to-undefined-routes)
     - [What if each of my models has a different ID name like CustomerID for Customer](#what-if-each-of-my-models-has-a-different-id-name-like-customerid-for-customer)
-    - [How can I send files in my request using Restangular?](#how-can-i-send-files-in-my-request-using-restangular?)
+    - [How can I send files in my request using Restangular?](#how-can-i-send-files-in-my-request-using-restangular)
     - [How do I handle CRUD operations in a List returned by Restangular?](#how-do-i-handle-crud-operations-in-a-list-returned-by-restangular)
-    - [Removing an element from a collection, keeping the collection restangularized](#removing-an-element-from-a-collection,-keeping-the-collection-restangularized)
+    - [Removing an element from a collection, keeping the collection restangularized](#removing-an-element-from-a-collection-keeping-the-collection-restangularized)
     - [How can I access the unrestangularized element as well as the restangularized one?](#how-can-i-access-the-unrestangularized-element-as-well-as-the-restangularized-one)
     - [How can add withCredentials params to requests?](#how-can-add-withcredentials-params-to-requests)
 - [Server Frameworks](#server-frameworks)
@@ -83,7 +83,7 @@ We are open to any cooperation in terms of its further development.
 
 **[Back to top](#table-of-contents)**
 
-#How do I add this to my project?
+# How do I add this to my project in angular 2?
 
 You can download this by:
 
@@ -91,13 +91,21 @@ You can download this by:
 
 **[Back to top](#table-of-contents)**
 
-#Dependencies
+# How do I add this to my project in angular 4?
+
+You can download this by:
+
+* Using npm and running `npm install ng2-restangular@beta`
+
+**[Back to top](#table-of-contents)**
+
+# Dependencies
 
 Restangular depends on Angular2 and Lodash.
 
 **[Back to top](#table-of-contents)**
 
-#Starter Guide
+# Starter Guide
 
 ## Quick Configuration (For Lazy Readers)
 This is all you need to start using all the basic Restangular features.
@@ -105,7 +113,7 @@ This is all you need to start using all the basic Restangular features.
 ````javascript
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { RestangularModule } from 'ng2-restangular';
+import { RestangularModule, Restangular } from 'ng2-restangular';
 
 // Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
@@ -140,8 +148,6 @@ export class OtherComponent {
     // GET http://api.test.local/v1/users/2/accounts
     this.restangular.one('users', 2).all('accounts').getList();
   }
-
-}
 ````
 **[Back to top](#table-of-contents)**
 
@@ -728,6 +734,30 @@ export class OtherComponent {
       console.log(response.headers);
     });
   }
+}
+````
+
+#### setDefaultHeaders
+
+You can set default Headers to be sent with every request. Send format: {header_name: header_value}
+````javascript
+import { NgModule } from '@angular/core';
+import { RestangularModule, Restangular } from 'ng2-restangular';
+
+// Function for settting the default restangular configuration
+export function RestangularConfigFactory (RestangularProvider) {
+  RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+}
+
+// AppModule is the main entry point into Angular2 bootstraping process
+@NgModule({
+  ...
+  imports: [
+    // Importing RestangularModule and making default configs for restanglar
+    RestangularModule.forRoot(RestangularConfigFactory),
+  ]
+})
+export class AppModule {
 }
 ````
 
