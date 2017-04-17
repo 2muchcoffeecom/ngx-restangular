@@ -33,7 +33,12 @@ export class RestangularHttp {
       return response;
     })
     .catch(err => {
-      err.data = typeof err._body == 'string' && err._body.length > 0 ? JSON.parse(err._body) : err._body;
+      try {
+        err.data = typeof err._body == 'string' && err._body.length > 0 ? JSON.parse(err._body) : err._body;
+      } catch (e) {
+        err.data = err._body;
+      }
+      
       err.request = request;
       err.repeatRequest = (newRequest?) => {
         return this.request(newRequest || request);
