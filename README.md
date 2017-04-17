@@ -1,18 +1,18 @@
-# Ng2-Restangular
+# Ngx-restangular
 
 
 
-This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ng2-Restangular is an Angular 2 service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
+This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ngx-restangular is an Angular 2+ service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 # Demo
 
 Live Demo on Plunkr [Hero App](http://embed.plnkr.co/qozGPV2HowzmtKbC9a54/).
-You can also check post about using ng2-restangular with [restdb.io](https://restdb.io/) service in [simple TODO Application](http://blog.2muchcoffee.com/angular_todo_application_with_ng2-restangular_and_restdb-io/)
+You can also check post about using ngx-restangular with [restdb.io](https://restdb.io/) service in [simple TODO Application](http://blog.2muchcoffee.com/angular_todo_application_with_ng2-restangular_and_restdb-io/)
 
 # Current stage
 
-Ng2-Restangular almost all functionality was transferred from the Restangular.
+Ngx-restangular almost all functionality was transferred from the Restangular.
 We are open to any cooperation in terms of its further development.
 
 # Table of contents
@@ -95,7 +95,7 @@ You can download this by:
 
 You can download this by:
 
-* Using npm and running `npm install ng2-restangular@beta`
+* Using npm and running `npm install ngx-restangular`
 
 **[Back to top](#table-of-contents)**
 
@@ -113,11 +113,11 @@ This is all you need to start using all the basic Restangular features.
 ````javascript
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { RestangularModule, Restangular } from 'ng2-restangular';
+import { RestangularModule, Restangular } from 'ngx-restangular';
 
 // Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
-  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setBaseUrl('http://api.restngx.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
 }
 
@@ -742,7 +742,7 @@ export class OtherComponent {
 You can set default Headers to be sent with every request. Send format: {header_name: header_value}
 ````javascript
 import { NgModule } from '@angular/core';
-import { RestangularModule, Restangular } from 'ng2-restangular';
+import { RestangularModule, Restangular } from 'ngx-restangular';
 
 // Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
@@ -794,11 +794,11 @@ You can configure this in either the `AppModule`.
 #### Configuring in the `AppModule`
 
 ````javascript
-import { RestangularModule } from 'ng2-restangular';
+import { RestangularModule } from 'ngx-restangular';
 
 // Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
-  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setBaseUrl('http://api.restngx.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
 }
 
@@ -822,11 +822,11 @@ export class AppModule {
 #### Configuring in the `AppModule` with Dependency Injection applied
 
 ````javascript
-import { RestangularModule } from 'ng2-restangular';
+import { RestangularModule } from 'ngx-restangular';
 
 // Function for settting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider, http) {
-  RestangularProvider.setBaseUrl('http://api.restng2.local/v1');
+  RestangularProvider.setBaseUrl('http://api.restngx.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
   
   // Example of using Http service inside global config restangular
@@ -1233,7 +1233,7 @@ You can use `setDefaultHeaders` or `addFullRequestInterceptor`
 ````javascript
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { RestangularModule } from 'ng2-restangular';
+import { RestangularModule } from 'ngx-restangular';
 import { authService } from '../your-services';
 
 // Function for settting the default restangular configuration
@@ -1407,7 +1407,7 @@ export class AppModule {}
 
 # Server Frameworks
 
-Users reported that this server frameworks play real nice with Ng2-Restangular, as they let you create a Nested RESTful Resources API easily:
+Users reported that this server frameworks play real nice with Ngx-restangular, as they let you create a Nested RESTful Resources API easily:
 
 * Ruby on Rails
 * CakePHP, Laravel and FatFREE, Symfony2 with RestBundle, Silex for PHP

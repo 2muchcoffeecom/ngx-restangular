@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 
 import 'rxjs/Rx';
-import {Restangular} from "../../../src/ng2-restangular";
+import {Restangular} from "../../../src/ngx-restangular";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 
 

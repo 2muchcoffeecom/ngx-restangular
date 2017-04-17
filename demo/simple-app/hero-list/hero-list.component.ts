@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 
 import 'rxjs/Rx';
-import {Restangular} from "../../../src/ng2-restangular";
+import {Restangular} from "../../../src/ngx-restangular";
 import {Hero} from "../../heroes-service/hero";
 
 

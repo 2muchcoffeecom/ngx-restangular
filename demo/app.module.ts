@@ -17,7 +17,7 @@ import {SimpleAppModule} from "./simple-app";
 import {HeroService} from "./heroes-service/hero.service";
 import {LandingComponent} from "./landing/landing.component";
 import {ExtendAppModule} from "./extend-app/extend-app.module";
-import {Restangular} from "../src/ng2-restangular";
+import {Restangular} from "../src/ngx-restangular";
 import {RANDOM_USER,RestangularRandomUserFactory} from "./random-user-restangular/random-user-restangular"
 
 @NgModule({

@@ -1,5 +1,5 @@
 import {InjectionToken} from "@angular/core";
-import {Restangular} from "../../src/ng2-restangular";
+import {Restangular} from "../../src/ngx-restangular";
 
 export const RANDOM_USER = new InjectionToken<string>('RandomUser');
 export function RestangularRandomUserFactory(restangular: Restangular) {

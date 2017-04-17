@@ -1,9 +1,9 @@
 import {Injectable, Inject, Injector, Optional} from "@angular/core";
 import {BehaviorSubject} from "rxjs";
 import * as _ from "lodash";
-import {RESTANGULAR} from "./ng2-restangular.config";
-import {RestangularHttp} from "./ng2-restangular-http";
-import {RestangularConfigurer} from "./ng2-restangular-config.factory";
+import {RESTANGULAR} from "./ngx-restangular.config";
+import {RestangularHttp} from "./ngx-restangular-http";
+import {RestangularConfigurer} from "./ngx-restangular-config.factory";
 
 
 @Injectable()

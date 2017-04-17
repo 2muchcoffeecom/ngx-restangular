@@ -1,6 +1,6 @@
 import {BaseRequestOptions, Http} from "@angular/http";
 import {MockBackend} from "@angular/http/testing";
-import {RestangularHttp} from "../../src/ng2-restangular-http";
+import {RestangularHttp} from "../../src/ngx-restangular-http";
 
 export const MockProviders = [
   BaseRequestOptions,

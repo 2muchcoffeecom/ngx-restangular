@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Request} from '@angular/http';
 import {Observable} from 'rxjs';
 
-import {RestangularHelper} from './ng2-restangular-helper';
+import {RestangularHelper} from './ngx-restangular-helper';
 
 
 @Injectable()
