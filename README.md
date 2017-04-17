@@ -101,7 +101,7 @@ You can download this by:
 
 # Dependencies
 
-Restangular depends on Angular2 and Lodash.
+Restangular depends on Angular2+ and Lodash.
 
 **[Back to top](#table-of-contents)**
 
