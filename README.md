@@ -119,7 +119,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RestangularModule, Restangular } from 'ngx-restangular';
 
-// Function for settting the default restangular configuration
+// Function for setting the default restangular configuration
 export function RestangularConfigFactory (RestangularProvider) {
   RestangularProvider.setBaseUrl('http://api.restngx.local/v1');
   RestangularProvider.setDefaultHeaders({'Authorization': 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
