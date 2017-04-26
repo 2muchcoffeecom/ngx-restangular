@@ -318,7 +318,7 @@ export function RestangularConfigurer(object, config){
   
   config.errorInterceptors = config.errorInterceptors || [];
   object.addErrorInterceptor = function (interceptor) {
-    config.errorInterceptors.push(interceptor);
+    config.errorInterceptors = [interceptor, ...config.errorInterceptors];
     return this;
   };
   
