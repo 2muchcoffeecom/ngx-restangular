@@ -221,7 +221,7 @@ export function RestangularConfigurer(object, config){
     };
   object.setRestangularFields = function (resFields) {
     config.restangularFields =
-      _.extend(config.restangularFields, resFields);
+      _.extend({}, config.restangularFields, resFields);
     return this;
   };
   
