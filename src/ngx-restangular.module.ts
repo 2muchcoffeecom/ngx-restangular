@@ -1,11 +1,11 @@
 /* tslint:disable:member-ordering no-unused-variable */
-import {ModuleWithProviders, NgModule, Optional, SkipSelf, OpaqueToken} from '@angular/core';
+import {ModuleWithProviders, NgModule, Optional, SkipSelf, InjectionToken} from '@angular/core';
 import {HttpModule} from "@angular/http";
 import {RESTANGULAR, RestangularFactory} from './ngx-restangular.config';
 import {Restangular} from './ngx-restangular';
 import {RestangularHttp} from './ngx-restangular-http';
 
-export const CONFIG_OBJ = new OpaqueToken('configObj');
+export const CONFIG_OBJ = new InjectionToken<string>('configObj');
 
 @NgModule({
   imports: [HttpModule],
