@@ -699,7 +699,7 @@ RestangularProvider.setFullResponse(true);
 Or set it per service
 ````javascript
 // Restangular factory that uses setFullResponse
-export const REST_FUL_RESPONSE = new OpaqueToken('RestFulResponse');
+export const REST_FUL_RESPONSE = new InjectionToken<any>('RestFulResponse');
 export function RestFulResponseFactory(restangular: Restangular) {
   return restangular.withConfig((RestangularConfigurer) => {
     RestangularConfigurer.setFullResponse(true);
@@ -865,7 +865,7 @@ export function RestangularConfigFactory (RestangularProvider) {
 }
 
 //Restangular service that uses Bing
-export const RESTANGULAR_BING = new OpaqueToken('RestangularBing');
+export const RESTANGULAR_BING = new InjectionToken<any>('RestangularBing');
 export function RestangularBingFactory(restangular: Restangular) {
   return restangular.withConfig((RestangularConfigurer) => {
      RestangularConfigurer.setBaseUrl('http://www.bing.com');
@@ -922,7 +922,7 @@ Let's see how it works:
 
 ````js
 // Restangular factory that uses Users
-export const USER_REST = new OpaqueToken('UserRest');
+export const USER_REST = new InjectionToken<any>('UserRest');
 export function UserRestFactory(restangular: Restangular) {
   return restangular.service('users');
 }
