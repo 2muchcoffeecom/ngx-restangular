@@ -1,5 +1,5 @@
 import {InjectionToken} from "@angular/core";
-import * as _ from 'lodash';
+import * as _ from './lodash';
 
 
 export const RESTANGULAR = new InjectionToken<string>('restangularWithConfig');
