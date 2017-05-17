@@ -1422,7 +1422,7 @@ Users reported that this server frameworks play real nice with Ngx-restangular, 
 * Slim Framework
 * Symfony2 with FOSRestBundle (PHP)
 * Microsoft ASP.NET Web API 2
-* Grails Framework ([example](https://github.com/rmondejar/grails-angular-duo))
+* Grails Framework
 
 **[Back to top](#table-of-contents)**
 
