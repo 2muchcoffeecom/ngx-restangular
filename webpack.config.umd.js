@@ -6,9 +6,9 @@ module.exports = {
   entry: './src/index.ts',
   output: {
     path: __dirname + '/dist/umd',
-    filename: './ng2-restangular.js',
+    filename: './ngx-restangular.js',
     libraryTarget: 'umd',
-    library: 'ng2-restangular'
+    library: 'ngx-restangular'
   },
   externals: [nodeExternals()],
   devtool: 'source-map',
