@@ -14,6 +14,7 @@ export class RestangularHelper {
       search: requestQueryParams,
       url: options.url,
       body: options.data,
+      responseType: options.responseType,
       withCredentials
     });
     
