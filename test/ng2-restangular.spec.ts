@@ -6,19 +6,14 @@ import {
 
 } from '@angular/core/testing';
 
+import 'jasmine';
+
 import {BrowserModule} from "@angular/platform-browser";
-import {Component, OpaqueToken,} from '@angular/core';
 import {BaseRequestOptions, ConnectionBackend, HttpModule, ResponseOptions, Response, Jsonp} from '@angular/http';
-import {By} from '@angular/platform-browser/src/dom/debug/by';
 import {MockBackend, MockConnection} from '@angular/http/testing';
 
-import {Injectable, Injector} from "@angular/core";
-import {Subject, Observable} from "rxjs";
+import {Injector} from "@angular/core";
 import {Http, Headers, RequestOptions, URLSearchParams, Request, RequestMethod} from "@angular/http";
-
-// let _ = require('lodash');
-// let $q = require('q');
-
 
 import {RestangularModule, Restangular, RestangularHttp} from "../src";
 
@@ -50,142 +45,6 @@ function SharedSetup() {
     }
   );
 }
-
-
-// export const RESTANGULAR_BING = new OpaqueToken('RestangularBing');
-// export function RestangularBingFactory(restangular: Restangular) {
-//   return restangular.withConfig((RestangularConfigurer) => {
-//     RestangularConfigurer.setBaseUrl('http://www.bing.com');
-//   });
-// }
-//
-// describe("testFunc", ()=> {
-//
-//   let queryParams;
-//   let headers;
-//   let search;
-//   let options;
-//   let request;
-//   let elementToPost;
-//   let endpoint;
-//   let id;
-//   let resOptions;
-//   let response;
-//
-//
-//
-//   beforeEach(() => {
-//
-//     search = new URLSearchParams();
-//     queryParams = {"testParam": "test"};
-//     headers = {"testHeader": "test"};
-//     elementToPost = {"ElementToPost": "test"};
-//     endpoint = "endpoint";
-//     id = 111;
-//
-//     for (let key in queryParams) {
-//       //if (!usedPathParams[key]) {
-//       let value: any = queryParams[key];
-//       if (typeof value === 'object') {
-//         // if (value instanceof Object) {
-//         value = JSON.stringify(value);
-//       }
-//       search.append(key, value);
-//       //}
-//     }
-//
-//     options = new RequestOptions({
-//       url: "/" + endpoint + "/" + id,
-//       headers: new Headers(headers),
-//       search: search,
-//       body: elementToPost
-//     });
-//     request = new Request(options);
-//
-//     resOptions = new ResponseOptions({
-//       body: JSON.stringify([{test: true}]),
-//       headers: new Headers({
-//         'testHeader': 'testBack'
-//       }),
-//       status: 403
-//     });
-//     response = new Response(resOptions);
-//
-//     return TestBed.configureTestingModule({
-//       imports: [HttpModule, BrowserModule,
-//         RestangularModule.forRoot((RestangularProvider) => {
-//             RestangularProvider.setParentless(true);
-//           }
-//         )
-//       ],
-//       providers: [
-//         BaseRequestOptions,
-//         MockBackend,
-//         ConnectionBackend,
-//         Jsonp,
-//         {
-//           provide: RestangularHttp,
-//           useFactory: (http: Http) => {
-//             return new RestangularHttp(http);
-//           },
-//           deps: [Http]
-//         },
-//         {
-//           provide: Http,
-//           useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-//             return new Http(backendInstance, defaultOptions);
-//           },
-//           deps: [MockBackend, BaseRequestOptions]
-//         },
-//         { provide: RESTANGULAR_BING, useFactory:  RestangularBingFactory, deps: [Restangular] }
-//       ],
-//     })
-//
-//   });
-//
-//   it("test()", async(inject([MockBackend, RestangularHttp, Injector, RESTANGULAR_BING], (backend, http, injector, resfr) => {
-//     let service = new Restangular(null,injector,http);
-//
-//     // service.provider.setFullResponse(true);
-//     let refreshAccesstoken = function () {
-//       // Refresh access-token logic
-//       return Observable.of(true)
-//     };
-//
-//     service.provider.addErrorInterceptor((response, subject, responseHandler) => {
-//       if (response.status === 403) {
-//
-//         refreshAccesstoken()
-//           .switchMap(refreshAccesstokenResponse => {
-//             debugger;
-//             response.request.url = "test";
-//             return response.repeatRequest(response.request);
-//           })
-//           .subscribe(
-//             res => responseHandler(res),
-//             err => subject.error(err)
-//           );
-//
-//         return false; // error handled
-//       }
-//       return true; // error not handled
-//     });
-//
-//     backend.connections.subscribe((connection: MockConnection) => {
-//
-//       debugger;
-//       connection.mockError(response);
-//     });
-//
-//     let t = service.all('users').getList().subscribe(res=>{
-//       debugger;
-//     },err => {
-//       debugger;
-//     })
-//
-//   })));
-//
-// });
 
 describe('Restangular | ', () => {
 
