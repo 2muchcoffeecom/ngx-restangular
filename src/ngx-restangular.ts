@@ -48,7 +48,6 @@ export class Restangular {
     setFullResponse: any,
     $get: any
   };
-  extendCollection;
   copy;
   configuration;
   service;
