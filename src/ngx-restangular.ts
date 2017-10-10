@@ -48,6 +48,9 @@ export class Restangular {
     setFullResponse: any,
     $get: any
   };
+  addElementTransformer: any;
+  extendCollection: any;
+  extendModel: any;
   copy;
   configuration;
   service;
