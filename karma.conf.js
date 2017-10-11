@@ -16,7 +16,6 @@ module.exports = function(config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-webpack'),
-      require('karma-chrome-launcher'),
       require('karma-remap-istanbul'),
       require('karma-jasmine-html-reporter'),
       require('karma-sourcemap-loader'),
@@ -100,11 +99,11 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: true,
 
     // How many browsers Karma launches in parallel.
     concurrency: 1

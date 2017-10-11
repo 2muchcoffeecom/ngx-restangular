@@ -1,3 +1,5 @@
+/// <reference types="jasmine" />
+
 import {
   fakeAsync,
   inject,
@@ -6,7 +8,6 @@ import {
 
 } from '@angular/core/testing';
 
-import 'jasmine';
 
 import {BrowserModule} from "@angular/platform-browser";
 import {BaseRequestOptions, ConnectionBackend, HttpModule, ResponseOptions, Response, Jsonp} from '@angular/http';
