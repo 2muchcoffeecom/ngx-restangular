@@ -1,6 +1,6 @@
 {
   "name": "ngx-restangular",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "ngx-restangular",
   "main": "./dist/umd/ngx-restangular.js",
   "module": "./dist/esm/src/index.js",
