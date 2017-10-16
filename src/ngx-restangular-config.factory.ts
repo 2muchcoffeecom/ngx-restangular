@@ -302,7 +302,9 @@ export function RestangularConfigurer(object, config){
   
   config.responseExtractor = function (data, operation, what, url, response, subject) {
     var interceptors = _.clone(config.responseInterceptors);
-    interceptors.push(config.defaultResponseInterceptor);
+    
+    // removed default interceptor to use defaultEmpty if 203 status and no response
+    
     var theData = data;
     _.each(interceptors, function (interceptor) {
       theData = interceptor(theData, operation,
