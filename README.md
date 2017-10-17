@@ -83,6 +83,7 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
     - [How can I access the unrestangularized element as well as the restangularized one?](#how-can-i-access-the-unrestangularized-element-as-well-as-the-restangularized-one)
     - [How can add withCredentials params to requests?](#how-can-add-withcredentials-params-to-requests)
 - [Server Frameworks](#server-frameworks)
+- [Contributing](#contributing)
 - [License](#license)
 
 **[Back to top](#table-of-contents)**
@@ -1425,6 +1426,13 @@ Users reported that this server frameworks play real nice with Ngx-restangular, 
 * Grails Framework
 
 **[Back to top](#table-of-contents)**
+
+
+# Contributing
+Please read [contributing guidelines here](https://github.com/2muchcoffeecom/ngx-restangular/blob/master/CONTRIBUTING.md).
+
+**[Back to top](#table-of-contents)**
+
 
 # License
 
