@@ -1,5 +1,7 @@
 import {URLSearchParams, Headers, RequestOptions, RequestMethod} from '@angular/http';
 
+import {assign} from 'core-js/fn/object';
+
 export class RestangularHelper {
   
   static createRequestOptions(options) {
@@ -22,7 +24,7 @@ export class RestangularHelper {
   }
   
   static createRequestQueryParams(queryParams) {
-    let requestQueryParams = Object.assign({}, queryParams);
+    let requestQueryParams = assign({}, queryParams);
     let search: URLSearchParams = new URLSearchParams();
     
     for (let key in requestQueryParams) {
@@ -52,6 +54,6 @@ export class RestangularHelper {
       }
     }
     
-    return new Headers(Object.assign({}, headers));
+    return new Headers(assign({}, headers));
   }
 }

@@ -1,4 +1,4 @@
-import {Injectable, OpaqueToken} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Hero} from "./hero";
 
 @Injectable()

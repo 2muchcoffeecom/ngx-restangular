@@ -5,6 +5,7 @@ import {RESTANGULAR} from "./ngx-restangular.config";
 import {RestangularHttp} from "./ngx-restangular-http";
 import {RestangularConfigurer} from "./ngx-restangular-config.factory";
 
+import {assign} from 'core-js/fn/object';
 
 @Injectable()
 export class Restangular {
@@ -114,7 +115,7 @@ export class Restangular {
   ) {
     this.provider = new providerConfig(http);
     let element = this.provider.$get();
-    Object.assign(this, element);
+    assign(this, element);
     
     this.setDefaultConfig();
   }
@@ -293,7 +294,7 @@ function providerConfig($http) {
       }
       
       function copyRestangularizedElement(fromElement, toElement = {}) {
-        var copiedElement = Object.assign(toElement, fromElement);
+        var copiedElement = assign(toElement, fromElement);
         return restangularizeElem(copiedElement[config.restangularFields.parentResource],
           copiedElement, copiedElement[config.restangularFields.route], true);
       }
