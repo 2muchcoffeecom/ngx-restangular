@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 
-import 'rxjs/Rx';
 import {Hero} from "../heroes-service/hero";
 
 

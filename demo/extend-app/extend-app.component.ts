@@ -1,7 +1,6 @@
 import {Component, Inject} from "@angular/core";
 import {Restangular} from "./../../src";
 
-import 'rxjs/Rx';
 import {RANDOM_USER} from "../random-user-restangular/random-user-restangular";
 
 

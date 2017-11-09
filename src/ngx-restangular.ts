@@ -1,5 +1,5 @@
 import {Injectable, Inject, Injector, Optional} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import * as _ from './lodash';
 import {RESTANGULAR} from "./ngx-restangular.config";
 import {RestangularHttp} from "./ngx-restangular-http";

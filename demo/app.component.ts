@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 
-import 'rxjs/Rx';
 import {RequestShowService} from "./request-show-service/request-show.service";
 
 @Component({

@@ -1,9 +1,8 @@
 import {Component} from "@angular/core";
 import {Restangular} from "./../../src";
 
-import 'rxjs/Rx';
 import {RequestShowService} from "../request-show-service/request-show.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 
 @Component({
@@ -148,16 +147,6 @@ export class RequestCalcComponent {
     });
 
     this.requestToShow$ = this.requestShowService.requestToShow;
-
-
-
-    // let formData = new FormData();
-    //   formData.append("name", "test");
-    //
-    // this.restangular.all('users')
-    // .customPOST(formData, undefined, undefined, { 'Content-Type': undefined });
-
-
   }
 
 }
