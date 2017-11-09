@@ -23,6 +23,7 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 - [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
 - [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
+- [How do I add this to my project in angular 5?](#how-do-i-add-this-to-my-project-in-angular-5)
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
@@ -97,6 +98,12 @@ You can download this by:
 **[Back to top](#table-of-contents)**
 
 # How do I add this to my project in angular 4?
+
+You can download this by:
+
+* Using npm and running `npm install --save ngx-restangular@1.0.13`
+
+# How do I add this to my project in angular 5?
 
 You can download this by:
 
