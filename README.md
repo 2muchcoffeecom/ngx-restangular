@@ -21,9 +21,10 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 # Table of contents
 
-- [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
-- [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
 - [How do I add this to my project in angular 5?](#how-do-i-add-this-to-my-project-in-angular-5)
+- [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
+- [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
+
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
@@ -89,25 +90,32 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 **[Back to top](#table-of-contents)**
 
-# How do I add this to my project in angular 2?
-
-You can download this by:
-
-* Using npm and running `npm install ng2-restangular`
-
-**[Back to top](#table-of-contents)**
-
-# How do I add this to my project in angular 4?
-
-You can download this by:
-
-* Using npm and running `npm install --save ngx-restangular@1.0.13`
 
 # How do I add this to my project in angular 5?
 
 You can download this by:
 
 * Using npm and running `npm install ngx-restangular`
+* This will install latest version of ngx-restangular (v.2.0.0)
+
+**[Back to top](#table-of-contents)**
+
+
+# How do I add this to my project in angular 4?
+
+You can download this by:
+
+* Using npm and running `npm install --save ngx-restangular@1.0.13`
+* Versions from 1.0.14 to 1.1.4 are deprecated. Npm warns you after their installation. Those versions would be removed.
+
+**[Back to top](#table-of-contents)**
+
+
+# How do I add this to my project in angular 2?
+
+You can download this by:
+
+* Using npm and running `npm install ng2-restangular`
 
 **[Back to top](#table-of-contents)**
 
