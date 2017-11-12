@@ -95,8 +95,7 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 You can download this by:
 
-* Using npm and running `npm install ngx-restangular`
-* This will install latest version of ngx-restangular (v.2.0.0)
+* Using npm and running `npm install ngx-restangular`. This will install latest version of ngx-restangular (v.2.0.0)
 
 **[Back to top](#table-of-contents)**
 
@@ -106,7 +105,8 @@ You can download this by:
 You can download this by:
 
 * Using npm and running `npm install --save ngx-restangular@1.0.13`
-* Versions from 1.0.14 to 1.1.4 are deprecated. Npm warns you after their installation. Those versions would be removed.
+
+Versions from 1.0.14 to 1.1.4 are deprecated. Npm warns you after their installation. Those versions would be removed.
 
 **[Back to top](#table-of-contents)**
 
