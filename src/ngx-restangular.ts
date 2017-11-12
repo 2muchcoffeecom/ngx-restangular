@@ -1,11 +1,14 @@
 import {Injectable, Inject, Injector, Optional} from "@angular/core";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {assign} from 'core-js/fn/object';
 import * as _ from './lodash';
+
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/filter";
+
 import {RESTANGULAR} from "./ngx-restangular.config";
 import {RestangularHttp} from "./ngx-restangular-http";
 import {RestangularConfigurer} from "./ngx-restangular-config.factory";
 
-import {assign} from 'core-js/fn/object';
 
 @Injectable()
 export class Restangular {
