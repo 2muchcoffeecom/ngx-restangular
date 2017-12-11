@@ -1,6 +1,4 @@
-# Ngx-restangular
-
-
+# Ngx-restangular. Maintained by [2muchcoffee](https://2muchcoffee.com/).
 
 This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ngx-restangular is an Angular 2+ service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
@@ -21,9 +19,10 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 # Table of contents
 
-- [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
-- [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
 - [How do I add this to my project in angular 5?](#how-do-i-add-this-to-my-project-in-angular-5)
+- [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
+- [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
+
 - [Dependencies](#dependencies)
 - [Starter Guide](#starter-guide)
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
@@ -89,31 +88,32 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 **[Back to top](#table-of-contents)**
 
-# How do I add this to my project in angular 2?
-
-You can download this by:
-
-* Using npm and running `npm install ng2-restangular`
-
-**[Back to top](#table-of-contents)**
-
-# How do I add this to my project in angular 4?
-
-You can download this by:
-
-* Using npm and running `npm install --save ngx-restangular@1.0.13`
 
 # How do I add this to my project in angular 5?
 
-You can download this by:
+You can download this by npm and running `npm install ngx-restangular`. This will install latest version of ngx-restangular (v.2.0.0).
 
-* Using npm and running `npm install ngx-restangular`
+**[Back to top](#table-of-contents)**
+
+
+# How do I add this to my project in angular 4?
+
+You can download this by npm and running `npm install --save ngx-restangular@1.0.13`
+
+Versions from 1.0.14 to 1.1.4 are deprecated. Npm warns you after their installation. Those versions would be removed.
+
+**[Back to top](#table-of-contents)**
+
+
+# How do I add this to my project in angular 2?
+
+You can download this by npm and running `npm install ng2-restangular`
 
 **[Back to top](#table-of-contents)**
 
 # Dependencies
 
-Restangular depends on Angular2+ and Lodash.
+Restangular depends on Angular 2+ and Lodash.
 
 **[Back to top](#table-of-contents)**
 
