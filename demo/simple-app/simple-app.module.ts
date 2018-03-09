@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import { HttpModule} from "@angular/http";
+import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 
 
@@ -18,7 +18,7 @@ import {HeroAddModule} from "./hero-add/hero-add.module";
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     HeroDetailModule,
     RouterModule,
     HeroListModule,
