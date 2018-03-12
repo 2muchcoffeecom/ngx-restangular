@@ -88,7 +88,7 @@
     "tslint": "3.15.1",
     "tslint-loader": "2.1.5",
     "typedoc": ">=0.5.1",
-    "typescript": ">=2.4.2 <2.5",
+    "typescript": ">=2.4.2 <2.7",
     "validate-commit-msg": "2.8.2",
     "webpack": "1.13.3",
     "webpack-dev-server": "1.16.2",
