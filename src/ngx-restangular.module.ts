@@ -1,6 +1,6 @@
 /* tslint:disable:member-ordering no-unused-variable */
 import {ModuleWithProviders, NgModule, Optional, SkipSelf, InjectionToken} from '@angular/core';
-import {HttpModule} from "@angular/http";
+import {HttpClientModule} from '@angular/common/http';
 import {RESTANGULAR, RestangularFactory} from './ngx-restangular.config';
 import {Restangular} from './ngx-restangular';
 import {RestangularHttp} from './ngx-restangular-http';
@@ -8,7 +8,7 @@ import {RestangularHttp} from './ngx-restangular-http';
 export const CONFIG_OBJ = new InjectionToken<string>('configObj');
 
 @NgModule({
-  imports: [HttpModule],
+  imports: [HttpClientModule],
   providers: [RestangularHttp, Restangular]
 })
 export class RestangularModule {
@@ -19,7 +19,7 @@ export class RestangularModule {
         'RestangularModule is already loaded. Import it in the AppModule only');
     }
   }
-  
+
   static forRoot(config1?, config2?): ModuleWithProviders {
     return {
       ngModule: RestangularModule,

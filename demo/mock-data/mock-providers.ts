@@ -1,22 +1,22 @@
-import {BaseRequestOptions, Http} from "@angular/http";
-import {MockBackend} from "@angular/http/testing";
+import {HttpClient, HttpHandler} from "@angular/common/http";
 import {RestangularHttp} from "../../src/ngx-restangular-http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MockBackendService } from "./mock-backend.service";
 
 export const MockProviders = [
-  BaseRequestOptions,
-  MockBackend,
+  MockBackendService,
   {
     provide: RestangularHttp,
-    useFactory: (http: Http) => {
+    useFactory: (http: HttpClient) => {
       return new RestangularHttp(http);
     },
-    deps: [Http]
+    deps: [HttpClient]
   },
   {
-    provide: Http,
-    useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-      return new Http(backendInstance, defaultOptions);
+    provide: HttpClient,
+    useFactory: (backendInstance: MockBackendService) => {
+      return new HttpClient(backendInstance);
     },
-    deps: [MockBackend, BaseRequestOptions]
+    deps: [MockBackendService]
   },
 ];

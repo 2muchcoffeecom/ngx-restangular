@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {HttpModule} from "@angular/http";
+import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 
@@ -13,7 +13,7 @@ import {ExtendAppComponent} from "./extend-app.component";
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule,
   ],
   exports: [ExtendAppComponent]

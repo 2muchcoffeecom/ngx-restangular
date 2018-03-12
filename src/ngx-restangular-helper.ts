@@ -1,32 +1,34 @@
-import {URLSearchParams, Headers, RequestOptions, RequestMethod} from '@angular/http';
+import {HttpRequest, HttpHeaders, HttpParams} from '@angular/common/http';
 
 import {assign} from 'core-js/fn/object';
 
 export class RestangularHelper {
-  
-  static createRequestOptions(options) {
+
+  static createRequest(options) {
     let requestQueryParams = RestangularHelper.createRequestQueryParams(options.params);
     let requestHeaders = RestangularHelper.createRequestHeaders(options.headers);
-    let methodName = options.method.charAt(0).toUpperCase() + options.method.substr(1).toLowerCase();
+    let methodName = options.method.toUpperCase();
     let withCredentials = options.withCredentials || false;
-    
-    let requestOptions = new RequestOptions({
-      method: RequestMethod[methodName],
-      headers: requestHeaders,
-      search: requestQueryParams,
-      url: options.url,
-      body: options.data,
-      responseType: options.responseType,
-      withCredentials
-    });
-    
-    return requestOptions;
+
+    let request = new HttpRequest(
+      methodName,
+      options.url,
+      options.data,
+      {
+        headers: requestHeaders,
+        params: requestQueryParams,
+        responseType: options.responseType,
+        withCredentials
+      }
+    )
+
+    return request;
   }
-  
+
   static createRequestQueryParams(queryParams) {
     let requestQueryParams = assign({}, queryParams);
-    let search: URLSearchParams = new URLSearchParams();
-    
+    let search: HttpParams = new HttpParams();
+
     for (let key in requestQueryParams) {
       let value: any = requestQueryParams[key];
 
@@ -40,12 +42,12 @@ export class RestangularHelper {
         }
         search.append(key, value);
       }
-           
+
     }
-    
+
     return search;
   }
-  
+
   static createRequestHeaders(headers) {
     for (let key in headers) {
       let value: any = headers[key];
@@ -53,7 +55,7 @@ export class RestangularHelper {
         delete headers[key];
       }
     }
-    
-    return new Headers(assign({}, headers));
+
+    return new HttpHeaders(assign({}, headers));
   }
 }
