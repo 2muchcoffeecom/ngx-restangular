@@ -19,9 +19,9 @@ export class MockBackendService extends HttpHandler {
 
     this.requestShowService.requestToShow.next(req);
     // console.log(connection.request);
-    console.log("Request Url on Backend: ", req.url);
+    console.log("Request Url on Backend: ", req.urlWithParams);
 
-    if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes)/.test(req.url)) {
+    if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes)/.test(req.urlWithParams)) {
       body = this.heroService.getHeroes();
 
       if(req.method == "POST") {
@@ -35,24 +35,24 @@ export class MockBackendService extends HttpHandler {
       if (req.method == "PUT" && req.headers.has("id")) {
         body = this.heroService.putHero(req.headers.get("id"), req.body);
       }
-      if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\/)/.test(req.url)) {
-        let id = req.url.slice(req.url.lastIndexOf("/") + 1, req.url.length);
+      if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\/)/.test(req.urlWithParams)) {
+        let id = req.urlWithParams.slice(req.urlWithParams.lastIndexOf("/") + 1, req.urlWithParams.length);
         body = this.heroService.getHero(id);
       }
-      if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\?number=)/.test(req.url)) {
-        let number = +req.url.slice(req.url.lastIndexOf("=") + 1, req.url.length);
+      if (/(http:\/\/api.2muchcoffee.com\/v1\/heroes\?number=)/.test(req.urlWithParams)) {
+        let number = +req.urlWithParams.slice(req.urlWithParams.lastIndexOf("=") + 1, req.urlWithParams.length);
         body = this.heroService.getHeroes(number);
       }
     }
 
-    if(/(https:\/\/randomuser.me\/api\/)/.test(req.url)) {
+    if(/(https:\/\/randomuser.me\/api\/)/.test(req.urlWithParams)) {
       body = this.heroService.getHeroes().map((hero,index)=>{
         hero.name = "user" + ++index;
         return hero;
       });
     }
 
-    if (/(http:\/\/api.2muchcoffee.com\/v1\/error)/.test(req.url)) {
+    if (/(http:\/\/api.2muchcoffee.com\/v1\/error)/.test(req.urlWithParams)) {
       return Observable.throw(new HttpErrorResponse({ headers, status: 403 }))
     }
     else {
