@@ -34,6 +34,7 @@ export class RestangularHttp {
     })
     .catch(err => {
       err.request = request;
+      err.data = err.error;
       err.repeatRequest = (newRequest?) => {
         return this.request(newRequest || request);
       };
