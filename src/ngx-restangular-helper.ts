@@ -20,8 +20,20 @@ export class RestangularHelper {
         responseType: options.responseType,
         withCredentials
       }
-    )
+    );
 
+    if(['GET', 'DELETE', 'HEAD', 'JSONP', 'OPTIONS'].indexOf(methodName) >= 0) {
+      request = new HttpRequest(
+        methodName,
+        options.url,
+        {
+          headers: requestHeaders,
+          params: requestQueryParams,
+          responseType: options.responseType,
+          withCredentials
+        }
+      )
+    }
     return request;
   }
 
@@ -34,13 +46,13 @@ export class RestangularHelper {
 
       if (Array.isArray(value)) {
         value.forEach(function(val){
-          search.append(key, val);
+          search = search.append(key, val);
         });
       } else {
         if (typeof value === 'object') {
           value = JSON.stringify(value);
         }
-        search.append(key, value);
+        search = search.append(key, value);
       }
 
     }
