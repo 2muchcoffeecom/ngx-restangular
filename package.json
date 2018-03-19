@@ -6,10 +6,13 @@
   "module": "./dist/esm/src/index.js",
   "typings": "./dist/esm/src/index.d.ts",
   "scripts": {
+    "start": "ng serve",
+    "prebuild:package": "npm run clean:all",
+    "build:package": "npm run build:esm && npm run build:rollup && npm run build:min",
+    "postbuild:package": "npm run copy:declarations && npm run copy:metadata && npm run copy:npm-assets && npm run clean:tmp",
     "clean:tmp": "rimraf tmp/",
     "clean:dist": "rimraf dist/",
     "clean:all": "npm run clean:dist && npm run clean:tmp",
-    "start": "ng serve",
     "build:esm": "npm run build:esm2015 && npm run build:esm5",
     "build:esm2015": "ngc -p ./config/tsconfig-esm2015.json",
     "build:esm5": "ngc -p ./config/tsconfig-esm5.json",
@@ -18,9 +21,10 @@
     "build:fesm5": "rollup -c ./config/rollup-esm5.conf.js",
     "build:umd": "rollup -c ./config/rollup-umd.conf.js",
     "build:min": "uglifyjs dist/bundles/ngx-restangular.umd.js -c -m -o dist/bundles/ngx-restangular.umd.min.js",
+    "copy:npm-assets": "npm run copy:package.json && npm run copy:readme",
     "copy:package.json": "copyfiles package.json dist",
-    "copy:declarations": "copyfiles -up 1 ./tmp/esm2015/src/**/*.d.ts dist/src && copyfiles -up 1 tmp/esm2015/*.d.ts dist",
-    "copy:metadata": "copyfiles -up 1 ./tmp/esm2015/*.json dist",
+    "copy:declarations": "copyfiles -u 3 ./tmp/esm2015/src/**/*.d.ts dist/src && copyfiles -u 2 tmp/esm2015/*.d.ts dist",
+    "copy:metadata": "copyfiles -u 2 ./tmp/esm2015/*.json dist",
     "copy:readme": "copyfiles README.md dist"
   },
   "repository": {
