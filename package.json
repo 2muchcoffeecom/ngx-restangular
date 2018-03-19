@@ -2,9 +2,10 @@
   "name": "ngx-restangular",
   "version": "2.1.0",
   "description": "ngx-restangular",
-  "main": "./dist/umd/ngx-restangular.js",
-  "module": "./dist/esm/src/index.js",
-  "typings": "./dist/esm/src/index.d.ts",
+  "typings": "./ngx-restangular.d.ts",
+  "main": "./bundles/ngx-restangular.umd.js",
+  "module": "./esm5/ngx-restangular.js",
+  "es2015": "./esm2015/ngx-restangular.js",
   "scripts": {
     "start": "ng serve",
     "prebuild:package": "npm run clean:all",
