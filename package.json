@@ -8,7 +8,8 @@
   "scripts": {
     "clean:tmp": "rimraf tmp/",
     "clean:dist": "rimraf dist/",
-    "clean:all": "npm run clean:dist && npm run clean:tmp"
+    "clean:all": "npm run clean:dist && npm run clean:tmp",
+    "start": "ng serve"
   },
   "repository": {
     "type": "git",
