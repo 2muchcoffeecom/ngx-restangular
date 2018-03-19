@@ -17,7 +17,11 @@
     "build:fesm2015": "rollup -c ./config/rollup-esm2015.conf.js",
     "build:fesm5": "rollup -c ./config/rollup-esm5.conf.js",
     "build:umd": "rollup -c ./config/rollup-umd.conf.js",
-    "build:min": "uglifyjs dist/bundles/ngx-restangular.umd.js -c -m -o dist/bundles/ngx-restangular.umd.min.js"
+    "build:min": "uglifyjs dist/bundles/ngx-restangular.umd.js -c -m -o dist/bundles/ngx-restangular.umd.min.js",
+    "copy:package.json": "copyfiles package.json dist",
+    "copy:declarations": "copyfiles -up 1 ./tmp/esm2015/src/**/*.d.ts dist/src && copyfiles -up 1 tmp/esm2015/*.d.ts dist",
+    "copy:metadata": "copyfiles -up 1 ./tmp/esm2015/*.json dist",
+    "copy:readme": "copyfiles README.md dist"
   },
   "repository": {
     "type": "git",
