@@ -2,6 +2,7 @@ export default {
   input: 'tmp/esm2015/ngx-restangular.js',
   output: {
     file: 'dist/esm2015/ngx-restangular.js',
-    format: 'es'
+    format: 'es',
+    sourcemap: true
   }
 };
