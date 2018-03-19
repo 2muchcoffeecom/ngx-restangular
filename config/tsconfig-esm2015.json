@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": true,
+    "target": "es2015",
+    "module": "es2015",
+    "baseUrl": "../lib",
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "outDir": "../tmp/esm2015",
+    "rootDir": "../lib",
+    "skipLibCheck": true,
+    "lib": ["dom", "es2015"]
+  },
+  "files": ["../lib/public_api.ts"],
+  "angularCompilerOptions": {
+    "annotateForClosureCompiler": true,
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "flatModuleOutFile": "ngx-restangular.js",
+    "flatModuleId": "ngx-restangular"
+  }
+}
