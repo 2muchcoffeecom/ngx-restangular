@@ -9,7 +9,15 @@
     "clean:tmp": "rimraf tmp/",
     "clean:dist": "rimraf dist/",
     "clean:all": "npm run clean:dist && npm run clean:tmp",
-    "start": "ng serve"
+    "start": "ng serve",
+    "build:esm": "npm run build:esm2015 && npm run build:esm5",
+    "build:esm2015": "ngc -p ./config/tsconfig-esm2015.json",
+    "build:esm5": "ngc -p ./config/tsconfig-esm5.json",
+    "build:rollup": "rollup -c ./config/rollup.conf.js",
+    "build:fesm2015": "rollup -c ./config/rollup-esm2015.conf.js",
+    "build:fesm5": "rollup -c ./config/rollup-esm5.conf.js",
+    "build:umd": "rollup -c ./config/rollup-umd.conf.js",
+    "build:min": "uglifyjs dist/bundles/ngx-restangular.umd.js -c -m -o dist/bundles/ngx-restangular.umd.min.js"
   },
   "repository": {
     "type": "git",
