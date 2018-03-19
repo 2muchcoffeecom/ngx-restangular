@@ -1,4 +1,4 @@
-import {InjectionToken} from "@angular/core";
+import {InjectionToken} from '@angular/core';
 import * as _ from './lodash';
 
 
@@ -13,7 +13,7 @@ export function RestangularFactory(config) {
     configObj = {
       arrServices: config[0],
       fn: config[1]
-    }
+    };
   }
   return configObj;
 }
