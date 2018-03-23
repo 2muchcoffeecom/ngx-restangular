@@ -1,1 +1,1 @@
-
+export * from './restangular-builder';
