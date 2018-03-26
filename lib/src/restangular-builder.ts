@@ -39,6 +39,19 @@ export class RestangularBuilder {
     this.parent = parent;
   }
 
+  protected get builderArray() {
+    if (!this.parent) {
+      return [this];
+    }
+    return [this, ...this.parent.builderArray];
+  }
+
+  get pointer() {
+    return this.builderArray
+    .reduceRight((acc, builder) => [...acc, builder.route, builder.id], [])
+    .filter((route) => !!route);
+  }
+
   /**
    * Generates new Builder that is pointer to one entity with parent as this one.
    * Used to build pointer to resources.
