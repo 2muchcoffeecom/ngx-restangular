@@ -30,7 +30,7 @@ export class RestangularBuilder {
   private isCollection: boolean;
 
   constructor({id, route, isCollection, parent}: RestangularBuilderOptions) {
-    if (id || route) {
+    if (!(id || route)) {
       throw new Error('Route or Id must be provided');
     }
     this.id = id;
