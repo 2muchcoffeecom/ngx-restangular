@@ -1,1 +1,2 @@
-export * from './restangular-builder';
+export * from './module';
+export * from './restangular';
