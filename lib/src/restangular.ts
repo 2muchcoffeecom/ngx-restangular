@@ -1,7 +1,8 @@
-import { RestangularBuilder } from './builder';
-import { RestangularClient } from './client/client';
-import { RestangularHandler } from './handler';
 import { Injectable } from '@angular/core';
+
+import { RestangularBuilder } from './builder';
+import { RestangularClient } from './client';
+import { RestangularHandler } from './handler';
 
 export abstract class Restangular {
 
