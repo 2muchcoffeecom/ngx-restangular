@@ -10,10 +10,14 @@ export abstract class Restangular {
   abstract one(route: string, id?: string | number): RestangularClient;
 
   abstract all(route: string): RestangularClient;
+
+  abstract extendConfig(options: any): Restangular;
+
+  abstract withConfig(options: any): Restangular;
 }
 
 @Injectable()
-export class InitialRestangular {
+export class InitialRestangular implements Restangular {
 
   constructor(private handler: RestangularHandler) {
   }
@@ -31,5 +35,15 @@ export class InitialRestangular {
   all(route) {
     const builder = new RestangularBuilder({route, isCollection: true});
     return new RestangularClient(builder, this.handler);
+  }
+
+  extendConfig(options: any) {
+    const handler = this.handler.extendConfig(options);
+    return new InitialRestangular(handler);
+  }
+
+  withConfig(options: any) {
+    const handler = this.handler.withConfig(options);
+    return new InitialRestangular(handler);
   }
 }
