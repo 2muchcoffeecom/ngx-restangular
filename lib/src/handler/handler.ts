@@ -7,5 +7,7 @@ import { RestangularRequest } from '../backend';
 export abstract class RestangularHandler {
   abstract handle<T>(req: RestangularRequest<T>): Observable<HttpEvent<T>>;
 
-  abstract config(options: any): RestangularHandler;
+  abstract withConfig(options: any): RestangularHandler;
+
+  abstract extendConfig(options: any): RestangularHandler;
 }

@@ -21,7 +21,18 @@ export class RestangularInterceptingHandler implements RestangularHandler {
     );
   }
 
-  config(options: any): RestangularHandler {
-    return new RestangularInterceptingHandler(this.backend, this.injector);
+  withConfig(options: any): RestangularHandler {
+    const injector = Injector.create({
+      providers: [],
+    });
+    return new RestangularInterceptingHandler(this.backend, injector);
+  }
+
+  extendConfig(options: any): RestangularHandler {
+    const injector = Injector.create({
+      providers: [],
+      parent: this.injector,
+    });
+    return new RestangularInterceptingHandler(this.backend, injector);
   }
 }
