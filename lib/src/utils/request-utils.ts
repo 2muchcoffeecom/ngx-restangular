@@ -21,3 +21,23 @@ export function toHttpParams(params: HttpParams | string | { [name: string]: str
     return new HttpParams();
   }
 }
+
+export function addToHttpHeaders(this: HttpHeaders, headers: HttpHeaders | { [name: string]: string | string[] }) {
+  if (headers instanceof HttpHeaders) {
+    return headers.keys().reduce((existing: HttpHeaders, key) => existing.set(key, headers.get(key)), this);
+  } else if (typeof headers === 'object') {
+    return Object.keys(headers).reduce((existing: HttpHeaders, key) => existing.set(key, headers[key]), this);
+  } else {
+    return this;
+  }
+}
+
+export function addToHttpParams(this: HttpParams, params: HttpParams | { [name: string]: string  }) {
+  if (params instanceof HttpParams) {
+    return params.keys().reduce((existing: HttpParams, key) => existing.set(key, params.get(key)), this);
+  } else if (typeof params === 'object') {
+    return Object.keys(params).reduce((existing: HttpParams, key) => existing.set(key, params[key]), this);
+  } else {
+    return this;
+  }
+}
