@@ -1,11 +1,45 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
 import { RestangularHandler, RestangularInterceptingHandler } from './handler';
 import { RestangularBackend, RestangularHttpBackend } from './backend';
-import { InitialRestangular, Restangular } from './restangular';
+import { Restangular } from './restangular';
 import { DefaultRestangularConfig, RestangularConfig } from './config';
 import { configInterceptors } from './interceptors';
+import { RestangularClient } from './client';
+import { RestangularBuilder } from './builder';
+
+@Injectable()
+export class InitialRestangular {
+
+  constructor(private handler: RestangularHandler) {
+  }
+
+  one(routeOrId, id?) {
+    let route = routeOrId;
+    if (typeof id === 'undefined') {
+      id = routeOrId;
+      route = undefined;
+    }
+    const builder = new RestangularBuilder({id, route, isCollection: false});
+    return new RestangularClient(builder, this.handler);
+  }
+
+  all(route) {
+    const builder = new RestangularBuilder({route, isCollection: true});
+    return new RestangularClient(builder, this.handler);
+  }
+
+  extendConfig(options: any) {
+    const handler = this.handler.extendConfig(options);
+    return new InitialRestangular(handler);
+  }
+
+  withConfig(options: any) {
+    const handler = this.handler.withConfig(options);
+    return new InitialRestangular(handler);
+  }
+}
 
 @NgModule({
   imports: [
@@ -21,4 +55,24 @@ import { configInterceptors } from './interceptors';
   ],
 })
 export class RestangularModule {
+
+  static config(config: any) {
+    let configProvider;
+    switch (typeof config) {
+      case 'object': {
+        configProvider = {provide: RestangularConfig, useValue: config};
+        break;
+      }
+      case 'function': {
+        configProvider = {provide: RestangularConfig, useClass: config};
+        break;
+      }
+    }
+    return {
+      ngModule: RestangularModule,
+      providers: [
+        configProvider,
+      ]
+    };
+  }
 }

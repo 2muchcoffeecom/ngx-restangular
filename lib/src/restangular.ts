@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
+
+import { Observable } from 'rxjs/Observable';
 
 import { RestangularBuilder } from './builder';
 import { RestangularClient } from './client';
@@ -6,44 +9,66 @@ import { RestangularHandler } from './handler';
 
 export abstract class Restangular {
 
-  abstract one(id: string | number): RestangularClient;
-  abstract one(route: string, id?: string | number): RestangularClient;
+  abstract one(id: string | number): RestangularEntity;
+  abstract one(route: string, id?: string | number): RestangularEntity;
 
-  abstract all(route: string): RestangularClient;
+  abstract all(route: string): RestangularCollection;
 
   abstract extendConfig(options: any): Restangular;
 
   abstract withConfig(options: any): Restangular;
 }
 
-@Injectable()
-export class InitialRestangular implements Restangular {
+export abstract class RestangularEntity extends Restangular {
+  abstract getList<T>(
+    route: string,
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): Observable<T & RestangularCollection>;
 
-  constructor(private handler: RestangularHandler) {
-  }
+  abstract get<T>(
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): Observable<T & RestangularEntity>;
 
-  one(routeOrId, id?) {
-    let route = routeOrId;
-    if (typeof id === 'undefined') {
-      id = routeOrId;
-      route = undefined;
-    }
-    const builder = new RestangularBuilder({id, route, isCollection: false});
-    return new RestangularClient(builder, this.handler);
-  }
+  abstract put<T>(
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): Observable<T & RestangularEntity>;
 
-  all(route) {
-    const builder = new RestangularBuilder({route, isCollection: true});
-    return new RestangularClient(builder, this.handler);
-  }
+  abstract post<T>(
+    route: string,
+    body: T,
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): Observable<T & RestangularEntity>;
+}
 
-  extendConfig(options: any) {
-    const handler = this.handler.extendConfig(options);
-    return new InitialRestangular(handler);
-  }
+export abstract class RestangularCollection extends Restangular {
+  abstract getList<T>(
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): Observable<RestangularCollectionFromServer<T>>;
 
-  withConfig(options: any) {
-    const handler = this.handler.withConfig(options);
-    return new InitialRestangular(handler);
-  }
+  abstract get(
+    id: string | number,
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): any;
+
+  abstract post<T>(
+    body: T,
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): any;
+}
+
+export abstract class RestangularCollectionFromServer<V> extends RestangularCollection {
+  [key: number]: (V & RestangularEntity);
+
+  abstract put<T>(
+    index: number,
+    params?: HttpParams | string | { [name: string]: string | string[] },
+    headers?: HttpHeaders | string | { [name: string]: string | string[] },
+  ): Observable<T & RestangularEntity>;
 }
