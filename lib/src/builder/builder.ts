@@ -27,7 +27,7 @@ export class RestangularBuilder {
   /**
    * Private identifier that used to check is it resource pointer or entity.
    */
-  private isCollection: boolean;
+  public readonly isCollection: boolean;
 
   constructor({id, route, isCollection, parent}: RestangularBuilderOptions) {
     if (!(id || route)) {
