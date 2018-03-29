@@ -32,7 +32,6 @@ export class HeroDetailComponent {
   }
 
   deleteHero() {
-    debugger;
     this.hero.remove(null,{"id":this.id}).subscribe(heroes => {
       this.router.navigate(["/simpleapp/herolist"]);
     })
