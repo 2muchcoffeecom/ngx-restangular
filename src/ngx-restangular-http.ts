@@ -1,27 +1,29 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { HttpBackend, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
 
-import 'rxjs/add/observable/throw'
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/catch'
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/filter';
 
-import {RestangularHelper} from './ngx-restangular-helper';
+import { RestangularHelper } from './ngx-restangular-helper';
 
 @Injectable()
 export class RestangularHttp {
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpBackend) {
   }
 
   createRequest(options) {
-    let request = RestangularHelper.createRequest(options);
+    const request = RestangularHelper.createRequest(options);
 
     return this.request(request);
   }
 
-  request(request) {
-    return this.http.request(request.method, request.url, {...request, observe: 'response' })
+  request(request: HttpRequest<any>) {
+    return this.http.handle(request)
+    .filter(event => event instanceof HttpResponse)
     .map((response: any) => {
       if (!response.ok) {
         return Observable.throw(new HttpErrorResponse(response));
