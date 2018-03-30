@@ -1,20 +1,13 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "ES5",
-    "module": "commonjs",
+    "target": "es5",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "typeRoots": [
-      "../node_modules/@types"
-    ]
-  },
-  "exclude": [
-    "node_modules"
-  ],
-  "compileOnSave": false
+    "typeRoots": ["/node_modules/@types"],
+    "lib": ["es2015", "dom"],
+    "skipLibCheck": true
+  }
 }
