@@ -294,7 +294,7 @@ export function RestangularConfigurer(object, config){
    * The ResponseExtractor is a function that receives the response and the method executed.
    */
 
-  config.responseInterceptors = config.responseInterceptors || [];
+  config.responseInterceptors = config.responseInterceptors ? [...config.responseInterceptors] : [];
 
   config.defaultResponseInterceptor = function (data /*, operation, what, url, response, subject */) {
     return data || {};
@@ -316,7 +316,7 @@ export function RestangularConfigurer(object, config){
     return this;
   };
 
-  config.errorInterceptors = config.errorInterceptors || [];
+  config.errorInterceptors = config.errorInterceptors ? [...config.errorInterceptors] : [];
   object.addErrorInterceptor = function (interceptor) {
     config.errorInterceptors = [interceptor, ...config.errorInterceptors];
     return this;
@@ -334,7 +334,7 @@ export function RestangularConfigurer(object, config){
   /**
    * Request interceptor is called before sending an object to the server.
    */
-  config.requestInterceptors = config.requestInterceptors || [];
+  config.requestInterceptors = config.requestInterceptors ? [...config.requestInterceptors] : [];
 
   config.defaultInterceptor = function (element, operation, path, url, headers, params, httpConfig) {
     return {
