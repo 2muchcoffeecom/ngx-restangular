@@ -1,6 +1,6 @@
 {
   "name": "ngx-restangular",
-  "version": "2.2.3",
+  "version": "2.3.0-beta.1",
   "description": "ngx-restangular",
   "typings": "./ngx-restangular.d.ts",
   "main": "./bundles/ngx-restangular.umd.js",
