@@ -83,7 +83,13 @@
     "rxjs": "^5.0.0"
   },
   "files": [
-    "dist"
+    "bundles",
+    "esm5",
+    "esm2015",
+    "src",
+    "ngx-restangular.d.ts",
+    "ngx-restangular.metadata.json",
+    "public_api.d.ts"
   ],
   "dependencies": {
     "@types/lodash": "^4.14.62"
