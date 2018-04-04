@@ -1,5 +1,5 @@
 import {InjectionToken} from '@angular/core';
-import * as _ from './lodash';
+import { isArray } from 'lodash';
 
 
 export const RESTANGULAR = new InjectionToken<string>('restangularWithConfig');
@@ -9,7 +9,7 @@ export function RestangularFactory(config) {
     arrServices: [],
   };
 
-  if (_.isArray(config[0])) {
+  if (isArray(config[0])) {
     configObj = {
       arrServices: config[0],
       fn: config[1]
