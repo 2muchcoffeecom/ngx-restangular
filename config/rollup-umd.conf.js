@@ -1,3 +1,5 @@
+import external from "./externals";
+
 export default {
   input: 'tmp/esm5/ngx-restangular.js',
   output: {
@@ -9,6 +11,11 @@ export default {
       '@angular/core': 'ng.core',
       '@angular/common': 'ng.common',
       '@angular/common/http': 'ng.common.http',
+      'lodash': '_',
+      'core-js/fn/object': 'core.Object',
+      'rxjs/Observable': 'Rx.Observable',
+      'rxjs/BehaviorSubject': 'Rx.BehaviorSubject',
     },
-  }
+  },
+  external,
 };
