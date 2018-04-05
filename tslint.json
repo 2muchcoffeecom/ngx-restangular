@@ -107,7 +107,7 @@
         "variable-declaration": "nospace"
       }
     ],
-    "unified-signatures": true,
+    "unified-signatures": false,
     "variable-name": false,
     "whitespace": [
       true,
