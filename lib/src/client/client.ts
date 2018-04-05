@@ -1,11 +1,15 @@
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { RestangularHandler } from '../handler';
 import { RestangularBuilder } from '../builder';
 import { RestangularRequest } from '../backend';
 import { RestangularHeaders, RestangularParams } from '../interfaces';
+import { Observable } from 'rxjs/Observable';
+
 
 export class RestangularClient {
+
+  private fromServer: boolean;
 
   constructor(
     private builder: RestangularBuilder,
@@ -14,68 +18,101 @@ export class RestangularClient {
   ) {
   }
 
-  one(routeOrId, id?): RestangularClient {
+  get isCollection() {
+    return this.builder.isCollection;
+  }
+
+  one(id: string): RestangularClient;
+  one(route: string, id: string): RestangularClient;
+  one(routeOrId, id?) {
     const builder = this.builder.one(routeOrId, id);
     return new RestangularClient(builder, this.handler);
   }
 
-  all(route): RestangularClient {
+  all(route: string): RestangularClient {
     const builder = this.builder.all(route);
     return new RestangularClient(builder, this.handler);
   }
 
+  get<T>(params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
+  get<T>(id: string, params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
   get(
-    paramsOrId?: RestangularParams | string | number,
-    paramsOrHeaders?: RestangularParams | RestangularHeaders,
-    headers?: RestangularHeaders,
+    paramsOrId?,
+    paramsOrHeaders?,
+    headers?,
   ) {
-    let id: string | number;
+    let id: string;
     let params: RestangularParams;
-    if (this.builder.isCollection) {
-      id = paramsOrId as string | number;
-      params = paramsOrHeaders as RestangularParams;
+    if (this.isCollection) {
+      id = paramsOrId as string;
+      params = paramsOrHeaders as HttpParams;
       return this.one(id).get(params, headers);
     }
-    params = paramsOrId as RestangularParams;
-    headers = paramsOrHeaders as RestangularHeaders;
-    const req = new RestangularRequest('GET', this.builder.pointer, {params, headers});
-    return this.handler.handle(req);
-  }
-
-
-  getList(
-    routeOrParams?: string | RestangularParams,
-    paramsOrHeaders?: RestangularParams | RestangularHeaders,
-    headers?: RestangularHeaders,
-  ) {
-    let route: string;
-    let params: RestangularParams;
-    if (!this.builder.isCollection && typeof routeOrParams === 'string') {
-      route = routeOrParams;
-      params = paramsOrHeaders as RestangularParams;
-      return this.all(route).getList(params, headers);
-    }
-    params = routeOrParams;
+    params = paramsOrId as HttpParams;
     headers = paramsOrHeaders as HttpHeaders;
     const req = new RestangularRequest('GET', this.builder.pointer, {params, headers});
     return this.handler.handle(req);
   }
 
-  post<T>(
-    body: T,
-    params?: RestangularParams,
-    headers?: RestangularHeaders,
+
+  getList<T>(params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
+  getList<T>(route: string, params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
+  getList(
+    routeOrParams?,
+    paramsOrHeaders?,
+    headers?,
   ) {
+    let route: string;
+    let params: HttpParams;
+    if (!this.isCollection && typeof routeOrParams === 'string') {
+      route = routeOrParams;
+      params = paramsOrHeaders as HttpParams;
+      return this.all(route).getList(params, headers);
+    }
+    params = routeOrParams as HttpParams;
+    headers = paramsOrHeaders as HttpHeaders;
+    const req = new RestangularRequest('GET', this.builder.pointer, {params, headers});
+    return this.handler.handle(req);
+  }
+
+  post<T>(body: T, params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
+  post<T>(subElement: string, body: T, params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
+  post(
+    subElementOrBody,
+    bodyOrParams,
+    paramsOrHeaders?,
+    headers?,
+  ) {
+    let subElement: string;
+    let body: any;
+    let params: HttpParams;
+    if (!this.isCollection) {
+      subElement = subElementOrBody as string;
+      body = bodyOrParams as HttpParams;
+      params = bodyOrParams as HttpParams;
+      return this.all(subElement).post(body, params, headers);
+    }
+    body = subElementOrBody;
+    params = bodyOrParams as HttpParams;
+    headers = paramsOrHeaders as HttpParams;
     const req = new RestangularRequest('POST', this.builder.pointer, body, {params, headers});
     return this.handler.handle(req);
   }
 
+  put<T>(params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
+  put<T>(index: number, params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
   put<T>(
-    body,
-    params?,
+    indexOrParams?,
+    paramsOrHeaders?,
     headers?,
   ) {
-    const req = new RestangularRequest('PUT', this.builder.pointer, body, {params, headers});
+    let params: HttpParams;
+    if (this.isCollection) {
+      throw new Error('Could not perform PUT request on resource pointer');
+    }
+    params = indexOrParams as HttpParams;
+
+    const req = new RestangularRequest('PUT', this.builder.pointer, {params, headers});
     return this.handler.handle(req);
   }
 
