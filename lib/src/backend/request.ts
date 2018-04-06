@@ -166,7 +166,7 @@ export class RestangularRequest<T> {
   }
 
   toHttpRequest() {
-    return new HttpRequest<T>(this.method as any, [this.baseUrl, ...this.pointer].join('/'), this.body, {
+    return new HttpRequest<T>(this.method as any, this.pointer.join('/'), this.body, {
       headers: this.headers,
       reportProgress: this.reportProgress,
       params: this.params,
