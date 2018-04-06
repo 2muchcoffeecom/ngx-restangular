@@ -12,11 +12,11 @@ export class RestangularBuilder {
    *
    * Id of current Entity, if present this is pointer to entity.
    */
-  protected id: string | number;
+  public readonly id: string | number;
   /**
    * Resource of current Entity, if present this is pointer to resource.
    */
-  protected route: string;
+  public readonly route: string;
 
   /**
    * Parent builder used to form complete pointer.
