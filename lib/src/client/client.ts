@@ -3,7 +3,6 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { RestangularHandler } from '../handler';
 import { RestangularBuilder } from '../builder';
 import { RestangularRequest } from '../backend';
-import { RestangularHeaders, RestangularParams } from '../interfaces';
 import { Observable } from 'rxjs/Observable';
 
 
@@ -20,6 +19,14 @@ export class RestangularClient {
 
   get isCollection() {
     return this.builder.isCollection;
+  }
+
+  get id() {
+    return this.builder.id;
+  }
+
+  get route() {
+    return this.builder.route;
   }
 
   get fromServer() {
@@ -46,7 +53,7 @@ export class RestangularClient {
     headers?,
   ) {
     let id: string;
-    let params: RestangularParams;
+    let params: HttpParams;
     if (this.isCollection) {
       id = paramsOrId as string;
       params = paramsOrHeaders as HttpParams;
@@ -118,13 +125,14 @@ export class RestangularClient {
         params = paramsOrHeaders as HttpParams;
         return (this[index] as RestangularClient).put(params, headers);
       }
+      case !this.isCollection && typeof this.id !== 'undefined':
       case this.isCollection && !this.fromServer: {
-        throw new Error('Could not perform PUT request on collection. Should be Entity pointer & returned from server');
+        throw new Error('Could not perform PUT request on collection. Should be Entity pointer');
       }
       default: {
         params = indexOrParams as HttpParams;
         headers = paramsOrHeaders as HttpHeaders;
-        const req = new RestangularRequest('PUT', this.builder.pointer, this, {params, headers});
+        const req = new RestangularRequest('PUT', this.builder.pointer, {}, {params, headers});
         return this.handler.handle(req);
       }
     }
