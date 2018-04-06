@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 
 export class RestangularClient {
 
-  private fromServer: boolean;
+  private _fromServer: boolean;
 
   constructor(
     private builder: RestangularBuilder,
@@ -20,6 +20,10 @@ export class RestangularClient {
 
   get isCollection() {
     return this.builder.isCollection;
+  }
+
+  get fromServer() {
+    return this._fromServer;
   }
 
   one(id: string): RestangularClient;
@@ -107,27 +111,37 @@ export class RestangularClient {
     headers?,
   ) {
     let params: HttpParams;
-    if (this.isCollection) {
-      throw new Error('Could not perform PUT request on resource pointer');
+    let index: number;
+    switch (true) {
+      case this.isCollection && this.fromServer: {
+        index = indexOrParams as number;
+        params = paramsOrHeaders as HttpParams;
+        return (this[index] as RestangularClient).put(params, headers);
+      }
+      case this.isCollection && !this.fromServer: {
+        throw new Error('Could not perform PUT request on collection. Should be Entity pointer & returned from server');
+      }
+      default: {
+        params = indexOrParams as HttpParams;
+        headers = paramsOrHeaders as HttpHeaders;
+        const req = new RestangularRequest('PUT', this.builder.pointer, this, {params, headers});
+        return this.handler.handle(req);
+      }
     }
-    params = indexOrParams as HttpParams;
-
-    const req = new RestangularRequest('PUT', this.builder.pointer, {params, headers});
-    return this.handler.handle(req);
   }
 
   patch<T>(
-    body,
-    params?,
-    headers?,
+    object: any,
+    params?: HttpParams,
+    headers?: HttpHeaders,
   ) {
-    const req = new RestangularRequest('PATCH', this.builder.pointer, body, {params, headers});
+    const req = new RestangularRequest('PATCH', this.builder.pointer, object, {params, headers});
     return this.handler.handle(req);
   }
 
   delete<T>(
-    params?,
-    headers?,
+    params?: HttpParams,
+    headers?: HttpHeaders,
   ) {
     const req = new RestangularRequest('DELETE', this.builder.pointer, {params, headers});
     return this.handler.handle(req);
