@@ -13,7 +13,7 @@ export class DefaultHeadersInterceptor implements RestangularInterceptor {
     private config: RestangularConfig,
   ) {}
 
-  intercept(req: RestangularRequest<any>, next: RestangularBaseHandler) {
+  intercept(req: any, next: RestangularBaseHandler) {
     let setHeaders: {[name: string]: string};
     if (this.config.defaultHeaders) {
       if (this.config.defaultHeaders instanceof HttpHeaders) {

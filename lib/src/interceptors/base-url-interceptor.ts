@@ -12,7 +12,7 @@ export class BaseUrlInterceptor implements RestangularInterceptor {
     private config: RestangularConfig,
   ) {}
 
-  intercept(req: RestangularRequest<any>, next: RestangularBaseHandler) {
+  intercept(req: any, next: RestangularBaseHandler) {
     if (this.config.baseUrl) {
       req = req.clone({baseUrl: this.config.baseUrl});
     }

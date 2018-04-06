@@ -1,9 +1,10 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 
+import { Observable } from 'rxjs/Observable';
+
 import { RestangularHandler } from '../handler';
 import { RestangularBuilder } from '../builder';
 import { RestangularRequest } from '../backend';
-import { Observable } from 'rxjs/Observable';
 
 
 export class RestangularClient {
@@ -61,7 +62,10 @@ export class RestangularClient {
     }
     params = paramsOrId as HttpParams;
     headers = paramsOrHeaders as HttpHeaders;
-    const req = new RestangularRequest('GET', this.builder.pointer, {params, headers});
+
+    const method = 'GET';
+    const builder = this.builder;
+    const req = new RestangularRequest({method, builder, params, headers});
     return this.handler.handle(req);
   }
 
@@ -82,7 +86,10 @@ export class RestangularClient {
     }
     params = routeOrParams as HttpParams;
     headers = paramsOrHeaders as HttpHeaders;
-    const req = new RestangularRequest('GET', this.builder.pointer, {params, headers});
+
+    const method = 'GET';
+    const builder = this.builder;
+    const req = new RestangularRequest({method, builder, params, headers});
     return this.handler.handle(req);
   }
 
@@ -106,7 +113,10 @@ export class RestangularClient {
     body = subElementOrBody;
     params = bodyOrParams as HttpParams;
     headers = paramsOrHeaders as HttpParams;
-    const req = new RestangularRequest('POST', this.builder.pointer, body, {params, headers});
+
+    const method = 'POST';
+    const builder = this.builder;
+    const req = new RestangularRequest({method, builder, body, params, headers});
     return this.handler.handle(req);
   }
 
@@ -132,7 +142,11 @@ export class RestangularClient {
       default: {
         params = indexOrParams as HttpParams;
         headers = paramsOrHeaders as HttpHeaders;
-        const req = new RestangularRequest('PUT', this.builder.pointer, {}, {params, headers});
+
+
+        const method = 'PUT';
+        const builder = this.builder;
+        const req = new RestangularRequest({method, builder, body: {}, params, headers});
         return this.handler.handle(req);
       }
     }
@@ -143,7 +157,9 @@ export class RestangularClient {
     params?: HttpParams,
     headers?: HttpHeaders,
   ) {
-    const req = new RestangularRequest('PATCH', this.builder.pointer, object, {params, headers});
+    const method = 'PATCH';
+    const builder = this.builder;
+    const req = new RestangularRequest({method, builder, params, headers});
     return this.handler.handle(req);
   }
 
@@ -151,7 +167,10 @@ export class RestangularClient {
     params?: HttpParams,
     headers?: HttpHeaders,
   ) {
-    const req = new RestangularRequest('DELETE', this.builder.pointer, {params, headers});
+
+    const method = 'DELETE';
+    const builder = this.builder;
+    const req = new RestangularRequest({method, builder, params, headers});
     return this.handler.handle(req);
   }
 

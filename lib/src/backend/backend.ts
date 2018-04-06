@@ -4,17 +4,18 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
-export abstract class RestangularBackend {
-  abstract handle(req: RestangularRequest<any>): Observable<HttpEvent<any>>;
-}
+// export abstract class RestangularBackend {
+//   abstract handle(req: RestangularRequest<any>): Observable<HttpEvent<any>>;
+// }
 
-@Injectable()
-export class RestangularHttpBackend implements RestangularBackend {
-
-  constructor(private http: HttpBackend) {
-  }
-
-  handle(req: RestangularRequest<any>): Observable<HttpEvent<any>> {
-    return this.http.handle(req.toHttpRequest());
-  }
-}
+// TODO: Uncomment if it will be needed later
+// @Injectable()
+// export class RestangularHttpBackend implements RestangularBackend {
+//
+//   constructor(private http: HttpBackend) {
+//   }
+//
+//   handle(req: RestangularRequest<any>): Observable<HttpEvent<any>> {
+//     return this.http.handle(req);
+//   }
+// }

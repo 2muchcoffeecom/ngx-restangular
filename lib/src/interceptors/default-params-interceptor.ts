@@ -13,7 +13,7 @@ export class DefaultParamsInterceptor implements RestangularInterceptor {
     private config: RestangularConfig,
   ) {}
 
-  intercept(req: RestangularRequest<any>, next: RestangularBaseHandler) {
+  intercept(req: any, next: RestangularBaseHandler) {
     let setParams: {[name: string]: string};
     if (this.config.defaultParams) {
       if (this.config.defaultParams instanceof HttpParams) {

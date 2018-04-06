@@ -1,27 +1,32 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpBackend, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { filter } from 'rxjs/operators/filter';
 
 import { RestangularBaseHandler } from './handler';
-import { RestangularBackend, RestangularRequest } from '../backend';
-import { RESTANGULAR_INTERCEPTORS, RestangularInterceptorHandler } from '../interceptor';
+import { RestangularRequest } from '../backend';
 
 @Injectable()
 export class RestangularInterceptingHandler implements RestangularBaseHandler {
-  private chain: RestangularBaseHandler;
+
   constructor(
-    private backend: RestangularBackend,
+    private backend: HttpBackend,
     private injector: Injector
   ) {
   }
 
-  handle<T>(req: RestangularRequest<T>) {
-    const interceptors = this.injector.get(RESTANGULAR_INTERCEPTORS, []);
+  handle<T>({method, builder, body, params, headers}: RestangularRequest<T>) {
+    const url = builder.pointer.join('/');
+    const httpRequest = new HttpRequest(
+      method,
+      url,
+      body,
+      {
+        params,
+        headers,
+      });
 
-    this.chain = interceptors.reduceRight((next, interceptor) => new RestangularInterceptorHandler(next, interceptor), this.backend);
-
-    return this.chain.handle(req.clone({setParams: req.params, setHeaders: req.headers}))
+    return this.backend.handle(httpRequest)
     .pipe(
       filter(ev => ev instanceof HttpResponse)
     );
