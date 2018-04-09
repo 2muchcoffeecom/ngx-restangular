@@ -22,7 +22,7 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
     this.injectConfig();
 
     const url = this.getNormalizedUrl(builder.pointer);
-    debugger;
+
     const httpRequest = new HttpRequest(
       method,
       url,
