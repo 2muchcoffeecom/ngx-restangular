@@ -1,6 +1,5 @@
-import { HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { addToHttpHeaders, addToHttpParams, toHttpHeaders, toHttpParams } from '../utils/request-utils';
 import { RestangularBuilder } from '../builder';
 
 function mightHaveBody(method: string): boolean {
@@ -14,15 +13,6 @@ function mightHaveBody(method: string): boolean {
     default:
       return true;
   }
-}
-
-export interface RestangularRequestOptions {
-  baseUrl?: string;
-  headers?: HttpHeaders | string | { [key: string]: string | string[] };
-  reportProgress?: boolean;
-  withCredentials?: boolean;
-  responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
-  params?: HttpParams | string | { [key: string]: string | string[] };
 }
 
 export class RestangularRequest<T> {
