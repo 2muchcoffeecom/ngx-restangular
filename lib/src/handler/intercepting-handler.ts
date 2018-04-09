@@ -70,9 +70,10 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
   }
 
   private normalizeUrl(url: string) {
-    const parts = /((?:http[s]?:)?\/\/)?(.*)?/.exec(url);
-    parts[2] = parts[2].replace(/[\\\/]+/g, '/');
-    return (typeof parts[1] !== 'undefined') ? parts[1] + parts[2] : parts[2];
+    const result = /((?:http[s]?:)?\/\/)?(.*)?/.exec(url);
+    const schemeWithSlash = result[1];
+    const restPart = result[2].replace(/[\\\/]+/g, '/');
+    return (typeof schemeWithSlash !== 'undefined') ? schemeWithSlash + restPart : restPart;
   }
 
   private escapeSlash(url: string = '') {
