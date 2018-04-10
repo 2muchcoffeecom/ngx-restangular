@@ -1,12 +1,12 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpBackend, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpBackend, HttpHeaders, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { filter } from 'rxjs/operators/filter';
 
 import { RestangularBaseHandler } from './handler';
 import { RestangularRequest } from '../backend';
 import { RestangularConfig } from '../config';
-import { combineHeaders, escapeSlash, isHttpHeaders, normalizeUrl } from '../utils';
+import { combineHeaders, combineParams, escapeSlash, isHttpHeaders, isHttpParams, normalizeUrl } from '../utils';
 
 @Injectable()
 export class RestangularInterceptingHandler implements RestangularBaseHandler {
@@ -19,12 +19,19 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
   ) {
   }
 
-  handle<T>({method, builder, body, params, headers = new HttpHeaders()}: RestangularRequest<T>) {
+  handle<T>({
+    method,
+    builder,
+    body,
+    params = new HttpParams(),
+    headers = new HttpHeaders()
+  }: RestangularRequest<T>) {
     this.injectConfig();
 
     const url = this.getNormalizedUrl(builder.pointer);
 
     headers = this.extendHeadersWithDefault(headers);
+    params = this.extendParamsWithDefault(params);
 
     const httpRequest = new HttpRequest(
       method,
@@ -72,7 +79,7 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
     return normalizeUrl(this.getUrl(pointer));
   }
 
-  private extendHeadersWithDefault(headers: HttpHeaders) {
+  private extendHeadersWithDefault(headers: HttpHeaders): HttpHeaders {
     const defaultHeaders = this.config.defaultHeaders;
     if (headers && !isHttpHeaders(headers)) {
       throw new Error('headers must be instance of HttpHeaders');
@@ -84,5 +91,19 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
       return combineHeaders(defaultHeaders, headers, this.config.appendHeaders);
     }
     return headers || new HttpHeaders();
+  }
+
+  private extendParamsWithDefault(params: HttpParams): HttpParams {
+    const defaultParams = this.config.defaultParams;
+    if (params && !isHttpParams(params)) {
+      throw new Error('params must be instance of HttpParams');
+    }
+    if (defaultParams && !isHttpParams(defaultParams)) {
+      throw new Error('Configuration defaultParams must be instance of HttpParams');
+    }
+    if (defaultParams && isHttpParams(defaultParams)) {
+      return combineParams(defaultParams, params, this.config.appendParams);
+    }
+    return params || new HttpParams();
   }
 }
