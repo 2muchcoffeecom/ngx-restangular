@@ -1,18 +1,34 @@
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 
-export function appendHeaders(
+export function combineHeaders(
   headers: HttpHeaders = new HttpHeaders(),
-  headersToAppend: HttpHeaders = new HttpHeaders(),
+  headersToCombine: HttpHeaders = new HttpHeaders(),
   append?: boolean
 ) {
-  return headersToAppend.keys().reduce(
+  return combineMaps(headers, headersToCombine, append);
+}
+
+export function combineParams(
+  params: HttpParams = new HttpParams(),
+  paramsToCombine: HttpParams = new HttpParams(),
+  append?: boolean
+) {
+  return combineMaps(params, paramsToCombine, append);
+}
+
+function combineMaps(
+  map: any,
+  mapToCombine: any,
+  append?: boolean
+) {
+  return mapToCombine.keys().reduce(
     (accHeaders, key) => {
       if (append) {
-        return accHeaders.append(key, headersToAppend.get(key));
+        return accHeaders.append(key, map.get(key));
       }
-      return accHeaders.set(key, headersToAppend.get(key));
+      return accHeaders.set(key, map.get(key));
     },
-    headers
+    map
   );
 }
 

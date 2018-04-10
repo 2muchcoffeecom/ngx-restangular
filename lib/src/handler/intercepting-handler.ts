@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators/filter';
 import { RestangularBaseHandler } from './handler';
 import { RestangularRequest } from '../backend';
 import { RestangularConfig } from '../config';
-import { appendHeaders, escapeSlash, isHttpHeaders, normalizeUrl } from '../utils';
+import { combineHeaders, escapeSlash, isHttpHeaders, normalizeUrl } from '../utils';
 
 @Injectable()
 export class RestangularInterceptingHandler implements RestangularBaseHandler {
@@ -81,7 +81,7 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
       throw new Error('Configuration defaultHeaders must be instance of HttpHeaders');
     }
     if (defaultHeaders && isHttpHeaders(defaultHeaders)) {
-      return appendHeaders(defaultHeaders, headers, this.config.appendHeaders);
+      return combineHeaders(defaultHeaders, headers, this.config.appendHeaders);
     }
     return headers || new HttpHeaders();
   }
