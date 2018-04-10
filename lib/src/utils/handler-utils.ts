@@ -51,5 +51,5 @@ export function isHttpHeaders(headers) {
 }
 
 export function isHttpParams(headers) {
-  return headers instanceof HttpHeaders;
+  return headers instanceof HttpParams;
 }
