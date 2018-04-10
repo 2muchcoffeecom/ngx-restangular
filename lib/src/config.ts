@@ -7,14 +7,24 @@ export abstract class RestangularConfig {
   baseUrl?: string;
 
   /**
-   * Headers that would be appended for every request.
+   * flag that response for set or append default headers
    */
-  defaultHeaders?: HttpHeaders | {[name: string]: string | string[]};
+  appendHeaders?: boolean;
 
   /**
-   * Params that would be appended for every request.
+   * Headers that would be appended or set for every request.
    */
-  defaultParams?: HttpParams | {[name: string]: string | string[]};
+  defaultHeaders?: HttpHeaders;
+
+  /**
+   * flag that response for set or append default params
+   */
+  appendParams?: boolean;
+
+  /**
+   * Params that would be appended or set for every request.
+   */
+  defaultParams?: HttpParams;
 }
 
 export const DefaultRestangularConfig: RestangularConfig = {};
