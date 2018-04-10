@@ -24,9 +24,9 @@ function combineMaps(
   return mapToCombine.keys().reduce(
     (accHeaders, key) => {
       if (append) {
-        return accHeaders.append(key, map.get(key));
+        return accHeaders.append(key, mapToCombine.get(key));
       }
-      return accHeaders.set(key, map.get(key));
+      return accHeaders.set(key, mapToCombine.get(key));
     },
     map
   );
