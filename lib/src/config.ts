@@ -1,4 +1,5 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { RestangularFieldsMap } from './mapping';
 
 export abstract class RestangularConfig {
   /**
@@ -25,6 +26,13 @@ export abstract class RestangularConfig {
    * Params that would be appended or set for every request.
    */
   defaultParams?: HttpParams;
+
+  /**
+   * fields that used by restangular
+   */
+  restangularFields?: RestangularFieldsMap;
 }
 
-export const DefaultRestangularConfig: RestangularConfig = {};
+export const DefaultRestangularConfig: RestangularConfig = {
+  restangularFields: new RestangularFieldsMap({}),
+};
