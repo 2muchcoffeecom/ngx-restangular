@@ -12,11 +12,11 @@ export class RestangularBuilder {
    *
    * Id of current Entity, if present this is pointer to entity.
    */
-  public readonly id: string | number;
+  public id: string | number;
   /**
    * Resource of current Entity, if present this is pointer to resource.
    */
-  public readonly route: string;
+  public route: string;
 
   /**
    * Parent builder used to form complete pointer.
@@ -27,13 +27,19 @@ export class RestangularBuilder {
   /**
    * Private identifier that used to check is it resource pointer or entity.
    */
-  public readonly isCollection: boolean;
+  public isCollection: boolean;
+
+  /**
+   * Field for saving id returned from server or set by restangular
+   */
+  private cannonicalId: string | number;
 
   constructor({id, route, isCollection, parent}: RestangularBuilderOptions) {
     if (!(id || route)) {
       throw new Error('Route or Id must be provided');
     }
     this.id = id;
+    this.cannonicalId = id;
     this.route = route;
     this.isCollection = isCollection;
     this.parent = parent;
@@ -49,6 +55,12 @@ export class RestangularBuilder {
   get pointer() {
     return this.builderArray
     .reduceRight((acc, builder) => [...acc, builder.route, builder.id], [])
+    .filter((route) => !!route);
+  }
+
+  get canonicalPointer() {
+    return this.builderArray
+    .reduceRight((acc, builder) => [...acc, builder.route, builder.cannonicalId], [])
     .filter((route) => !!route);
   }
 
