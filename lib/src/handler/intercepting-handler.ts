@@ -3,15 +3,18 @@ import { HttpBackend, HttpHeaders, HttpParams, HttpRequest, HttpResponse } from 
 
 import { filter } from 'rxjs/operators/filter';
 
-import { RestangularBaseHandler } from './handler';
+import { RestangularHandler } from './handler';
 import { RestangularRequest } from '../backend';
 import { RestangularConfig } from '../config';
 import { combineHeaders, combineParams, escapeSlash, isHttpHeaders, isHttpParams, normalizeUrl } from '../utils';
+import { RestangularFieldsMap } from '../mapping';
 
 @Injectable()
-export class RestangularInterceptingHandler implements RestangularBaseHandler {
+export class RestangularInterceptingHandler implements RestangularHandler {
 
   private config: RestangularConfig;
+
+  public restangularFields: RestangularFieldsMap;
 
   constructor(
     private backend: HttpBackend,
@@ -48,14 +51,14 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
     );
   }
 
-  withConfig(options: any): RestangularBaseHandler {
+  withConfig(options: any) {
     const injector = Injector.create({
       providers: [],
     });
     return new RestangularInterceptingHandler(this.backend, injector);
   }
 
-  extendConfig(options: any): RestangularBaseHandler {
+  extendConfig(options: any) {
     const injector = Injector.create({
       providers: [],
       parent: this.injector,
@@ -66,6 +69,7 @@ export class RestangularInterceptingHandler implements RestangularBaseHandler {
   private injectConfig() {
     if (!this.config) {
       this.config = this.injector.get(RestangularConfig);
+      this.restangularFields = this.config.restangularFields || new RestangularFieldsMap({});
     }
   }
 
