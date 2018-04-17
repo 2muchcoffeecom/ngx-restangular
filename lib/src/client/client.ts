@@ -1,4 +1,4 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -6,6 +6,7 @@ import { RestangularHandler } from '../handler';
 import { RestangularBuilder } from '../builder';
 import { RestangularRequest } from '../backend';
 import { extendClientWithId } from '../utils';
+import { RestangularFieldsMap } from '../mapping';
 
 
 export class RestangularClient {
@@ -20,7 +21,7 @@ export class RestangularClient {
     extendClientWithId(this, this.restangularFieldsMap);
   }
 
-  get restangularFieldsMap() {
+  get restangularFieldsMap(): RestangularFieldsMap {
     return this.handler.restangularFields;
   }
 
@@ -162,11 +163,11 @@ export class RestangularClient {
     object: any,
     params?: HttpParams,
     headers?: HttpHeaders,
-  ) {
+  ): Observable<HttpEvent<T>> {
     const method = 'PATCH';
     const builder = this.builder;
-    const req = new RestangularRequest({method, builder, params, headers});
-    return this.handler.handle(req);
+    const req = new RestangularRequest<T>({method, builder, params, headers});
+    return this.handler.handle<T>(req);
   }
 
   delete<T>(
