@@ -24,7 +24,7 @@
     "build:min": "uglifyjs dist/bundles/ngx-restangular.umd.js -c -m -o dist/bundles/ngx-restangular.umd.min.js",
     "copy:npm-assets": "npm run copy:package.json && npm run copy:readme",
     "copy:package.json": "copyfiles package.json dist",
-    "copy:declarations": "copyfiles -u 3 ./tmp/esm2015/src/**/*.d.ts dist/src && copyfiles -u 2 tmp/esm2015/*.d.ts dist",
+    "copy:declarations": "copyfiles -u 3 './tmp/esm2015/src/**/*.d.ts' dist/src && copyfiles -u 2 tmp/esm2015/*.d.ts dist",
     "copy:metadata": "copyfiles -u 2 ./tmp/esm2015/*.json dist",
     "copy:readme": "copyfiles README.md dist"
   },
