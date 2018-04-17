@@ -2,11 +2,11 @@ import { HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 
-import { RestangularHandler } from '../handler';
-import { RestangularBuilder } from '../builder';
-import { RestangularRequest } from '../backend';
-import { extendClientWithId } from '../utils';
-import { RestangularFieldsMap } from '../mapping';
+import { RestangularHandler } from './handler';
+import { RestangularBuilder } from './builder';
+import { RestangularRequest } from './request';
+import { extendClientWithId } from './utils/client';
+import { RestangularFieldsMap } from './mapping';
 
 
 export class RestangularClient {

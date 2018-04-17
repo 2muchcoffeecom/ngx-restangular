@@ -1,7 +1,8 @@
 import { Injectable, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-import { RestangularHandler, RestangularInterceptingHandler } from './handler';
+import { RestangularHandler } from './handler';
+import { RestangularInterceptingHandler } from './intercepting-handler';
 import { Restangular } from './restangular';
 import { DefaultRestangularConfig, RestangularConfig } from './config';
 import { RestangularClient } from './client';

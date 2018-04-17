@@ -1,6 +1,6 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { RestangularBuilder } from '../builder';
+import { RestangularBuilder } from './builder';
 
 function mightHaveBody(method: string): boolean {
   switch (method) {

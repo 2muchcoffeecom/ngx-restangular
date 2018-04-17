@@ -4,10 +4,10 @@ import { HttpBackend, HttpEvent, HttpHeaders, HttpParams, HttpRequest, HttpRespo
 import { filter } from 'rxjs/operators/filter';
 
 import { RestangularHandler } from './handler';
-import { RestangularRequest } from '../backend';
-import { RestangularConfig } from '../config';
-import { combineHeaders, combineParams, escapeSlash, isHttpHeaders, isHttpParams, normalizeUrl } from '../utils';
-import { RestangularFieldsMap } from '../mapping';
+import { RestangularRequest } from './request';
+import { RestangularConfig } from './config';
+import { combineHeaders, combineParams, escapeSlash, isHttpHeaders, isHttpParams, normalizeUrl } from './utils/handler';
+import { RestangularFieldsMap } from './mapping';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
