@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { RestangularHandler } from '../handler';
 import { RestangularBuilder } from '../builder';
 import { RestangularRequest } from '../backend';
+import { extendClientWithId } from '../utils';
 
 
 export class RestangularClient {
@@ -16,14 +17,15 @@ export class RestangularClient {
     private handler: RestangularHandler,
     private parent?: RestangularClient,
   ) {
+    extendClientWithId(this, this.restangularFieldsMap);
+  }
+
+  get restangularFieldsMap() {
+    return this.handler.restangularFields;
   }
 
   get isCollection() {
     return this.builder.isCollection;
-  }
-
-  get id() {
-    return this.builder.id;
   }
 
   get route() {
@@ -32,6 +34,10 @@ export class RestangularClient {
 
   get fromServer() {
     return this._fromServer;
+  }
+
+  private get restangularId() {
+    return this.builder.id;
   }
 
   one(id: string): RestangularClient;
@@ -135,7 +141,7 @@ export class RestangularClient {
         params = paramsOrHeaders as HttpParams;
         return (this[index] as RestangularClient).put(params, headers);
       }
-      case !this.isCollection && typeof this.id !== 'undefined':
+      case !this.isCollection && typeof this.restangularId !== 'undefined':
       case this.isCollection && !this.fromServer: {
         throw new Error('Could not perform PUT request on collection. Should be Entity pointer');
       }
