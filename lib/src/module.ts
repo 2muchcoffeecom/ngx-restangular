@@ -1,10 +1,9 @@
 import { Injectable, NgModule } from '@angular/core';
-import { HttpBackend, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { RestangularHandler, RestangularInterceptingHandler } from './handler';
 import { Restangular } from './restangular';
 import { DefaultRestangularConfig, RestangularConfig } from './config';
-import { configInterceptors } from './interceptors';
 import { RestangularClient } from './client';
 import { RestangularBuilder } from './builder';
 
@@ -45,7 +44,6 @@ export class InitialRestangular {
     HttpClientModule
   ],
   providers: [
-    configInterceptors,
     {provide: RestangularConfig, useValue: DefaultRestangularConfig},
     {provide: Restangular, useClass: InitialRestangular},
     {provide: RestangularHandler, useClass: RestangularInterceptingHandler},
