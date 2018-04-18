@@ -7,7 +7,7 @@ export function extendClientWithId(object, properties: RestangularFieldsMap) {
   const setIdToBuilder = function(value) {
     this.builder.id = value;
   };
-  Object.defineProperty(object, 'id', {
+  Object.defineProperty(object, properties.id, {
     get: getIdFromBuilder.bind(object),
     set: setIdToBuilder.bind(object),
     enumerable: true,
