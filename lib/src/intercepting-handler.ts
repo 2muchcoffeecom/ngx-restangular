@@ -1,14 +1,13 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpBackend, HttpEvent, HttpHeaders, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpBackend, HttpEvent, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 
-import { filter } from 'rxjs/operators/filter';
+import { Observable } from 'rxjs/Observable';
 
 import { RestangularHandler } from './handler';
 import { RestangularRequest } from './request';
 import { RestangularConfig } from './config';
-import { combineHeaders, combineParams, escapeSlash, isHttpHeaders, isHttpParams, normalizeUrl } from './utils/handler';
 import { RestangularFieldsMap } from './mapping';
-import { Observable } from 'rxjs/Observable';
+import { combineHeaders, combineParams, escapeSlash, filterResponse, isHttpHeaders, isHttpParams, normalizeUrl } from './utils/handler';
 
 @Injectable()
 export class RestangularInterceptingHandler implements RestangularHandler {
@@ -21,6 +20,7 @@ export class RestangularInterceptingHandler implements RestangularHandler {
     private backend: HttpBackend,
     private injector: Injector,
   ) {
+    this.injectConfig();
   }
 
   handle<T>({
@@ -30,7 +30,6 @@ export class RestangularInterceptingHandler implements RestangularHandler {
     params = new HttpParams(),
     headers = new HttpHeaders()
   }: RestangularRequest<T>): Observable<HttpEvent<T>> {
-    this.injectConfig();
 
     const url = this.getNormalizedUrl(builder.pointer);
 
@@ -48,7 +47,7 @@ export class RestangularInterceptingHandler implements RestangularHandler {
 
     return this.backend.handle(httpRequest)
     .pipe(
-      filter(ev => ev instanceof HttpResponse)
+      filterResponse(),
     );
   }
 

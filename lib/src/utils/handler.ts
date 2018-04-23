@@ -1,4 +1,5 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { filter } from 'rxjs/operators/filter';
 
 export function combineHeaders(
   headers: HttpHeaders = new HttpHeaders(),
@@ -52,4 +53,8 @@ export function isHttpHeaders(headers) {
 
 export function isHttpParams(headers) {
   return headers instanceof HttpParams;
+}
+
+export function filterResponse<T>() {
+  return filter<HttpResponse<T>>((ev) => ev instanceof HttpResponse);
 }
