@@ -14,3 +14,12 @@ export function extendClientWithId(object, properties: RestangularFieldsMap) {
   });
   return object;
 }
+
+export function extendWithFields(objectToExtend, objectExtendWith = {}) {
+  if (!objectExtendWith) {
+    return objectToExtend;
+  }
+  const keys = Object.keys(objectExtendWith);
+  keys.forEach((key) => objectToExtend[key] = objectExtendWith[key]);
+  return objectToExtend;
+}
