@@ -1,11 +1,13 @@
-import { HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
+import 'rxjs/add/observable/from';
 
 import { RestangularHandler } from './handler';
 import { RestangularBuilder } from './builder';
 import { RestangularRequest } from './request';
-import { extendClientWithId } from './utils/client';
+import { extendClientWithId, extendWithFields } from './utils/client';
 import { RestangularFieldsMap } from './mapping';
 
 
@@ -45,12 +47,12 @@ export class RestangularClient {
   one(route: string, id: string): RestangularClient;
   one(routeOrId, id?) {
     const builder = this.builder.one(routeOrId, id);
-    return new RestangularClient(builder, this.handler);
+    return new RestangularClient(builder, this.handler, this);
   }
 
   all(route: string): RestangularClient {
     const builder = this.builder.all(route);
-    return new RestangularClient(builder, this.handler);
+    return new RestangularClient(builder, this.handler, this);
   }
 
   get<T>(params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
@@ -73,7 +75,10 @@ export class RestangularClient {
     const method = 'GET';
     const builder = this.builder;
     const req = new RestangularRequest({method, builder, params, headers});
-    return this.handler.handle(req);
+    const responseClient = this.clone();
+    return this.handler.handle(req).pipe(
+      this.restangularize(responseClient),
+    );
   }
 
 
@@ -97,7 +102,10 @@ export class RestangularClient {
     const method = 'GET';
     const builder = this.builder;
     const req = new RestangularRequest({method, builder, params, headers});
-    return this.handler.handle(req);
+    const responseClient = this.clone();
+    return this.handler.handle(req).pipe(
+      this.restangularizeCollection(responseClient)
+    );
   }
 
   post<T>(body: T, params?: HttpParams, headers?: HttpHeaders): Observable<RestangularClient & T>;
@@ -189,5 +197,36 @@ export class RestangularClient {
   extendConfig(options: any) {
     const handler = this.handler.extendConfig(options);
     return new RestangularClient(this.builder, handler);
+  }
+
+  clone() {
+    const clonedEntity = new RestangularClient(this.builder, this.handler, this.parent);
+    return clonedEntity;
+  }
+
+  private restangularizeCollection(restangularClient: RestangularClient) {
+    return (observable: Observable<any>) => observable.pipe(
+      map((response: HttpResponse<any>) => {
+        const collection = response.body;
+        if (!Array.isArray(collection)) {
+          throw new Error('response from collection pointer should be an Array');
+        }
+        const restangularizedCollection = collection.map((element) => {
+          const clonedClient = restangularClient.one(element.id);
+          return extendWithFields(clonedClient, element);
+        });
+        return extendWithFields(restangularClient.clone(), restangularizedCollection);
+      })
+    );
+  }
+
+  private restangularize(restangularClient: RestangularClient) {
+    const clonedClient = restangularClient.clone();
+    return (observable: Observable<any>) => observable.pipe(
+      map((response: HttpResponse<any>) => {
+        const object = response.body;
+        return extendWithFields(clonedClient, object);
+      })
+    );
   }
 }
