@@ -22,8 +22,8 @@ import {
   includes
 } from 'lodash';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/filter';
+import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { RESTANGULAR } from './ngx-restangular.config';
 import { RestangularHttp } from './ngx-restangular-http';
@@ -264,7 +264,7 @@ function providerConfig($http) {
 
       // Promises
       function restangularizeResponse(subject, isCollection, valueToFill) {
-        return subject.filter(res => res);
+        return subject.pipe(filter(res => !!res));
       }
 
       function resolvePromise(subject, response, data, filledValue) {
