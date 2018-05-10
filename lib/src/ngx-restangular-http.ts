@@ -4,7 +4,7 @@ import { HttpBackend, HttpErrorResponse, HttpRequest, HttpResponse } from '@angu
 import { throwError } from 'rxjs';
 
 import { RestangularHelper } from './ngx-restangular-helper';
-import {catchError, filter, map} from 'rxjs/operators';
+import { catchError, filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class RestangularHttp {
