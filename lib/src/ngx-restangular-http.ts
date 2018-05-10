@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpBackend, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
 
-import { throwError } from 'rxjs';
+import { throwError, Observable } from 'rxjs';
 
 import { RestangularHelper } from './ngx-restangular-helper';
 import { catchError, filter, map } from 'rxjs/operators';
+import {HttpEvent} from '@angular/common/http/src/response';
 
 @Injectable()
 export class RestangularHttp {
@@ -12,13 +13,13 @@ export class RestangularHttp {
   constructor(public http: HttpBackend) {
   }
 
-  createRequest(options) {
+  createRequest(options): Observable<HttpEvent<any>> {
     const request = RestangularHelper.createRequest(options);
 
     return this.request(request);
   }
 
-  request(request: HttpRequest<any>) {
+  request(request: HttpRequest<any>): Observable<HttpEvent<any>> {
     return this.http.handle(request)
     .pipe(
       filter(event => event instanceof HttpResponse),
