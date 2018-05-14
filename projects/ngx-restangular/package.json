@@ -1,0 +1,39 @@
+{
+  "name": "ngx-restangular",
+  "version": "2.3.0-beta.3",
+  "description": "ngx-restangular",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2muchcoffeecom/ngx-restangular.git"
+  },
+  "keywords": [
+    "ng2-rest",
+    "ng2-restangular",
+    "ngx-restangular",
+    "angular2-restangular",
+    "angular4-restangular",
+    "angular2-rest",
+    "angular4-rest",
+    "restangular",
+    "angular 2 restangular",
+    "angular 4 restangular",
+    "angular 2 rest",
+    "angular 4 rest"
+  ],
+  "author": "logvinoleg89 <logvinoleg89@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/2muchcoffeecom/ngx-restangular/issues"
+  },
+  "homepage": "https://github.com/2muchcoffeecom/ngx-restangular#readme",
+  "peerDependencies": {
+    "@angular/core": "^6.0",
+    "@angular/common": "^6.0",
+    "@angular/platform-browser": "^6.0",
+    "core-js": ">=2.4.1",
+    "rxjs": "^6.0"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.62"
+  }
+}
