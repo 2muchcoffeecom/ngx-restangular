@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-restangular Demo App": {
+    "ngx-restangular-demo": {
       "root": "demo",
       "sourceRoot": "demo",
       "projectType": "application",
@@ -11,7 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/demo",
             "index": "demo/index.html",
             "main": "demo/main.ts",
             "tsConfig": "demo/tsconfig.app.json",
@@ -48,18 +48,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-restangular Demo App:build"
+            "browserTarget": "ngx-restangular-demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-restangular Demo App:build:production"
+              "browserTarget": "ngx-restangular-demo:build:production"
             }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "ngx-restangular Demo App:build"
           }
         },
         "lint": {
@@ -74,11 +68,6 @@
           }
         }
       }
-    },
-    "ngx-restangular Demo App-e2e": {
-      "root": "",
-      "sourceRoot": "",
-      "projectType": "application"
     }
   },
   "defaultProject": "ngx-restangular Demo App",
