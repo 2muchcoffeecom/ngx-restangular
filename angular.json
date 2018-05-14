@@ -68,6 +68,46 @@
           }
         }
       }
+    },
+    "ngx-restangular": {
+      "root": "projects/ngx-restangular",
+      "sourceRoot": "projects/ngx-restangular/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-restangular/tsconfig.lib.json",
+            "project": "projects/ngx-restangular/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/ngx-restangular/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-restangular/src/test.ts",
+            "tsConfig": "projects/ngx-restangular/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-restangular/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-restangular/tsconfig.lib.json",
+              "projects/ngx-restangular/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ngx-restangular Demo App",
