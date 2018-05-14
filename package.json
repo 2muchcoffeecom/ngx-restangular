@@ -8,25 +8,7 @@
   "es2015": "./esm2015/ngx-restangular.js",
   "scripts": {
     "start": "ng serve",
-    "prebuild:package": "npm run clean:all",
-    "build:package": "npm run build:esm && npm run build:rollup && npm run build:min",
-    "postbuild:package": "npm run copy:declarations && npm run copy:metadata && npm run copy:npm-assets && npm run clean:tmp",
-    "clean:tmp": "rimraf tmp/",
-    "clean:dist": "rimraf dist/",
-    "clean:all": "npm run clean:dist && npm run clean:tmp",
-    "build:esm": "npm run build:esm2015 && npm run build:esm5",
-    "build:esm2015": "ngc -p ./config/tsconfig-esm2015.json",
-    "build:esm5": "ngc -p ./config/tsconfig-esm5.json",
-    "build:rollup": "rollup -c ./config/rollup.conf.js",
-    "build:fesm2015": "rollup -c ./config/rollup-esm2015.conf.js",
-    "build:fesm5": "rollup -c ./config/rollup-esm5.conf.js",
-    "build:umd": "rollup -c ./config/rollup-umd.conf.js",
-    "build:min": "uglifyjs dist/bundles/ngx-restangular.umd.js -c -m -o dist/bundles/ngx-restangular.umd.min.js",
-    "copy:npm-assets": "npm run copy:package.json && npm run copy:readme",
-    "copy:package.json": "copyfiles package.json dist",
-    "copy:declarations": "copyfiles -u 3 ./tmp/esm2015/src/**/*.d.ts dist/src && copyfiles -u 2 tmp/esm2015/*.d.ts dist",
-    "copy:metadata": "copyfiles -u 2 ./tmp/esm2015/*.json dist",
-    "copy:readme": "copyfiles README.md dist"
+    "build:package": "ng build ngx-restangular"
   },
   "repository": {
     "type": "git",
@@ -68,16 +50,12 @@
     "@types/jasmine": ">=2.5.37",
     "@types/node": "^10.0",
     "codelyzer": "^4.2.1",
-    "copyfiles": "^2.0.0",
     "ng-packagr": "^3.0.0-rc.2",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.57.1",
     "rxjs": "^6.0",
     "tsickle": ">=0.25.5",
     "tslib": "^1.7.1",
     "tslint": "^5.9.1",
     "typescript": "~2.7.2",
-    "uglify-js": "^3.3.16",
     "zone.js": "~0.8.26"
   },
   "peerDependencies": {
@@ -87,15 +65,6 @@
     "core-js": ">=2.4.1",
     "rxjs": "^6.0"
   },
-  "files": [
-    "bundles",
-    "esm5",
-    "esm2015",
-    "src",
-    "ngx-restangular.d.ts",
-    "ngx-restangular.metadata.json",
-    "public_api.d.ts"
-  ],
   "dependencies": {
     "@types/lodash": "^4.14.62"
   }
