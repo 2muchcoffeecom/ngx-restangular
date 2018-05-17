@@ -24,10 +24,10 @@ export class RestangularModule {
     return {
       ngModule: RestangularModule,
       providers: [
-        {provide: CONFIG_OBJ, useValue: [config1,config2]},
+        {provide: CONFIG_OBJ, useValue: [config1, config2]},
         {provide: RESTANGULAR, useFactory: RestangularFactory, deps: [CONFIG_OBJ]},
       ]
-    }
+    };
   }
 
 }

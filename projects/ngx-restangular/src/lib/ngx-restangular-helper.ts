@@ -1,14 +1,14 @@
-import {HttpRequest, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpRequest, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import {assign} from 'core-js/fn/object';
+import { assign } from 'core-js/fn/object';
 
 export class RestangularHelper {
 
   static createRequest(options) {
-    let requestQueryParams = RestangularHelper.createRequestQueryParams(options.params);
-    let requestHeaders = RestangularHelper.createRequestHeaders(options.headers);
-    let methodName = options.method.toUpperCase();
-    let withCredentials = options.withCredentials || false;
+    const requestQueryParams = RestangularHelper.createRequestQueryParams(options.params);
+    const requestHeaders = RestangularHelper.createRequestHeaders(options.headers);
+    const methodName = options.method.toUpperCase();
+    const withCredentials = options.withCredentials || false;
 
     let request = new HttpRequest(
       methodName,
@@ -22,7 +22,7 @@ export class RestangularHelper {
       }
     );
 
-    if(['GET', 'DELETE', 'HEAD', 'JSONP', 'OPTIONS'].indexOf(methodName) >= 0) {
+    if (['GET', 'DELETE', 'HEAD', 'JSONP', 'OPTIONS'].indexOf(methodName) >= 0) {
       request = new HttpRequest(
         methodName,
         options.url,
@@ -32,20 +32,20 @@ export class RestangularHelper {
           responseType: options.responseType,
           withCredentials
         }
-      )
+      );
     }
     return request;
   }
 
   static createRequestQueryParams(queryParams) {
-    let requestQueryParams = assign({}, queryParams);
+    const requestQueryParams = assign({}, queryParams);
     let search: HttpParams = new HttpParams();
 
-    for (let key in requestQueryParams) {
+    for (const key in requestQueryParams) {
       let value: any = requestQueryParams[key];
 
       if (Array.isArray(value)) {
-        value.forEach(function(val){
+        value.forEach(function (val) {
           search = search.append(key, val);
         });
       } else {
@@ -54,15 +54,14 @@ export class RestangularHelper {
         }
         search = search.append(key, value);
       }
-
     }
 
     return search;
   }
 
   static createRequestHeaders(headers) {
-    for (let key in headers) {
-      let value: any = headers[key];
+    for (const key in headers) {
+      const value: any = headers[key];
       if (typeof value === 'undefined') {
         delete headers[key];
       }
