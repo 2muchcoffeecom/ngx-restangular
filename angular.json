@@ -110,7 +110,7 @@
       }
     }
   },
-  "defaultProject": "ngx-restangular Demo App",
+  "defaultProject": "ngx-restangular-demo",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
