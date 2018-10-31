@@ -1,4 +1,4 @@
-import { Injectable, Inject, Injector, Optional } from '@angular/core';
+import { Injectable, Inject, Injector, Optional, Type } from '@angular/core';
 import { assign } from 'core-js/fn/object';
 import {
   map,
@@ -147,7 +147,7 @@ export class Restangular {
       return;
     }
 
-    const arrDI = map(this.configObj.arrServices, (services) => {
+    const arrDI = map(this.configObj.arrServices, (services: Type<any>) => {
       return this.injector.get(services);
     });
 
@@ -299,8 +299,8 @@ function providerConfig($http) {
         elem[config.restangularFields.customOperation] = bind(customFunction, elem);
         const requestMethods = {get: customFunction, delete: customFunction};
         each(['put', 'patch', 'post'], function (name) {
-          requestMethods[name] = function (operation, elem, path, params, headers) {
-            return bind(customFunction, this)(operation, path, params, headers, elem);
+          requestMethods[name] = function (operation, element, path, params, headers) {
+            return bind(customFunction, this)(operation, path, params, headers, element);
           };
         });
         each(requestMethods, function (requestFunc, name) {
@@ -497,8 +497,8 @@ function providerConfig($http) {
             resolvePromise(subject, response, __this, filledArray);
           } else if (every(config.errorInterceptors, function (cb: any) {
 
-              return cb(response, subject, okCallback) !== false;
-            })) {
+            return cb(response, subject, okCallback) !== false;
+          })) {
             // triggered if no callback returns false
             subject.error(response);
           }
@@ -592,8 +592,8 @@ function providerConfig($http) {
           if (response.status === 304 && config.isSafe(operation)) {
             resolvePromise(subject, response, __this, filledObject);
           } else if (every(config.errorInterceptors, function (cb: any) {
-              return cb(response, subject, okCallback) !== false;
-            })) {
+            return cb(response, subject, okCallback) !== false;
+          })) {
             // triggered if no callback returns false
             subject.error(response);
           }

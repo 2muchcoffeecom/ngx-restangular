@@ -19,34 +19,34 @@ import {
   forEach,
 } from 'lodash';
 
-export function RestangularConfigurer(object, config) {
-  object.configuration = config;
+export function RestangularConfigurer(object, configuration) {
+  object.configuration = configuration;
 
   /**
    * Those are HTTP safe methods for which there is no need to pass any data with the request.
    */
   const safeMethods = ['get', 'head', 'options', 'trace', 'getlist'];
-  config.isSafe = function (operation) {
+  configuration.isSafe = function (operation) {
     return includes(safeMethods, operation.toLowerCase());
   };
 
   const absolutePattern = /^https?:\/\//i;
-  config.isAbsoluteUrl = function (string) {
-    return isUndefined(config.absoluteUrl) || isNull(config.absoluteUrl) ?
-    string && absolutePattern.test(string) :
-      config.absoluteUrl;
+  configuration.isAbsoluteUrl = function (string) {
+    return isUndefined(configuration.absoluteUrl) || isNull(configuration.absoluteUrl) ?
+      string && absolutePattern.test(string) :
+      configuration.absoluteUrl;
   };
 
-  config.absoluteUrl = isUndefined(config.absoluteUrl) ? true : config.absoluteUrl;
+  configuration.absoluteUrl = isUndefined(configuration.absoluteUrl) ? true : configuration.absoluteUrl;
   object.setSelfLinkAbsoluteUrl = function (value) {
-    config.absoluteUrl = value;
+    configuration.absoluteUrl = value;
   };
   /**
    * This is the BaseURL to be used with Restangular
    */
-  config.baseUrl = isUndefined(config.baseUrl) ? '' : config.baseUrl;
+  configuration.baseUrl = isUndefined(configuration.baseUrl) ? '' : configuration.baseUrl;
   object.setBaseUrl = function (newBaseUrl) {
-    config.baseUrl = /\/$/.test(newBaseUrl) ?
+    configuration.baseUrl = /\/$/.test(newBaseUrl) ?
       newBaseUrl.substring(0, newBaseUrl.length - 1) :
       newBaseUrl;
     return this;
@@ -55,46 +55,46 @@ export function RestangularConfigurer(object, config) {
   /**
    * Sets the extra fields to keep from the parents
    */
-  config.extraFields = config.extraFields || [];
+  configuration.extraFields = configuration.extraFields || [];
   object.setExtraFields = function (newExtraFields) {
-    config.extraFields = newExtraFields;
+    configuration.extraFields = newExtraFields;
     return this;
   };
 
   /**
    * Some default $http parameter to be used in EVERY call
    **/
-  config.defaultHttpFields = config.defaultHttpFields || {};
+  configuration.defaultHttpFields = configuration.defaultHttpFields || {};
   object.setDefaultHttpFields = function (values) {
-    config.defaultHttpFields = values;
+    configuration.defaultHttpFields = values;
     return this;
   };
 
   /**
    * Always return plain data, no restangularized object
    **/
-  config.plainByDefault = config.plainByDefault || false;
+  configuration.plainByDefault = configuration.plainByDefault || false;
   object.setPlainByDefault = function (value) {
-    config.plainByDefault = value === true ? true : false;
+    configuration.plainByDefault = value === true ? true : false;
     return this;
   };
 
-  config.withHttpValues = function (httpLocalConfig, obj) {
-    return defaults(obj, httpLocalConfig, config.defaultHttpFields);
+  configuration.withHttpValues = function (httpLocalConfig, obj) {
+    return defaults(obj, httpLocalConfig, configuration.defaultHttpFields);
   };
 
-  config.encodeIds = isUndefined(config.encodeIds) ? true : config.encodeIds;
+  configuration.encodeIds = isUndefined(configuration.encodeIds) ? true : configuration.encodeIds;
   object.setEncodeIds = function (encode) {
-    config.encodeIds = encode;
+    configuration.encodeIds = encode;
   };
 
-  config.defaultRequestParams = config.defaultRequestParams || {
-      get: {},
-      post: {},
-      put: {},
-      remove: {},
-      common: {}
-    };
+  configuration.defaultRequestParams = configuration.defaultRequestParams || {
+    get: {},
+    post: {},
+    put: {},
+    remove: {},
+    common: {}
+  };
 
   object.setDefaultRequestParams = function (param1, param2) {
     let methods = [];
@@ -110,54 +110,54 @@ export function RestangularConfigurer(object, config) {
     }
 
     each(methods, function (method) {
-      config.defaultRequestParams[method] = params;
+      configuration.defaultRequestParams[method] = params;
     });
     return this;
   };
 
-  object.requestParams = config.defaultRequestParams;
+  object.requestParams = configuration.defaultRequestParams;
 
-  config.defaultHeaders = config.defaultHeaders || {};
+  configuration.defaultHeaders = configuration.defaultHeaders || {};
   object.setDefaultHeaders = function (headers) {
-    config.defaultHeaders = headers;
-    object.defaultHeaders = config.defaultHeaders;
+    configuration.defaultHeaders = headers;
+    object.defaultHeaders = configuration.defaultHeaders;
     return this;
   };
 
-  object.defaultHeaders = config.defaultHeaders;
+  object.defaultHeaders = configuration.defaultHeaders;
 
 
   /**
    * Method overriders response Method
    **/
-  config.defaultResponseMethod = config.defaultResponseMethod || 'promise';
+  configuration.defaultResponseMethod = configuration.defaultResponseMethod || 'promise';
   object.setDefaultResponseMethod = function (method) {
-    config.defaultResponseMethod = method;
-    object.defaultResponseMethod = config.defaultResponseMethod;
+    configuration.defaultResponseMethod = method;
+    object.defaultResponseMethod = configuration.defaultResponseMethod;
     return this;
   };
-  object.defaultResponseMethod = config.defaultResponseMethod;
+  object.defaultResponseMethod = configuration.defaultResponseMethod;
 
   /**
    * Method overriders will set which methods are sent via POST with an X-HTTP-Method-Override
    **/
-  config.methodOverriders = config.methodOverriders || [];
+  configuration.methodOverriders = configuration.methodOverriders || [];
   object.setMethodOverriders = function (values) {
     const overriders = extend([], values);
-    if (config.isOverridenMethod('delete', overriders)) {
+    if (configuration.isOverridenMethod('delete', overriders)) {
       overriders.push('remove');
     }
-    config.methodOverriders = overriders;
+    configuration.methodOverriders = overriders;
     return this;
   };
 
-  config.jsonp = isUndefined(config.jsonp) ? false : config.jsonp;
+  configuration.jsonp = isUndefined(configuration.jsonp) ? false : configuration.jsonp;
   object.setJsonp = function (active) {
-    config.jsonp = active;
+    configuration.jsonp = active;
   };
 
-  config.isOverridenMethod = function (method, values) {
-    const search = values || config.methodOverriders;
+  configuration.isOverridenMethod = function (method, values) {
+    const search = values || configuration.methodOverriders;
     return !isUndefined(find(search, function (one: string) {
       return one.toLowerCase() === method.toLowerCase();
     }));
@@ -166,13 +166,13 @@ export function RestangularConfigurer(object, config) {
   /**
    * Sets the URL creator type. For now, only Path is created. In the future we'll have queryParams
    **/
-  config.urlCreator = config.urlCreator || 'path';
+  configuration.urlCreator = configuration.urlCreator || 'path';
   object.setUrlCreator = function (name) {
-    if (!has(config.urlCreatorFactory, name)) {
+    if (!has(configuration.urlCreatorFactory, name)) {
       throw new Error('URL Path selected isn\'t valid');
     }
 
-    config.urlCreator = name;
+    configuration.urlCreator = name;
     return this;
   };
 
@@ -186,69 +186,69 @@ export function RestangularConfigurer(object, config) {
    *  All of this fields except for id, are handled (and created) by Restangular. By default,
    *  the field values will be id, route and parentResource respectively
    */
-  config.restangularFields = config.restangularFields || {
-      id: 'id',
-      route: 'route',
-      parentResource: 'parentResource',
-      restangularCollection: 'restangularCollection',
-      cannonicalId: '__cannonicalId',
-      etag: 'restangularEtag',
-      selfLink: 'href',
-      get: 'get',
-      getList: 'getList',
-      put: 'put',
-      post: 'post',
-      remove: 'remove',
-      head: 'head',
-      trace: 'trace',
-      options: 'options',
-      patch: 'patch',
-      getRestangularUrl: 'getRestangularUrl',
-      getRequestedUrl: 'getRequestedUrl',
-      putElement: 'putElement',
-      addRestangularMethod: 'addRestangularMethod',
-      getParentList: 'getParentList',
-      clone: 'clone',
-      ids: 'ids',
-      httpConfig: '_$httpConfig',
-      reqParams: 'reqParams',
-      one: 'one',
-      all: 'all',
-      several: 'several',
-      oneUrl: 'oneUrl',
-      allUrl: 'allUrl',
-      customPUT: 'customPUT',
-      customPATCH: 'customPATCH',
-      customPOST: 'customPOST',
-      customDELETE: 'customDELETE',
-      customGET: 'customGET',
-      customGETLIST: 'customGETLIST',
-      customOperation: 'customOperation',
-      doPUT: 'doPUT',
-      doPATCH: 'doPATCH',
-      doPOST: 'doPOST',
-      doDELETE: 'doDELETE',
-      doGET: 'doGET',
-      doGETLIST: 'doGETLIST',
-      fromServer: 'fromServer',
-      withConfig: 'withConfig',
-      withHttpConfig: 'withHttpConfig',
-      singleOne: 'singleOne',
-      plain: 'plain',
-      save: 'save',
-      restangularized: 'restangularized'
-    };
+  configuration.restangularFields = configuration.restangularFields || {
+    id: 'id',
+    route: 'route',
+    parentResource: 'parentResource',
+    restangularCollection: 'restangularCollection',
+    cannonicalId: '__cannonicalId',
+    etag: 'restangularEtag',
+    selfLink: 'href',
+    get: 'get',
+    getList: 'getList',
+    put: 'put',
+    post: 'post',
+    remove: 'remove',
+    head: 'head',
+    trace: 'trace',
+    options: 'options',
+    patch: 'patch',
+    getRestangularUrl: 'getRestangularUrl',
+    getRequestedUrl: 'getRequestedUrl',
+    putElement: 'putElement',
+    addRestangularMethod: 'addRestangularMethod',
+    getParentList: 'getParentList',
+    clone: 'clone',
+    ids: 'ids',
+    httpConfig: '_$httpConfig',
+    reqParams: 'reqParams',
+    one: 'one',
+    all: 'all',
+    several: 'several',
+    oneUrl: 'oneUrl',
+    allUrl: 'allUrl',
+    customPUT: 'customPUT',
+    customPATCH: 'customPATCH',
+    customPOST: 'customPOST',
+    customDELETE: 'customDELETE',
+    customGET: 'customGET',
+    customGETLIST: 'customGETLIST',
+    customOperation: 'customOperation',
+    doPUT: 'doPUT',
+    doPATCH: 'doPATCH',
+    doPOST: 'doPOST',
+    doDELETE: 'doDELETE',
+    doGET: 'doGET',
+    doGETLIST: 'doGETLIST',
+    fromServer: 'fromServer',
+    withConfig: 'withConfig',
+    withHttpConfig: 'withHttpConfig',
+    singleOne: 'singleOne',
+    plain: 'plain',
+    save: 'save',
+    restangularized: 'restangularized'
+  };
   object.setRestangularFields = function (resFields) {
-    config.restangularFields =
-      extend({}, config.restangularFields, resFields);
+    configuration.restangularFields =
+      extend({}, configuration.restangularFields, resFields);
     return this;
   };
 
-  config.isRestangularized = function (obj) {
-    return !!obj[config.restangularFields.restangularized];
+  configuration.isRestangularized = function (obj) {
+    return !!obj[configuration.restangularFields.restangularized];
   };
 
-  config.setFieldToElem = function (field, elem, value) {
+  configuration.setFieldToElem = function (field, elem, value) {
     const properties = field.split('.');
     let idValue = elem;
     each(initial(properties), function (prop: any) {
@@ -260,7 +260,7 @@ export function RestangularConfigurer(object, config) {
     return this;
   };
 
-  config.getFieldFromElem = function (field, elem) {
+  configuration.getFieldFromElem = function (field, elem) {
     const properties = field.split('.');
     let idValue: any = elem;
     each(properties, function (prop) {
@@ -271,37 +271,37 @@ export function RestangularConfigurer(object, config) {
     return clone(idValue);
   };
 
-  config.setIdToElem = function (elem, id /*, route */) {
-    config.setFieldToElem(config.restangularFields.id, elem, id);
+  configuration.setIdToElem = function (elem, id /*, route */) {
+    configuration.setFieldToElem(configuration.restangularFields.id, elem, id);
     return this;
   };
 
-  config.getIdFromElem = function (elem) {
-    return config.getFieldFromElem(config.restangularFields.id, elem);
+  configuration.getIdFromElem = function (elem) {
+    return configuration.getFieldFromElem(configuration.restangularFields.id, elem);
   };
 
-  config.isValidId = function (elemId) {
+  configuration.isValidId = function (elemId) {
     return '' !== elemId && !isUndefined(elemId) && !isNull(elemId);
   };
 
-  config.setUrlToElem = function (elem, url /*, route */) {
-    config.setFieldToElem(config.restangularFields.selfLink, elem, url);
+  configuration.setUrlToElem = function (elem, url /*, route */) {
+    configuration.setFieldToElem(configuration.restangularFields.selfLink, elem, url);
     return this;
   };
 
-  config.getUrlFromElem = function (elem) {
-    return config.getFieldFromElem(config.restangularFields.selfLink, elem);
+  configuration.getUrlFromElem = function (elem) {
+    return configuration.getFieldFromElem(configuration.restangularFields.selfLink, elem);
   };
 
-  config.useCannonicalId = isUndefined(config.useCannonicalId) ? false : config.useCannonicalId;
+  configuration.useCannonicalId = isUndefined(configuration.useCannonicalId) ? false : configuration.useCannonicalId;
   object.setUseCannonicalId = function (value) {
-    config.useCannonicalId = value;
+    configuration.useCannonicalId = value;
     return this;
   };
 
-  config.getCannonicalIdFromElem = function (elem) {
-    const cannonicalId = elem[config.restangularFields.cannonicalId];
-    const actualId = config.isValidId(cannonicalId) ? cannonicalId : config.getIdFromElem(elem);
+  configuration.getCannonicalIdFromElem = function (elem) {
+    const cannonicalId = elem[configuration.restangularFields.cannonicalId];
+    const actualId = configuration.isValidId(cannonicalId) ? cannonicalId : configuration.getIdFromElem(elem);
     return actualId;
   };
 
@@ -313,15 +313,15 @@ export function RestangularConfigurer(object, config) {
    * The ResponseExtractor is a function that receives the response and the method executed.
    */
 
-  config.responseInterceptors = config.responseInterceptors ? [...config.responseInterceptors] : [];
+  configuration.responseInterceptors = configuration.responseInterceptors ? [...configuration.responseInterceptors] : [];
 
-  config.defaultResponseInterceptor = function (data /*, operation, what, url, response, subject */) {
+  configuration.defaultResponseInterceptor = function (data /*, operation, what, url, response, subject */) {
     return data || {};
   };
 
-  config.responseExtractor = function (data, operation, what, url, response, subject) {
-    const interceptors = clone(config.responseInterceptors);
-    interceptors.push(config.defaultResponseInterceptor);
+  configuration.responseExtractor = function (data, operation, what, url, response, subject) {
+    const interceptors = clone(configuration.responseInterceptors);
+    interceptors.push(configuration.defaultResponseInterceptor);
     let theData = data;
     each(interceptors, function (interceptor: any) {
       theData = interceptor(theData, operation,
@@ -331,13 +331,13 @@ export function RestangularConfigurer(object, config) {
   };
 
   object.addResponseInterceptor = function (extractor) {
-    config.responseInterceptors.push(extractor);
+    configuration.responseInterceptors.push(extractor);
     return this;
   };
 
-  config.errorInterceptors = config.errorInterceptors ? [...config.errorInterceptors] : [];
+  configuration.errorInterceptors = configuration.errorInterceptors ? [...configuration.errorInterceptors] : [];
   object.addErrorInterceptor = function (interceptor) {
-    config.errorInterceptors = [interceptor, ...config.errorInterceptors];
+    configuration.errorInterceptors = [interceptor, ...configuration.errorInterceptors];
     return this;
   };
 
@@ -353,9 +353,9 @@ export function RestangularConfigurer(object, config) {
   /**
    * Request interceptor is called before sending an object to the server.
    */
-  config.requestInterceptors = config.requestInterceptors ? [...config.requestInterceptors] : [];
+  configuration.requestInterceptors = configuration.requestInterceptors ? [...configuration.requestInterceptors] : [];
 
-  config.defaultInterceptor = function (element, operation, path, url, headers, params, httpConfig) {
+  configuration.defaultInterceptor = function (element, operation, path, url, headers, params, httpConfig) {
     return {
       element: element,
       headers: headers,
@@ -364,9 +364,9 @@ export function RestangularConfigurer(object, config) {
     };
   };
 
-  config.fullRequestInterceptor = function (element, operation, path, url, headers, params, httpConfig) {
-    const interceptors = clone(config.requestInterceptors);
-    const defaultRequest = config.defaultInterceptor(element, operation, path, url, headers, params, httpConfig);
+  configuration.fullRequestInterceptor = function (element, operation, path, url, headers, params, httpConfig) {
+    const interceptors = clone(configuration.requestInterceptors);
+    const defaultRequest = configuration.defaultInterceptor(element, operation, path, url, headers, params, httpConfig);
     return reduce(interceptors, function (request: any, interceptor: any) {
 
       const returnInterceptor: any = interceptor(
@@ -383,7 +383,7 @@ export function RestangularConfigurer(object, config) {
   };
 
   object.addRequestInterceptor = function (interceptor) {
-    config.requestInterceptors.push(function (elem, operation, path, url, headers, params, httpConfig) {
+    configuration.requestInterceptors.push(function (elem, operation, path, url, headers, params, httpConfig) {
       return {
         headers: headers,
         params: params,
@@ -397,22 +397,22 @@ export function RestangularConfigurer(object, config) {
   object.setRequestInterceptor = object.addRequestInterceptor;
 
   object.addFullRequestInterceptor = function (interceptor) {
-    config.requestInterceptors.push(interceptor);
+    configuration.requestInterceptors.push(interceptor);
     return this;
   };
 
   object.setFullRequestInterceptor = object.addFullRequestInterceptor;
 
-  config.onBeforeElemRestangularized = config.onBeforeElemRestangularized || function (elem) {
-      return elem;
-    };
+  configuration.onBeforeElemRestangularized = configuration.onBeforeElemRestangularized || function (elem) {
+    return elem;
+  };
   object.setOnBeforeElemRestangularized = function (post) {
-    config.onBeforeElemRestangularized = post;
+    configuration.onBeforeElemRestangularized = post;
     return this;
   };
 
   object.setRestangularizePromiseInterceptor = function (interceptor) {
-    config.restangularizePromiseInterceptor = interceptor;
+    configuration.restangularizePromiseInterceptor = interceptor;
     return this;
   };
 
@@ -423,24 +423,24 @@ export function RestangularConfigurer(object, config) {
    * and the name of the model
    *
    */
-  config.onElemRestangularized = config.onElemRestangularized || function (elem) {
-      return elem;
-    };
+  configuration.onElemRestangularized = configuration.onElemRestangularized || function (elem) {
+    return elem;
+  };
   object.setOnElemRestangularized = function (post) {
-    config.onElemRestangularized = post;
+    configuration.onElemRestangularized = post;
     return this;
   };
 
-  config.shouldSaveParent = config.shouldSaveParent || function () {
-      return true;
-    };
+  configuration.shouldSaveParent = configuration.shouldSaveParent || function () {
+    return true;
+  };
   object.setParentless = function (values) {
     if (isArray(values)) {
-      config.shouldSaveParent = function (route) {
+      configuration.shouldSaveParent = function (route) {
         return !includes(values, route);
       };
     } else if (isBoolean(values)) {
-      config.shouldSaveParent = function () {
+      configuration.shouldSaveParent = function () {
         return !values;
       };
     }
@@ -456,16 +456,16 @@ export function RestangularConfigurer(object, config) {
    *
    * By default, the suffix is null
    */
-  config.suffix = isUndefined(config.suffix) ? null : config.suffix;
+  configuration.suffix = isUndefined(configuration.suffix) ? null : configuration.suffix;
   object.setRequestSuffix = function (newSuffix) {
-    config.suffix = newSuffix;
+    configuration.suffix = newSuffix;
     return this;
   };
 
   /**
    * Add element transformers for certain routes.
    */
-  config.transformers = config.transformers || {};
+  configuration.transformers = configuration.transformers || {};
   object.addElementTransformer = function (type, secondArg, thirdArg) {
     let isCollection = null;
     let transformer = null;
@@ -476,9 +476,9 @@ export function RestangularConfigurer(object, config) {
       isCollection = secondArg;
     }
 
-    let typeTransformers = config.transformers[type];
+    let typeTransformers = configuration.transformers[type];
     if (!typeTransformers) {
-      typeTransformers = config.transformers[type] = [];
+      typeTransformers = configuration.transformers[type] = [];
     }
 
     typeTransformers.push(function (coll, elem) {
@@ -499,37 +499,37 @@ export function RestangularConfigurer(object, config) {
     return object.addElementTransformer(route, false, fn);
   };
 
-  config.transformElem = function (elem, isCollection, route, Restangular, force) {
-    if (!force && !config.transformLocalElements && !elem[config.restangularFields.fromServer]) {
+  configuration.transformElem = function (elem, isCollection, route, Restangular, force) {
+    if (!force && !configuration.transformLocalElements && !elem[configuration.restangularFields.fromServer]) {
       return elem;
     }
-    const typeTransformers = config.transformers[route];
+    const typeTransformers = configuration.transformers[route];
     let changedElem = elem;
     if (typeTransformers) {
       each(typeTransformers, function (transformer: (isCollection: boolean, changedElem: any) => any) {
         changedElem = transformer(isCollection, changedElem);
       });
     }
-    return config.onElemRestangularized(changedElem, isCollection, route, Restangular);
+    return configuration.onElemRestangularized(changedElem, isCollection, route, Restangular);
   };
 
-  config.transformLocalElements = isUndefined(config.transformLocalElements) ?
+  configuration.transformLocalElements = isUndefined(configuration.transformLocalElements) ?
     false :
-    config.transformLocalElements;
+    configuration.transformLocalElements;
 
   object.setTransformOnlyServerElements = function (active) {
-    config.transformLocalElements = !active;
+    configuration.transformLocalElements = !active;
   };
 
-  config.fullResponse = isUndefined(config.fullResponse) ? false : config.fullResponse;
+  configuration.fullResponse = isUndefined(configuration.fullResponse) ? false : configuration.fullResponse;
   object.setFullResponse = function (full) {
-    config.fullResponse = full;
+    configuration.fullResponse = full;
     return this;
   };
 
 
   // Internal values and functions
-  config.urlCreatorFactory = {};
+  configuration.urlCreatorFactory = {};
 
   /**
    * Base URL Creator. Base prototype for everything related to it
@@ -567,20 +567,20 @@ export function RestangularConfigurer(object, config) {
       if (config.isSafe(value.method)) {
 
         resource[key] = function () {
-          const config = extend(value, {
+          const resultConfig = extend(value, {
             url: url
           });
-          return $http.createRequest(config);
+          return $http.createRequest(resultConfig);
         };
 
       } else {
 
         resource[key] = function (data) {
-          const config = extend(value, {
+          const resultConfig = extend(value, {
             url: url,
             data: data
           });
-          return $http.createRequest(config);
+          return $http.createRequest(resultConfig);
         };
 
       }
@@ -594,7 +594,7 @@ export function RestangularConfigurer(object, config) {
     const headers = defaults(callHeaders || {}, this.config.defaultHeaders);
 
     if (etag) {
-      if (!config.isSafe(operation)) {
+      if (!configuration.isSafe(operation)) {
         headers['If-Match'] = etag;
       } else {
         headers['If-None-Match'] = etag;
@@ -735,7 +735,7 @@ export function RestangularConfigurer(object, config) {
             elemId = __this.config.getIdFromElem(elem);
           }
 
-          if (config.isValidId(elemId) && !elem.singleOne) {
+          if (configuration.isValidId(elemId) && !elem.singleOne) {
             elemUrl += '/' + (__this.config.encodeIds ? encodeURIComponent(elemId) : elemId);
           }
         }
@@ -757,7 +757,7 @@ export function RestangularConfigurer(object, config) {
 
   Path.prototype.fetchRequestedUrl = function (current, what) {
     const url = this.fetchUrl(current, what);
-    const params = current[config.restangularFields.reqParams];
+    const params = current[configuration.restangularFields.reqParams];
 
     // From here on and until the end of fetchRequestedUrl,
     // the code has been kindly borrowed from angular.js
@@ -766,21 +766,21 @@ export function RestangularConfigurer(object, config) {
     //   serialization of parameters would need to be identical
     //   to the one done by angular for cache keys to match.
     function sortedKeys(obj) {
-      const keys = [];
+      const resultKeys = [];
       for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
-          keys.push(key);
+          resultKeys.push(key);
         }
       }
-      return keys.sort();
+      return resultKeys.sort();
     }
 
     function forEachSorted(obj, iterator?, context?) {
-      const keys = sortedKeys(obj);
-      for (let i = 0; i < keys.length; i++) {
-        iterator.call(context, obj[keys[i]], keys[i]);
+      const sortedKeysArray = sortedKeys(obj);
+      for (let i = 0; i < sortedKeysArray.length; i++) {
+        iterator.call(context, obj[sortedKeysArray[i]], sortedKeysArray[i]);
       }
-      return keys;
+      return sortedKeysArray;
     }
 
     function encodeUriQuery(val, pctEncodeSpaces?) {
@@ -816,5 +816,5 @@ export function RestangularConfigurer(object, config) {
     return url + (this.config.suffix || '') + ((url.indexOf('?') === -1) ? '?' : '&') + parts.join('&');
   };
 
-  config.urlCreatorFactory.path = Path;
+  configuration.urlCreatorFactory.path = Path;
 }
