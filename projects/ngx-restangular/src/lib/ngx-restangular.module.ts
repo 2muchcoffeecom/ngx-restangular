@@ -1,9 +1,8 @@
-/* tslint:disable:member-ordering no-unused-variable */
-import {ModuleWithProviders, NgModule, Optional, SkipSelf, InjectionToken} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
-import {RESTANGULAR, RestangularFactory} from './ngx-restangular.config';
-import {Restangular} from './ngx-restangular';
-import {RestangularHttp} from './ngx-restangular-http';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf, InjectionToken } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RESTANGULAR, RestangularFactory } from './ngx-restangular.config';
+import { Restangular } from './ngx-restangular';
+import { RestangularHttp } from './ngx-restangular-http';
 
 export const CONFIG_OBJ = new InjectionToken<string>('configObj');
 
@@ -20,14 +19,16 @@ export class RestangularModule {
     }
   }
 
+  static forRoot(configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders;
+  static forRoot(providers?: any[], configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders;
   static forRoot(config1?, config2?): ModuleWithProviders {
     return {
       ngModule: RestangularModule,
       providers: [
-        {provide: CONFIG_OBJ, useValue: [config1,config2]},
+        {provide: CONFIG_OBJ, useValue: [config1, config2]},
         {provide: RESTANGULAR, useFactory: RestangularFactory, deps: [CONFIG_OBJ]},
       ]
-    }
+    };
   }
 
 }
