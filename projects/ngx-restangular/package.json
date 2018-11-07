@@ -30,7 +30,7 @@
     "@angular/core": "^6.0",
     "@angular/common": "^6.0",
     "@angular/platform-browser": "^6.0",
-    "core-js": ">=2.4.1",
+    "core-js": "^2.5.4",
     "rxjs": "^6.0"
   },
   "dependencies": {
