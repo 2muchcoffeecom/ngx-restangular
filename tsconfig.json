@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "es5",
     "moduleResolution": "node",
+    "baseUrl": "./",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
