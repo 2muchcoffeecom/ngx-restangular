@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpBackend, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpBackend, HttpErrorResponse, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { throwError, Observable } from 'rxjs';
 
 import { RestangularHelper } from './ngx-restangular-helper';
 import { catchError, filter, map } from 'rxjs/operators';
-import { HttpEvent } from '@angular/common/http/src/response';
 
 @Injectable()
 export class RestangularHttp {
