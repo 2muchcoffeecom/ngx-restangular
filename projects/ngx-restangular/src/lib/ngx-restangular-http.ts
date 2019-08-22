@@ -5,7 +5,7 @@ import { throwError, Observable } from 'rxjs';
 
 import { RestangularHelper } from './ngx-restangular-helper';
 import { catchError, filter, map } from 'rxjs/operators';
-import { HttpEvent } from '@angular/common/http/src/response';
+import { HttpEvent } from '@angular/common/http';
 
 @Injectable()
 export class RestangularHttp {
