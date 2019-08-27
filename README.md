@@ -627,9 +627,10 @@ export function RestangularConfigFactory (RestangularProvider, authService) {
         //Or you can live it empty and request will be the same.
         
         // update Authorization header
-        response.request.headers.set('Authorization', 'Bearer ' + refreshAccesstokenResponse)
+        const newHeaders = response.request.headers.set('Authorization', 'Bearer ' + refreshAccesstokenResponse);
+        const newRequest = response.request.clone({headers: newHeaders});
         
-        return response.repeatRequest(response.request);
+        return response.repeatRequest(newRequest);
       })
       .subscribe(
         res => responseHandler(res),
