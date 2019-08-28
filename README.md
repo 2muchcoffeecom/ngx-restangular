@@ -18,7 +18,7 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 # Table of contents
 
-- [How do I add this to my project in angular 5?](#how-do-i-add-this-to-my-project-in-angular-5)
+- [How do I add this to my project in angular 5+?](#how-do-i-add-this-to-my-project-in-angular-5)
 - [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
 - [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
 
@@ -88,7 +88,7 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 **[Back to top](#table-of-contents)**
 
 
-# How do I add this to my project in angular 5?
+# How do I add this to my project in angular 5+?
 
 You can download this by npm and running `npm install ngx-restangular`. This will install latest version of ngx-restangular (v.2.0.0).
 
