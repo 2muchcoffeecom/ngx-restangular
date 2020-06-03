@@ -5,7 +5,7 @@ It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 # Demo
 
-You can check post about using ngx-restangular with [restdb.io](https://restdb.io/) service in [simple TODO Application](https://2muchcoffee.com/blog/ngx-restangular-restful-api-angular-solution/)
+You can check post about using ngx-restangular in [RESTful API Angular Solution](https://2muchcoffee.com/blog/ngx-restangular-restful-api-angular-solution/)
 
 # Current stage
 
