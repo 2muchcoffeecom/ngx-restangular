@@ -19,9 +19,9 @@ export class RestangularModule {
     }
   }
 
-  static forRoot(configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders;
-  static forRoot(providers?: any[], configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders;
-  static forRoot(config1?, config2?): ModuleWithProviders {
+  static forRoot(configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders<any>;
+  static forRoot(providers?: any[], configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders<any>;
+  static forRoot(config1?, config2?): ModuleWithProviders<any> {
     return {
       ngModule: RestangularModule,
       providers: [
