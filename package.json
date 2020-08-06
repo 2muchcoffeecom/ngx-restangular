@@ -1,5 +1,6 @@
 {
   "name": "ngx-restangular",
+  "version": "5.0.0",
   "scripts": {
     "start": "ng serve",
     "build:ngx-restangular": "ng build ngx-restangular"
