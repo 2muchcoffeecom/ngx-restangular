@@ -1,6 +1,6 @@
 import { Injectable, Inject, Injector, Optional, Type } from '@angular/core';
-import { assign } from 'core-js/features/object';
 import {
+  assign,
   map,
   bind,
   union,

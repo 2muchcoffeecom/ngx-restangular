@@ -1,6 +1,5 @@
 import { HttpRequest, HttpHeaders, HttpParams } from '@angular/common/http';
-
-import { assign } from 'core-js/features/object';
+import { assign } from 'lodash';
 
 export class RestangularHelper {
 
