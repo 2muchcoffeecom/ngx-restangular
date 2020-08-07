@@ -1,6 +1,6 @@
 {
-  "name": "ngx-restangular",
-  "version": "5.0.0",
+  "name": "@bal3no/ngx-restangular",
+  "version": "6.0.0-rc1",
   "scripts": {
     "start": "ng serve",
     "build:ngx-restangular": "ng build ngx-restangular"
@@ -77,5 +77,8 @@
     "typescript": "~3.9.0",
     "zone.js": "~0.10.0",
     "core-js": "^3.0"
-  }
+  },
+  "description": "This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ngx-restangular is an Angular 2+ service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code. It's a perfect fit for any WebApp that consumes data from a RESTful API.",
+  "main": "index.js",
+  "dependencies": {}
 }

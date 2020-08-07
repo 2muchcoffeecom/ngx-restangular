@@ -1,0 +1,12 @@
+/**
+ * @fileoverview added by tsickle
+ * Generated from: ngx-restangular.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+export { RestangularModule, Restangular, RestangularHttp } from './public_api';
+export { RESTANGULAR as ɵb, RestangularFactory as ɵc } from './lib/ngx-restangular.config';
+export { CONFIG_OBJ as ɵa } from './lib/ngx-restangular.module';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibmd4LXJlc3Rhbmd1bGFyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vcHJvamVjdHMvbmd4LXJlc3Rhbmd1bGFyL3NyYy9uZ3gtcmVzdGFuZ3VsYXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFJQSxnRUFBYyxjQUFjLENBQUM7QUFFN0IsT0FBTyxFQUFDLFdBQVcsSUFBSSxFQUFFLEVBQUMsa0JBQWtCLElBQUksRUFBRSxFQUFDLE1BQU0sOEJBQThCLENBQUM7QUFDeEYsT0FBTyxFQUFDLFVBQVUsSUFBSSxFQUFFLEVBQUMsTUFBTSw4QkFBOEIsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogR2VuZXJhdGVkIGJ1bmRsZSBpbmRleC4gRG8gbm90IGVkaXQuXG4gKi9cblxuZXhwb3J0ICogZnJvbSAnLi9wdWJsaWNfYXBpJztcblxuZXhwb3J0IHtSRVNUQU5HVUxBUiBhcyDJtWIsUmVzdGFuZ3VsYXJGYWN0b3J5IGFzIMm1Y30gZnJvbSAnLi9saWIvbmd4LXJlc3Rhbmd1bGFyLmNvbmZpZyc7XG5leHBvcnQge0NPTkZJR19PQkogYXMgybVhfSBmcm9tICcuL2xpYi9uZ3gtcmVzdGFuZ3VsYXIubW9kdWxlJzsiXX0=

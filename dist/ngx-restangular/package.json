@@ -58,6 +58,15 @@
     "rxjs": "^6.0"
   },
   "dependencies": {
-    "@types/lodash": "^4.0"
-  }
+    "@types/lodash": "^4.0",
+    "tslib": "^2.0.0"
+  },
+  "main": "bundles/ngx-restangular.umd.js",
+  "module": "fesm2015/ngx-restangular.js",
+  "es2015": "fesm2015/ngx-restangular.js",
+  "esm2015": "esm2015/ngx-restangular.js",
+  "fesm2015": "fesm2015/ngx-restangular.js",
+  "typings": "ngx-restangular.d.ts",
+  "metadata": "ngx-restangular.metadata.json",
+  "sideEffects": false
 }
