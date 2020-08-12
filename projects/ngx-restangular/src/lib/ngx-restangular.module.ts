@@ -19,14 +19,14 @@ export class RestangularModule {
     }
   }
 
-  static forRoot(configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders;
-  static forRoot(providers?: any[], configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders;
-  static forRoot(config1?, config2?): ModuleWithProviders {
+  static forRoot(configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders<RestangularModule>;
+  static forRoot(providers?: any[], configFunction?: (provider: any, ...arg: any[]) => void): ModuleWithProviders<RestangularModule>;
+  static forRoot(config1?, config2?): ModuleWithProviders<RestangularModule> {
     return {
       ngModule: RestangularModule,
       providers: [
-        {provide: CONFIG_OBJ, useValue: [config1, config2]},
-        {provide: RESTANGULAR, useFactory: RestangularFactory, deps: [CONFIG_OBJ]},
+        { provide: CONFIG_OBJ, useValue: [config1, config2] },
+        { provide: RESTANGULAR, useFactory: RestangularFactory, deps: [CONFIG_OBJ] },
       ]
     };
   }
