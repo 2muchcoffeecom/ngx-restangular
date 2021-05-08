@@ -67,7 +67,7 @@
     "@types/jasmine": "~3.5.0",
     "@types/lodash": "^4.14.62",
     "codelyzer": "^6.0.0",
-    "ng-packagr": "~10.0.0",
+    "ng-packagr": "~10.1.1",
     "rxjs": "~6.5.5",
     "tsickle": "^0.39.1",
     "tslib": "^2.0.0",
