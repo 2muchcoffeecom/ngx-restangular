@@ -90,7 +90,14 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 # How do I add this to my project in angular 5+?
 
-You can download this by npm and running `npm install ngx-restangular`. This will install latest version of ngx-restangular (v.2.0.0).
+You can download this by npm and running `npm install ngx-restangular`. This will install latest version of ngx-restangular.
+
+
+| ngx-restangular | Angular |
+| --------------- | ------- |
+| 2.x.x           | 5.0.0   |
+| 6.x.x           | 10.0.0  |
+| 7.x.x           | 11.0.0  |
 
 **[Back to top](#table-of-contents)**
 

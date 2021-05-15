@@ -1,6 +1,6 @@
 {
   "name": "ngx-restangular",
-  "version": "6.0.1",
+  "version": "7.0.0",
   "description": "ngx-restangular",
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
     "angular8-restangular",
     "angular9-restangular",
     "angular10-restangular",
+    "angular11-restangular",
     "angular2-rest",
     "angular4-rest",
     "angular5-rest",
@@ -26,6 +27,7 @@
     "angular8-rest",
     "angular9-rest",
     "angular10-rest",
+    "angular11-rest",
     "restangular",
     "angular 2 restangular",
     "angular 4 restangular",
@@ -35,6 +37,7 @@
     "angular 8 restangular",
     "angular 9 restangular",
     "angular 10 restangular",
+    "angular 11 restangular",
     "angular 2 rest",
     "angular 4 rest",
     "angular 5 rest",
@@ -42,7 +45,8 @@
     "angular 7 rest",
     "angular 8 rest",
     "angular 9 rest",
-    "angular 10 rest"
+    "angular 10 rest",
+    "angular 11 rest"
   ],
   "author": "logvinoleg89 <logvinoleg89@gmail.com>",
   "license": "MIT",
@@ -51,10 +55,10 @@
   },
   "homepage": "https://github.com/2muchcoffeecom/ngx-restangular#readme",
   "peerDependencies": {
-    "@angular/core": "^10.0.0",
-    "@angular/common": "^10.0.0",
-    "@angular/platform-browser": "^10.0.0",
-    "rxjs": "^6.0"
+    "@angular/core": "^11.0.0",
+    "@angular/common": "^11.0.0",
+    "@angular/platform-browser": "^11.0.0",
+    "rxjs": "^6.6.0"
   },
   "dependencies": {
     "@types/lodash": "^4.14.62"
