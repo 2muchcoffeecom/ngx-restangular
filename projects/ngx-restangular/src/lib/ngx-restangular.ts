@@ -1,5 +1,4 @@
 import { Injectable, Inject, Injector, Optional, Type } from '@angular/core';
-import { assign } from 'core-js/features/object';
 import {
   map,
   bind,
@@ -137,7 +136,7 @@ export class Restangular {
   ) {
     this.provider = new providerConfig(http);
     const element = this.provider.$get();
-    assign(this, element);
+    Object.assign(this, element);
 
     this.setDefaultConfig();
   }
@@ -314,7 +313,7 @@ function providerConfig($http) {
       }
 
       function copyRestangularizedElement(fromElement, toElement = {}) {
-        const copiedElement = assign(toElement, fromElement);
+        const copiedElement = Object.assign(toElement, fromElement);
         return restangularizeElem(copiedElement[config.restangularFields.parentResource],
           copiedElement, copiedElement[config.restangularFields.route], true);
       }
