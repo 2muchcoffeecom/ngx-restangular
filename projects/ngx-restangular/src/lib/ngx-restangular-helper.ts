@@ -1,7 +1,5 @@
 import { HttpRequest, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { assign } from 'core-js/features/object';
-
 export class RestangularHelper {
 
   static createRequest(options) {
@@ -38,7 +36,7 @@ export class RestangularHelper {
   }
 
   static createRequestQueryParams(queryParams) {
-    const requestQueryParams = assign({}, queryParams);
+    const requestQueryParams = Object.assign({}, queryParams);
     let search: HttpParams = new HttpParams();
 
     for (const key in requestQueryParams) {
@@ -67,6 +65,6 @@ export class RestangularHelper {
       }
     }
 
-    return new HttpHeaders(assign({}, headers));
+    return new HttpHeaders(Object.assign({}, headers));
   }
 }
