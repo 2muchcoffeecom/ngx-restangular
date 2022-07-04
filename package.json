@@ -68,7 +68,7 @@
     "@types/lodash": "^4.14.62",
     "codelyzer": "^0.0.28",
     "core-js": "^3.5.0",
-    "ng-packagr": "^14.0.2",
+    "ng-packagr": "~11.2.4",
     "rxjs": "~6.5.5",
     "tsickle": "~0.40",
     "tslib": "^2.0.0",
