@@ -1,6 +1,6 @@
 {
   "name": "ngx-restangular",
-  "version": "6.0.0-beta.1",
+  "version": "7.0.0",
   "scripts": {
     "start": "npx ng serve",
     "build:ngx-restangular": "npx ng build ngx-restangular"
@@ -21,6 +21,7 @@
     "angular8-restangular",
     "angular9-restangular",
     "angular10-restangular",
+    "angular12-restangular",
     "angular2-rest",
     "angular4-rest",
     "angular5-rest",
@@ -29,6 +30,7 @@
     "angular8-rest",
     "angular9-rest",
     "angular10-rest",
+    "angular12-rest",
     "restangular",
     "angular 2 restangular",
     "angular 4 restangular",
@@ -38,6 +40,7 @@
     "angular 8 restangular",
     "angular 9 restangular",
     "angular 10 restangular",
+    "angular 12 restangular",
     "angular 2 rest",
     "angular 4 rest",
     "angular 5 rest",
@@ -45,7 +48,8 @@
     "angular 7 rest",
     "angular 8 rest",
     "angular 9 rest",
-    "angular 10 rest"
+    "angular 10 rest",
+    "angular 12 rest"
   ],
   "author": "logvinoleg89 <logvinoleg89@gmail.com>",
   "license": "MIT",
