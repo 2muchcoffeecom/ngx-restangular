@@ -54,7 +54,7 @@
   },
   "homepage": "https://github.com/2muchcoffeecom/ngx-restangular#readme",
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.0.4",
+    "@angular-devkit/build-angular": "~0.1102.19",
     "@angular/cli": "~11.2.19",
     "@angular/common": "~11.2.14",
     "@angular/compiler": "~11.2.14",
