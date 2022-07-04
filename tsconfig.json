@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "sourceMap": true,
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "typeRoots": ["/node_modules/@types"],
     "lib": ["es2015", "dom"],
