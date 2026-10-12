@@ -1,11 +1,13 @@
 # Ngx-restangular. Maintained by [2muchcoffee](https://2muchcoffee.com/).
 
-This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ngx-restangular is an Angular 2+ service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
+This project is the follow-up of the [Restangular](https://github.com/mgonto/restangular/). Ngx-restangular is an Angular service that simplifies common GET, POST, DELETE, and UPDATE requests with a minimum of client code.
 It's a perfect fit for any WebApp that consumes data from a RESTful API.
 
 # Demo
 
 You can check post about using ngx-restangular in [RESTful API Angular Solution](https://2muchcoffee.com/blog/ngx-restangular-restful-api-angular-solution/)
+
+The `demo/` folder in this repository is a small app that uses the library: run `npm run build`, then `npm start`.
 
 # Current stage
 
@@ -18,11 +20,11 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 
 # Table of contents
 
-- [How do I add this to my project in angular 5+?](#how-do-i-add-this-to-my-project-in-angular-5)
-- [How do I add this to my project in angular 4?](#how-do-i-add-this-to-my-project-in-angular-4)
-- [How do I add this to my project in angular 2?](#how-do-i-add-this-to-my-project-in-angular-2)
-
-- [Dependencies](#dependencies)
+- [Installation](#installation)
+- [Compatibility](#compatibility)
+- [Upgrading from 6.x](#upgrading-from-6x)
+- [Standalone apps](#standalone-apps)
+- [Which HTTP backend Restangular uses](#which-http-backend-restangular-uses)
 - [Starter Guide](#starter-guide)
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
   - [Using Restangular](#using-restangular)
@@ -88,31 +90,81 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 **[Back to top](#table-of-contents)**
 
 
-# How do I add this to my project in angular 5+?
+# Installation
 
-You can download this by npm and running `npm install ngx-restangular`. This will install latest version of ngx-restangular (v.2.0.0).
+```
+npm install ngx-restangular
+```
 
-**[Back to top](#table-of-contents)**
-
-
-# How do I add this to my project in angular 4?
-
-You can download this by npm and running `npm install --save ngx-restangular@1.0.13`
-
-Versions from 1.0.14 to 1.1.4 are deprecated. Npm warns you after their installation. Those versions would be removed.
+`lodash-es` and `tslib` install with it. Since 7.0.0 the package doesn't need `core-js` or `lodash` from your app; if you only had them for ngx-restangular, you can remove them.
 
 **[Back to top](#table-of-contents)**
 
 
-# How do I add this to my project in angular 2?
+# Compatibility
 
-You can download this by npm and running `npm install ng2-restangular`
+| ngx-restangular | Angular | RxJS |
+|---|---|---|
+| 7.x | 16 to 22 | 7.4 or later |
+| 6.x | 10 | 6 |
+| 5.x | 8 | 6 |
+| 4.x | 7 | 6 |
+| 3.x | 6 | 6 |
+| 2.x | 5 | 5 |
+| 1.0.13 | 4 | 5 |
+| ng2-restangular | 2 | 5 |
+
+7.0.0 is built with Angular 21 in partial-Ivy format, the format Angular recommends for libraries on npm, so your app's own compiler links it. We checked every Angular major from 16 to 22 by installing the packed library into a fresh app, running a production build and sending requests through it; `tools/check-consumer.sh` in this repository repeats that check for any version.
+
+6.x and older were published in the View Engine format. Ivy apps could only use them after ngcc converted the package, which is where errors like `Type RestangularModule does not have 'ɵmod' property` came from, and Angular 16 removed ngcc, so 6.x can't load on Angular 16 or later at all.
+
+For Angular 4, install `ngx-restangular@1.0.13`; versions 1.0.14 to 1.1.4 are deprecated. For Angular 2, install `ng2-restangular`.
 
 **[Back to top](#table-of-contents)**
 
-# Dependencies
 
-Restangular depends on Angular 2+ and Lodash.
+# Upgrading from 6.x
+
+Application code doesn't change: `RestangularModule.forRoot(...)`, `Restangular` and its methods work as before, and the same 68 tests pass on 6.x code and on 7.0.0. What changed is the package around them:
+
+- It needs Angular 16 or later and RxJS 7.4 or later.
+- It ships ES2022 modules (FESM2022) only. The UMD bundles and ES2015 builds from 6.x are gone, so a setup that loaded `bundles/ngx-restangular.umd.js` directly, such as SystemJS or a script tag, has to move to a bundler.
+- lodash comes in as `lodash-es`, a regular dependency, and `core-js` and `@types/lodash` are no longer dependencies.
+
+The promise examples below use `toPromise()`, which RxJS 7 deprecates. Restangular's observables emit once and complete, so `firstValueFrom(observable)` from `rxjs` is a drop-in replacement.
+
+**[Back to top](#table-of-contents)**
+
+
+# Standalone apps
+
+`ng new` has created standalone apps by default since Angular 17. Pass the module to `importProvidersFrom` in your application config:
+
+```typescript
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { RestangularModule } from 'ngx-restangular';
+
+export function RestangularConfigFactory(RestangularProvider) {
+  RestangularProvider.setBaseUrl('http://api.restngx.local/v1');
+}
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    importProvidersFrom(RestangularModule.forRoot(RestangularConfigFactory)),
+  ],
+};
+```
+
+Then inject `Restangular` where you need it, with `inject(Restangular)` or a constructor parameter. The NgModule setup in the [Starter Guide](#starter-guide) works the same way.
+
+**[Back to top](#table-of-contents)**
+
+
+# Which HTTP backend Restangular uses
+
+Restangular sends requests through Angular's `HttpBackend` rather than `HttpClient`, so `HttpClient` interceptors don't run for them. Use Restangular's own hooks instead: `addFullRequestInterceptor`, `addResponseInterceptor` and `addErrorInterceptor`.
+
+`RestangularModule` imports `HttpClientModule`, which uses XHR. Your app's `HttpClient` and Restangular share one `HttpBackend`, and on Angular 22, where `provideHttpClient()` defaults to Fetch, the provider that comes last decides for both: with `provideHttpClient()` listed after `importProvidersFrom(RestangularModule.forRoot(...))` both use Fetch, and listed before it both use XHR. On Angular 21 every order gives XHR. We measured both with `provideHttpClient()` and no features.
 
 **[Back to top](#table-of-contents)**
 
