@@ -208,7 +208,7 @@ The types can't see runtime configuration, so in this beta:
 - Method names changed with `setRestangularFields()` aren't reflected.
 - If a response interceptor reshapes data, for example by unwrapping an envelope, register the shape the interceptor returns.
 - Methods added with `extendModel`, `extendCollection` or `addRestangularMethod` need to be declared under `methods` or `collectionMethods`; the types trust that declaration.
-- A misspelled route name that isn't registered is still `any`.
+- A misspelled route name compiles as `any`, at the top level and under a registered route (`account.all('buidlings')`), because unregistered routes fall back to `any`. Misspelled fields on a registered route are errors.
 - A model field named like a Restangular member (`route`, `get`, `save` and so on) is shadowed by the member, in the types and at runtime.
 
 Tell us how it works for you in the [typed routes RFC](https://github.com/2muchcoffeecom/ngx-restangular/issues).
