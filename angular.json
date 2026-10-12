@@ -1,123 +1,90 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "analytics": false
+  },
   "newProjectRoot": "projects",
   "projects": {
     "ngx-restangular-demo": {
+      "projectType": "application",
       "root": "demo",
       "sourceRoot": "demo",
-      "projectType": "application",
+      "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist/demo",
             "index": "demo/index.html",
-            "main": "demo/main.ts",
+            "browser": "demo/main.ts",
             "tsConfig": "demo/tsconfig.app.json",
-            "polyfills": "demo/polyfills.ts",
             "assets": [
-              "demo/assets",
+              {
+                "glob": "**/*",
+                "input": "demo/public"
+              },
               "demo/favicon.ico"
             ],
             "styles": [
               "demo/styles.css"
-            ],
-            "scripts": []
+            ]
           },
           "configurations": {
             "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "environments/environment.ts",
-                  "with": "environments/environment.prod.ts"
-                }
-              ]
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "ngx-restangular-demo:build"
-          },
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngx-restangular-demo:build:production"
+              "buildTarget": "ngx-restangular-demo:build:production"
+            },
+            "development": {
+              "buildTarget": "ngx-restangular-demo:build:development"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "demo/tsconfig.app.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
+          },
+          "defaultConfiguration": "development"
         }
       }
     },
     "ngx-restangular": {
+      "projectType": "library",
       "root": "projects/ngx-restangular",
       "sourceRoot": "projects/ngx-restangular/src",
-      "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular/build:ng-packagr",
           "options": {
-            "tsConfig": "projects/ngx-restangular/tsconfig.lib.json",
             "project": "projects/ngx-restangular/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-restangular/ng-package.prod.json"
+              "tsConfig": "projects/ngx-restangular/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-restangular/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/ngx-restangular/src/test.ts",
-            "tsConfig": "projects/ngx-restangular/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-restangular/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-restangular/tsconfig.lib.json",
-              "projects/ngx-restangular/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": "projects/ngx-restangular/tsconfig.spec.json"
           }
         }
       }
-    }
-  },
-  "defaultProject": "ngx-restangular-demo",
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "app",
-      "styleext": "css"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "app"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "ngx-restangular",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "ngx-restangular",
   "repository": {
     "type": "git",
@@ -51,13 +51,13 @@
   },
   "homepage": "https://github.com/2muchcoffeecom/ngx-restangular#readme",
   "peerDependencies": {
-    "@angular/core": "^10.0.0",
-    "@angular/common": "^10.0.0",
-    "@angular/platform-browser": "^10.0.0",
-    "core-js": "^3.5.0",
-    "rxjs": "^6.0"
+    "@angular/common": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0",
+    "@angular/core": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0",
+    "rxjs": "^7.4.0"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.62"
-  }
+    "lodash-es": "^4.17.21",
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
 }
