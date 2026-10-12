@@ -33,13 +33,7 @@
           },
           "configurations": {
             "production": {
-              "outputHashing": "all",
-              "fileReplacements": [
-                {
-                  "replace": "demo/environments/environment.ts",
-                  "with": "demo/environments/environment.prod.ts"
-                }
-              ]
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
