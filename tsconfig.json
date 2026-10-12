@@ -1,14 +1,34 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+/* The library predates strict mode and is written against untyped config objects, so `strict` stays off. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "moduleResolution": "node",
-    "baseUrl": "./",
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
     "experimentalDecorators": true,
-    "typeRoots": ["/node_modules/@types"],
-    "lib": ["es2015", "dom"],
-    "skipLibCheck": true
-  }
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/ngx-restangular/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-restangular/tsconfig.spec.json"
+    },
+    {
+      "path": "./demo/tsconfig.app.json"
+    }
+  ]
 }
