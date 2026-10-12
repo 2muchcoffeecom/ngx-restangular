@@ -27,6 +27,7 @@ import { filter } from 'rxjs/operators';
 import { RESTANGULAR } from './ngx-restangular.config';
 import { RestangularHttp } from './ngx-restangular-http';
 import { RestangularConfigurer } from './ngx-restangular-config.factory';
+import type { RestangularMember } from './ngx-restangular.types';
 
 @Injectable()
 export class Restangular {
@@ -73,9 +74,9 @@ export class Restangular {
   addElementTransformer: any;
   extendCollection: any;
   extendModel: any;
-  copy;
+  copy: RestangularMember<'copy'>;
   configuration;
-  service;
+  service: RestangularMember<'service'>;
   id;
   route;
   parentResource;
@@ -101,11 +102,11 @@ export class Restangular {
   ids;
   httpConfig;
   reqParams;
-  one;
-  all;
-  several;
-  oneUrl;
-  allUrl;
+  one: RestangularMember<'one'>;
+  all: RestangularMember<'all'>;
+  several: RestangularMember<'several'>;
+  oneUrl: RestangularMember<'oneUrl'>;
+  allUrl: RestangularMember<'allUrl'>;
   customPUT;
   customPATCH;
   customPOST;
@@ -120,14 +121,14 @@ export class Restangular {
   doGET;
   doGETLIST;
   fromServer;
-  withConfig;
+  withConfig: RestangularMember<'withConfig'>;
   withHttpConfig;
   singleOne;
   plain;
   save;
   restangularized;
-  restangularizeElement;
-  restangularizeCollection;
+  restangularizeElement: RestangularMember<'restangularizeElement'>;
+  restangularizeCollection: RestangularMember<'restangularizeCollection'>;
 
   constructor(
     @Optional() @Inject(RESTANGULAR) public configObj,

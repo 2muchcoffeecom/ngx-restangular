@@ -6,7 +6,8 @@
     "build": "ng build ngx-restangular && node -e \"for (const f of ['README.md', 'LICENSE']) require('fs').copyFileSync(f, 'dist/ngx-restangular/' + f)\"",
     "build:ngx-restangular": "npm run build",
     "build:demo": "ng build ngx-restangular-demo",
-    "test": "ng test ngx-restangular --watch=false"
+    "test": "ng test ngx-restangular --watch=false",
+    "test:types": "npm run build && tsc -p tools/type-tests/tsconfig.untyped.json && tsc -p tools/type-tests/tsconfig.typed.json"
   },
   "repository": {
     "type": "git",

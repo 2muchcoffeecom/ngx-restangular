@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "skipLibCheck": false,
+    "paths": {
+      "ngx-restangular": ["../../dist/ngx-restangular"]
+    }
+  }
+}
