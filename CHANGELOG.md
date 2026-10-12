@@ -21,7 +21,7 @@ Angular 16 to 22. The public API is unchanged; the package format and its depend
 
 ### Development
 
-- The workspace runs on Angular 21, TypeScript 5.9 and RxJS 7.8, with Vitest for tests. 68 tests describe the 6.x behavior; they pass on the 6.x source and on 7.0.0.
+- The workspace runs on Angular 21, TypeScript 5.9 and RxJS 7.8, with Vitest for tests. 74 tests describe the 6.x behavior; they pass on the 6.x source and on 7.0.0.
 - `tools/check-consumer.sh <angular-version>` installs the packed library into a fresh app of that version, builds it and runs requests through it.
 - The demo app uses the library.
 
@@ -31,6 +31,9 @@ Angular 16 to 22. The public API is unchanged; the package format and its depend
 - Requests go through `HttpBackend`, so `HttpClient` interceptors don't see them (#185).
 - A response body of `false`, `0` or `""` comes back as an empty object (#229).
 - `getList()` on a 204 response with an empty body throws `Response for getList SHOULD be an array` as an uncaught error, and the observable never emits (#159).
+- Unsubscribing doesn't cancel a request that is already in flight.
+- The headers object passed to a request method gets the default headers merged into it, and its keys set to `undefined` are deleted.
+- `getRequestedUrl()` on a collection returned by `getList(params)` includes the serialized request object in its query string instead of the params.
 
 
 <a name="0.1.7"></a>

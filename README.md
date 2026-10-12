@@ -125,7 +125,7 @@ For Angular 4, install `ngx-restangular@1.0.13`; versions 1.0.14 to 1.1.4 are de
 
 # Upgrading from 6.x
 
-Application code doesn't change: `RestangularModule.forRoot(...)`, `Restangular` and its methods work as before, and the same 68 tests pass on 6.x code and on 7.0.0. What changed is the package around them:
+Application code doesn't change: `RestangularModule.forRoot(...)`, `Restangular` and its methods work as before, and the same 74 tests pass on 6.x code and on 7.0.0. What changed is the package around them:
 
 - It needs Angular 16 or later and RxJS 7.4 or later.
 - It ships ES2022 modules (FESM2022) only. The UMD bundles and ES2015 builds from 6.x are gone, so a setup that loaded `bundles/ngx-restangular.umd.js` directly, such as SystemJS or a script tag, has to move to a bundler.
