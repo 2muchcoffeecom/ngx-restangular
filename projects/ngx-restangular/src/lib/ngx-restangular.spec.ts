@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { config as rxjsConfig, firstValueFrom } from 'rxjs';
 
 import { Restangular, RestangularModule } from '../public_api';
 
@@ -689,6 +690,81 @@ describe('Restangular', () => {
       const {rest} = setup(p => p.setRequestSuffix('.json'));
       expect(rest.configuration.suffix).toBe('.json');
       expect(typeof rest.provider.setBaseUrl).toBe('function');
+    });
+  });
+
+  describe('observables', () => {
+    it('works with firstValueFrom() in place of toPromise()', async () => {
+      const {rest, http} = setup();
+      const pending = firstValueFrom(rest.one('accounts', 1).get());
+      http.expectOne(`${BASE}/accounts/1`).flush({id: 1, name: 'Acme'});
+      const account: any = await pending;
+      expect(account.name).toBe('Acme');
+      expect(typeof account.put).toBe('function');
+    });
+  });
+
+  // 6.x behaviors that 7.0 keeps on purpose. Some of them are defects; each is pinned so that
+  // a fix shows up as a deliberate change to this block rather than as a silent difference.
+  describe('6.x behavior kept in 7.0', () => {
+    it('keeps the request in flight after unsubscribe()', () => {
+      const {rest, http} = setup();
+      rest.all('accounts').getList().subscribe().unsubscribe();
+      const req = http.expectOne(`${BASE}/accounts`);
+      expect(req.cancelled).toBe(false);
+      req.flush([]);
+    });
+
+    it('merges default headers into the headers object the caller passed and deletes undefined keys', () => {
+      const {rest, http} = setup(p => p.setDefaultHeaders({'X-Default': 'd'}));
+      const headers: any = {'X-Mine': '1', 'X-Undef': undefined};
+      rest.all('accounts').getList(undefined, headers).subscribe();
+      http.expectOne(`${BASE}/accounts`).flush([]);
+      expect(headers).toEqual({'X-Mine': '1', 'X-Default': 'd'});
+      expect('X-Undef' in headers).toBe(false);
+    });
+
+    it('builds getRequestedUrl() of a fetched collection from the HttpRequest object', () => {
+      const {rest, http} = setup();
+      let accounts: any;
+      rest.all('accounts').getList({page: 2}).subscribe((res: any) => accounts = res);
+      http.expectOne(r => r.url === `${BASE}/accounts`).flush([{id: 1}]);
+      const url = accounts.getRequestedUrl();
+      expect(url.startsWith(`${BASE}/accounts?`)).toBe(true);
+      expect(url).toContain('method=GET');
+      expect(url).toContain('urlWithParams=');
+      expect(accounts[0].getRequestedUrl()).toBe(`${BASE}/accounts/1`);
+    });
+
+    it('returns an empty element for response bodies false, 0 and "" (#229)', () => {
+      const {rest, http} = setup();
+      for (const body of [false, 0, '']) {
+        let result: any;
+        rest.one('flags', 1).customGET('enabled').subscribe((res: any) => result = res);
+        http.expectOne(`${BASE}/flags/1/enabled`).flush(body as any);
+        expect(typeof result).toBe('object');
+        expect(result.plain()).toEqual({});
+      }
+    });
+
+    it('never emits for getList() on a 204 with an empty body and reports an unhandled error (#159)', async () => {
+      const {rest, http} = setup();
+      const unhandled: any[] = [];
+      const previous = rxjsConfig.onUnhandledError;
+      rxjsConfig.onUnhandledError = err => unhandled.push(err);
+      try {
+        const next = vi.fn();
+        const error = vi.fn();
+        rest.all('accounts').getList().subscribe({next, error});
+        http.expectOne(`${BASE}/accounts`).flush(null, {status: 204, statusText: 'No Content'});
+        await new Promise(resolve => setTimeout(resolve));
+        expect(next).not.toHaveBeenCalled();
+        expect(error).not.toHaveBeenCalled();
+        expect(unhandled.map(err => err.message))
+          .toEqual(['Response for getList SHOULD be an array and not an object or something else']);
+      } finally {
+        rxjsConfig.onUnhandledError = previous;
+      }
     });
   });
 });
