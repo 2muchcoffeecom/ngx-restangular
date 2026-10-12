@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { isArray } from 'lodash';
+import { isArray } from 'lodash-es';
 
 
 export const RESTANGULAR = new InjectionToken<string>('restangularWithConfig');

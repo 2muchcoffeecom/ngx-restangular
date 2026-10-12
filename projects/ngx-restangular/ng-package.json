@@ -4,5 +4,7 @@
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "allowedNonPeerDependencies": ["@types/lodash"]
+  "allowedNonPeerDependencies": [
+    "lodash-es"
+  ]
 }

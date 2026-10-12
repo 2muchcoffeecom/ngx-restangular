@@ -17,7 +17,7 @@ import {
   keys,
   isEmpty,
   forEach,
-} from 'lodash';
+} from 'lodash-es';
 
 export function RestangularConfigurer(object, configuration) {
   object.configuration = configuration;
