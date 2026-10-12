@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 7.1.0-beta.0 (unreleased)
+
+Typed routes, as a beta on the `next` tag. Types only: the published JavaScript is identical to 7.0.0.
+
+### Features
+
+- Register routes once in the `RestangularRoutes` interface with `declare module 'ngx-restangular'`, and `one`, `all`, `several`, `oneUrl`, `allUrl`, `service`, `withConfig`, `copy`, `restangularizeElement`, `restangularizeCollection` and the members of returned elements and collections become typed. With no routes registered, every one of them stays `any`, as in 7.0.0.
+- Unregistered routes and unlisted children stay `any`, so routes can be registered one at a time.
+- `customGET`, `customPOST` and the other custom methods take an optional response type, `customGET<T>()`.
+- New exported types: `RestangularRoutes`, `RestangularRoute`, `RestElement`, `RestCollection`, `RestangularElementMembers`, `RestangularCollectionMembers`, `RestangularResourceService`, `RestangularTypedService`, `RestangularMember`, `RestangularId`, `RestangularParams`, `RestangularHeaders`.
+
+### Development
+
+- `npm run test:types` builds the package and compiles two apps against it with `--strict`: one with no routes registered, where every typed member must be `any`, and one with routes registered.
+- The library suite gains a typed-routes spec (79 tests), and `tools/consumer-harness` gains one, so `tools/check-consumer.sh` checks the types under each Angular version's own TypeScript.
+
 ## 7.0.0 (unreleased)
 
 Angular 16 to 22. The public API is unchanged; the package format and its dependencies changed.

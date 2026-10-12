@@ -25,6 +25,7 @@ This project was renamed from **ng2-restangular** to **ngx-restangular** due to 
 - [Upgrading from 6.x](#upgrading-from-6x)
 - [Standalone apps](#standalone-apps)
 - [Which HTTP backend Restangular uses](#which-http-backend-restangular-uses)
+- [Typed routes (beta)](#typed-routes-beta)
 - [Starter Guide](#starter-guide)
   - [Quick configuration for Lazy Readers](#quick-configuration-for-lazy-readers)
   - [Using Restangular](#using-restangular)
@@ -167,6 +168,53 @@ Restangular sends requests through Angular's `HttpBackend` rather than `HttpClie
 `RestangularModule` imports `HttpClientModule`, which uses XHR. Your app's `HttpClient` and Restangular share one `HttpBackend`, and on Angular 22, where `provideHttpClient()` defaults to Fetch, the provider that comes last decides for both: with `provideHttpClient()` listed after `importProvidersFrom(RestangularModule.forRoot(...))` both use Fetch, and listed before it both use XHR. On Angular 21 every order gives XHR. We measured both with `provideHttpClient()` and no features.
 
 **[Back to top](#table-of-contents)**
+
+# Typed routes (beta)
+
+`7.1.0-beta.0` adds optional types for your routes. Install it from the `next` tag with `npm install ngx-restangular@next`. It changes types only: the JavaScript is the same as 7.0, and nothing changes until you register a route.
+
+Describe your API once, in a file that has at least one `import` or `export` (module augmentation only works inside a module):
+
+```typescript
+declare module 'ngx-restangular' {
+  interface RestangularRoutes {
+    accounts: {
+      model: Account;
+      methods: { label(): string };            // what you add with extendModel('accounts', ...)
+      collectionMethods: { total(): number };  // what you add with extendCollection('accounts', ...)
+      children: { buildings: { model: Building } };
+    };
+  }
+}
+```
+
+Calls stay the same, and their results are typed:
+
+```typescript
+this.restangular.one('accounts', 1).get().subscribe(account => {
+  account.name;                         // string
+  account.label();                      // string
+  account.plain();                      // Account
+  account.all('buildings').getList();   // Observable of typed buildings
+  account.nmae;                         // compile error
+});
+```
+
+Routes you don't register, and children you don't list, stay `any`, so you can register one route at a time. `customGET<T>()` and the other custom methods take an optional response type. We checked the types with TypeScript 5.0 (Angular 16), 5.9 (Angular 21) and 6.0 (Angular 22).
+
+The types can't see runtime configuration, so in this beta:
+
+- `setFullResponse(true)` and `setPlainByDefault(true)` change what calls return; the types assume the defaults.
+- Method names changed with `setRestangularFields()` aren't reflected.
+- If a response interceptor reshapes data, for example by unwrapping an envelope, register the shape the interceptor returns.
+- Methods added with `extendModel`, `extendCollection` or `addRestangularMethod` need to be declared under `methods` or `collectionMethods`; the types trust that declaration.
+- A misspelled route name that isn't registered is still `any`.
+- A model field named like a Restangular member (`route`, `get`, `save` and so on) is shadowed by the member, in the types and at runtime.
+
+Tell us how it works for you in the [typed routes RFC](https://github.com/2muchcoffeecom/ngx-restangular/issues).
+
+**[Back to top](#table-of-contents)**
+
 
 # Starter Guide
 

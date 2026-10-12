@@ -16,6 +16,12 @@ npm test
 
 Runs the library specs once with Vitest.
 
+```
+npm run test:types
+```
+
+Builds the package and compiles `tools/type-tests` against it with `--strict`: an app with no typed routes registered, where everything must stay `any`, and an app with typed routes.
+
 ### Building
 
 ```
